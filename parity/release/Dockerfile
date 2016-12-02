@@ -1,6 +1,6 @@
 FROM debian:jessie-slim
 
-ARG PARITY_VERSION=1.4.4
+ARG PARITY_VERSION=1.4.5
 ENV PARITY_VERSION $PARITY_VERSION
 ENV PARITY_DEB_URL http://d1h4xl4cr1h0mo.cloudfront.net/v${PARITY_VERSION}/x86_64-unknown-linux-gnu/parity_${PARITY_VERSION}_amd64.deb
 
