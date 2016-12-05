@@ -41,8 +41,7 @@ RUN { \
       mv target/release/parity /usr/local/bin; \
 
       # Remove build dependencies and clean up
-      apt-get remove -qq -y $BUILD_DEPS; \
-      apt-get autoremove -qq -y; \
+      apt-get purge -qq -y --auto-remove $BUILD_DEPS; \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* $HOME/.multirust $HOME/.cargo; \
     }
 
