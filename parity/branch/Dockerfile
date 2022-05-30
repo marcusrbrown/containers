@@ -1,4 +1,4 @@
-FROM debian:jessie-slim
+FROM debian:jessie-slim@sha256:b9b0e7354098cbd534861d7532c082fb81cdb4d893303ba1f322f52c9e583cd2
 
 ARG PARITY_BRANCH=master
 ENV PARITY_BRANCH $PARITY_BRANCH
