@@ -1,0 +1,30 @@
+name: Docker Metrics Collector
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  collect-metrics:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      
+    - name: Collect Docker Metrics
+      run: python collect_docker_metrics.py
+      
+    - name: Upload Metrics Data
+      uses: actions/upload-artifact@v2
+      with:
+        name: metrics-data
+        path: ./collected_metrics.yaml

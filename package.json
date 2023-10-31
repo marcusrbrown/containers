@@ -1,0 +1,11 @@
+{
+    "name": "dockerfiles-repo",
+    "version": "1.0.0",
+    "description": "Repository for Dockerfiles",
+    "scripts": {
+        "lint": "npx dockerfilelint ./Dockerfile"
+    },
+    "devDependencies": {
+        "dockerfilelint": "^2.0.7"
+    }
+}

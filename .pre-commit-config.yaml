@@ -1,0 +1,21 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+-   repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.6.0
+    hooks:
+    -   id: pylint
+-   repo: local
+    hooks:
+    -   id: dockerfilelint
+        name: dockerfilelint
+        entry: npx dockerfilelint
+        language: node
+        files: Dockerfile$
+-   repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.26.3
+    hooks:
+    -   id: yamllint

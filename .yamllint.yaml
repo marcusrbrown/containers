@@ -1,0 +1,13 @@
+extends: default
+
+ignore: |
+  .github/workflows/*.yml
+
+rules:
+  document-start: disable
+  truthy: enable
+  line-length:
+    max: 120
+    level: warning
+
+name: default_name

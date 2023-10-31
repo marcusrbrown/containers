@@ -1,0 +1,37 @@
+name: Docker Release Workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      
+    - name: Generate Docker Image Tags
+      run: python generate_image_tags.py
+      
+    - name: Apply Git Tags
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        tags=$(cat generated_tags.json | jq -r 'to_entries[] | .value[0]')
+        for tag in $tags; do
+          git tag $tag
+        done
+        git push --tags
+
+    # ... rest of the job steps for building and pushing Docker images

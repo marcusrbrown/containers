@@ -1,0 +1,14 @@
+{
+  "name": "Dockerfiles Devcontainer",
+  "dockerFile": "Dockerfile",
+  "forwardPorts": [],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "postCreateCommand": "pip install -r requirements.txt",
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-azuretools.vscode-docker"
+  ]
+}

@@ -1,0 +1,1 @@
+{"version": "2.0.0", "tasks": [{"label": "lint image1", "type": "shell", "command": "hadolint image1/Dockerfile"}]}

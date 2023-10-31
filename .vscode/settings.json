@@ -1,0 +1,9 @@
+{
+  "python.formatting.provider": "black",
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "editor.tabSize": 4,
+  "editor.rulers": [88],
+  "files.autoSave": "onFocusChange"
+}

@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - uses: pre-commit/action@v2.0.0
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Hadolint
+      uses: hadolint/hadolint-action@v1.5.0
+      with:
+        dockerfile: Dockerfile
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Yamllint
+      uses: actionshub/yamllint@v1.0.0
