@@ -1,6 +1,0 @@
-version: "3"
-services:
-  image1:
-    build: ./image1
-  image2:
-    build: ./image2
