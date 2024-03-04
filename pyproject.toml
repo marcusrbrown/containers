@@ -1,6 +1,6 @@
 [project]
 name = "dockerfiles"
-version = "1.0.0"
+version = "0.1.0"
 description = "A repository containing various Dockerfiles."
 authors = ["Your Name <your.email@example.com>"]
 maintainers = ["Your Name <your.email@example.com>"]
