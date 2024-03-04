@@ -5,7 +5,7 @@ repository:
   name: containers
   description: A collection of Dockerfiles, docker-compose files, and scripts I use across projects.
   homepage: https://hub.docker.com/u/igetgames/
-  topics: containers, dockerfiles, docker-compose, scripts
+  topics: containers, dockerfiles, docker-compose, scripts, automation, docker
 
 branches:
   - name: main
