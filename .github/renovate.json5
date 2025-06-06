@@ -1,0 +1,7 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: ['github>marcusrbrown/renovate-config#4.0.0'],
+  automergeType: 'pr',
+  prCreation: 'immediate',
+  rebaseWhen: 'behind-base-branch',
+}

@@ -1,10 +1,10 @@
-# dockerfiles
+# containers
 
 > My collection of Dockerfiles, docker-compose files, and related scripts.
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/your-username/your-repo/Your-Workflow-Name)
 ![Docker Pulls](https://img.shields.io/docker/pulls/your-image-name)
-![GitHub Release](https://img.shields.io/github/v/release/marcusrbrown/dockerfiles)
+![GitHub Release](https://img.shields.io/github/v/release/marcusrbrown/containers)
 
 ## Overview
 
@@ -50,9 +50,9 @@ This project is licensed under the MIT License. See the [LICENSE.md](repo/LICENS
 ## Badges
 
 [![Docker Build](https://img.shields.io/docker/cloud/build/your-docker-hub-username/your-repo-name)](https://hub.docker.com/r/your-docker-hub-username/your-repo-name/builds)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/marcusrbrown/dockerfiles/build-publish.yaml?branch=main)](https://github.com/marcusrbrown/dockerfiles/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/marcusrbrown/dockerfiles)](https://github.com/marcusrbrown/dockerfiles/releases)
-[![License](https://img.shields.io/github/license/marcusrbrown/dockerfiles)](repo/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/marcusrbrown/containers/build-publish.yaml?branch=main)](https://github.com/marcusrbrown/containers/actions)
+[![GitHub Release](https://img.shields.io/github/v/release/marcusrbrown/containers)](https://github.com/marcusrbrown/containers/releases)
+[![License](https://img.shields.io/github/license/marcusrbrown/containers)](LICENSE.md)
 
 ## Prerequisite Software
 
@@ -66,17 +66,17 @@ This project is licensed under the MIT License. See the [LICENSE.md](repo/LICENS
 
 1. Install the required Python packages:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ### package.json Setup
 
 1. Install the required Node.js packages:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 ## Usage Instructions
 
@@ -84,15 +84,15 @@ This project is licensed under the MIT License. See the [LICENSE.md](repo/LICENS
 
 1. Generate Dockerfiles:
 
-    ```bash
-    python dfscripts/generate_dockerfiles.py
-    ```
+   ```bash
+   python dfscripts/generate_dockerfiles.py
+   ```
 
 2. Collect Docker Metrics:
 
-    ```bash
-    python dfscripts/collect_docker_metrics.py
-    ```
+   ```bash
+   python dfscripts/collect_docker_metrics.py
+   ```
 
 ### Using dfscripts CLI
 

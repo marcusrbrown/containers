@@ -1,5 +1,5 @@
 {
-  "python.analysis.typeCheckingMode": "basic",
-  "editor.tabSize": 4,
-  "editor.rulers": [88]
+    "python.analysis.typeCheckingMode": "basic",
+    "editor.tabSize": 4,
+    "editor.rulers": [88]
 }

@@ -1,0 +1,19 @@
+---
+_extends: .github:common-settings.yaml
+
+repository:
+  name: containers
+  description: A collection of Dockerfiles, docker-compose files, and scripts I use across projects.
+  homepage: https://hub.docker.com/u/igetgames/
+  topics: containers, dockerfiles, docker-compose, scripts, automation, docker
+
+branches:
+  - name: main
+    protection:
+      enforce_admins: true
+      required_linear_history: true
+      required_pull_request_reviews: null
+      required_status_checks:
+        strict: false
+        contexts: ['Renovate / Renovate']
+      restrictions: null
