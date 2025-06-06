@@ -14,13 +14,13 @@ jobs:
       - uses: actions/setup-python@e9aba2c848f5ebd159c070c61ea2c4e2b122355e # v2.3.4
         with:
           python-version: '3.x'
-      - uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@0764670bf370aab253130d534e1eda7ff497dc60 # v2.0.0
   hadolint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
       - name: Run Hadolint
-        uses: hadolint/hadolint-action@v1.5.0
+        uses: hadolint/hadolint-action@c27bd9edc1e95eed30474db8f295ff5807ebca14 # v1.5.0
         with:
           dockerfile: Dockerfile
   yamllint:
