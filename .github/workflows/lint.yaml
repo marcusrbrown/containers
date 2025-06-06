@@ -28,4 +28,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Yamllint
-        uses: actionshub/yamllint@v1.0.0
+        uses: actionshub/yamllint@00f4f7f756a93a38e77ea1af41a46b48fd893dcd # v1.8.3
