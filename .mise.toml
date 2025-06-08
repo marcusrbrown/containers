@@ -1,0 +1,11 @@
+[env]
+_.path = [
+  # adds a path relative to the mise.toml, not PWD
+  "./node_modules/.bin",
+]
+
+[tools]
+node = "22.16.0"
+pnpm = "10.11.0"
+poetry = "2.1.3"
+python = "3.13.1"
