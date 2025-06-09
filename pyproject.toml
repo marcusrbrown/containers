@@ -25,7 +25,7 @@ python = "3.13.4"
 argparse = "^1.4.0"
 
 [tool.poetry.scripts]
-generate_documentation = "dfscripts.generate_documentation:main"
-collect_docker_metrics = "dfscripts.collect_docker_metrics:main"
-generate_image_tags = "dfscripts.generate_image_tags:main"
-generate_dockerfile = "dfscripts.generate_dockerfile:main"
+generate_documentation = "scripts.generate_documentation:main"
+collect_docker_metrics = "scripts.collect_docker_metrics:main"
+generate_image_tags = "scripts.generate_image_tags:main"
+generate_dockerfile = "scripts.generate_dockerfile:main"

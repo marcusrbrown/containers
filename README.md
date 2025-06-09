@@ -85,25 +85,25 @@ This project is licensed under the MIT License. See the [LICENSE.md](repo/LICENS
 1. Generate Dockerfiles:
 
    ```bash
-   python dfscripts/generate_dockerfiles.py
+   python scripts/generate_dockerfiles.py
    ```
 
 2. Collect Docker Metrics:
 
    ```bash
-   python dfscripts/collect_docker_metrics.py
+   python scripts/collect_docker_metrics.py
    ```
 
-### Using dfscripts CLI
+### Using scripts CLI
 
-You can also use the `dfscripts` CLI to invoke the above scripts:
+You can also use the `scripts` CLI to invoke the above scripts:
 
 ```bash
-python dfscripts/cli.py --script generate_dockerfiles
+python scripts/cli.py --script generate_dockerfiles
 ```
 
 For more options, run:
 
 ```bash
-python dfscripts/cli.py --help
+python scripts/cli.py --help
 ```
