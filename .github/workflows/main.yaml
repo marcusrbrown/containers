@@ -12,7 +12,7 @@ jobs:
     name: Pre-commit Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Setup
         uses: ./.github/actions/setup
       # - uses: pre-commit/action@9b88afc9cd57fd75b655d5c71bd38146d07135fe # v2.0.3
@@ -28,6 +28,6 @@ jobs:
     name: Yamllint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Run Yamllint
         uses: actionshub/yamllint@00f4f7f756a93a38e77ea1af41a46b48fd893dcd # v1.8.3
