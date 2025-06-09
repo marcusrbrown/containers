@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Generate Documentation
-        run: python generate_documentation.py
+        run: python scripts/generate_documentation.py
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
