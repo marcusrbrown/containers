@@ -19,14 +19,14 @@ jobs:
       - name: Generate Docker Image Tags
         run: python scripts/generate_image_tags.py
 
-      - name: Apply Git Tags
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          tags=$(cat generated_tags.json | jq -r 'to_entries[] | .value[0]')
-          for tag in $tags; do
-            git tag $tag
-          done
-          git push --tags
+      # - name: Apply Git Tags
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     tags=$(cat generated_tags.json | jq -r 'to_entries[] | .value[0]')
+      #     for tag in $tags; do
+      #       git tag $tag
+      #     done
+      #     git push --tags
 
     # ... rest of the job steps for building and pushing Docker images
