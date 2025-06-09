@@ -8,14 +8,14 @@ on:
     branches: [main]
 
 jobs:
-  # pre-commit:
-  #   name: Pre-commit Checks
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
-  #     - name: Setup
-  #       uses: ./.github/actions/setup
-  #     - uses: pre-commit/action@9b88afc9cd57fd75b655d5c71bd38146d07135fe # v2.0.3
+  pre-commit:
+    name: Pre-commit Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+      - name: Setup
+        uses: ./.github/actions/setup
+      # - uses: pre-commit/action@9b88afc9cd57fd75b655d5c71bd38146d07135fe # v2.0.3
   # hadolint:
   #   runs-on: ubuntu-latest
   #   steps:
