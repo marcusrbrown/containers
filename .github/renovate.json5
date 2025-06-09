@@ -1,7 +1,47 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: ['github>marcusrbrown/renovate-config#4.0.0'],
+  extends: ['github>marcusrbrown/renovate-config#4.0.0', 'security:openssf-scorecard'],
   automergeType: 'pr',
+  constraints: {
+    python: '3.13',
+  },
+  packageRules: [
+    {
+      matchDepNames: ['python'],
+      allowedVersions: '<=3.14',
+    },
+    {
+      description: 'Disable patch updates except for select dependencies.',
+      matchUpdateTypes: ['patch'],
+      matchPackageNames: ['!typescript', '!python'],
+      enabled: false,
+    },
+    {
+      description: 'Do not group TypeScript and Python with other updates',
+      matchPackageNames: ['typescript', 'python'],
+      groupName: null,
+    },
+    {
+      description: 'Show Merge Confidence, OpenSSF Scorecard, and GitHub Search badges for Renovate dependencies.',
+      matchDatasources: ['go', 'maven', 'npm', 'nuget', 'packagist', 'pypi', 'rubygems'],
+      matchUpdateTypes: ['pin', 'patch', 'minor', 'major'],
+      prBodyColumns: ['Package', 'Change', 'Age', 'Confidence', 'GitHub'],
+    },
+    {
+      description: 'Show Merge Confidence, OpenSSF Scorecard, and GitHub Search badges for Renovate dependencies.',
+      matchDatasources: ['go', 'maven', 'npm', 'nuget', 'packagist', 'pypi', 'rubygems'],
+      matchUpdateTypes: ['pin', 'patch', 'minor', 'major'],
+      matchSourceUrls: ['https://github.com/**'],
+      prBodyColumns: ['Package', 'Change', 'Age', 'Confidence', 'OpenSSF', 'GitHub'],
+    },
+  ],
+  postUpgradeTasks: {
+    commands: ['pnpm format'],
+    executionMode: 'branch',
+  },
+  prBodyDefinitions: {
+    GitHub: '[![GitHub Code Search for "{{{depName}}}"](https://img.shields.io/badge/code_search-{{{replace "-" "--" depName}}}-2671E5.svg?logo=github)](https://github.com/search?q=repo:{{{encodeURIComponent repository}}}+NOT+path:/package(-lock)%3F%5C.json%7Cyarn%5C.lock%7Cpnpm-lock%5C.yaml/+{{{encodeURIComponent depName}}})',
+  },
   prCreation: 'immediate',
   rebaseWhen: 'behind-base-branch',
 }

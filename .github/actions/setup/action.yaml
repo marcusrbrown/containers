@@ -1,0 +1,31 @@
+---
+# Based on https://github.com/bfra-me/works/blob/7217b637351a0b251d1d0c2158614210c7efdad0/.github/actions/pnpm-install/action.yaml
+name: Setup
+description: Setup build environment and install dependencies
+
+inputs:
+  cache-version:
+    default: '0'
+    description: Cache version. Can be incremented to invalidate the cache.
+    required: false
+
+runs:
+  steps:
+    - name: Install mise
+      env:
+        MISE_VERSION: 2025.6.0 # renovate: datasource=github-releases packageName=jdx/mise
+      uses: jdx/mise-action@13abe502c30c1559a5c37dff303831bab82c9402 # v2.2.3
+      with:
+        version: ${{ env.MISE_VERSION }}
+
+    - name: Setup Python
+      uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5
+      with:
+        cache: poetry
+        python-version-file: 'pyproject.toml'
+
+    - name: Install dependencies
+      run: poetry install
+      shell: 'bash -Eeuo pipefail {0}'
+
+  using: composite
