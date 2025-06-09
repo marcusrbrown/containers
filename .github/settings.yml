@@ -15,5 +15,5 @@ branches:
       required_pull_request_reviews: null
       required_status_checks:
         strict: false
-        contexts: ['Renovate / Renovate']
+        contexts: ['Pre-commit Checks', 'Renovate / Renovate', 'Yamllint']
       restrictions: null

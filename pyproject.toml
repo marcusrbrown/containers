@@ -1,14 +1,15 @@
-[project]
-name = "dockerfiles"
+[tool.poetry]
+name = "containers"
 version = "0.1.0"
 description = "A repository containing various Dockerfiles."
-authors = ["Your Name <your.email@example.com>"]
-maintainers = ["Your Name <your.email@example.com>"]
+authors = ["Marcus R. Brown <git@mrbro.dev>"]
+maintainers = ["Marcus R. Brown <git@mrbro.dev>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
@@ -19,15 +20,12 @@ target-version = ['py37']
 profile = "black"
 known_third_party = ["pytest"]
 
-[tool.mypy]
-python_version = 3.7
+[tool.poetry.dependencies]
+python = "3.13.4"
+argparse = "^1.4.0"
 
 [tool.poetry.scripts]
 generate_documentation = "dfscripts.generate_documentation:main"
 collect_docker_metrics = "dfscripts.collect_docker_metrics:main"
 generate_image_tags = "dfscripts.generate_image_tags:main"
 generate_dockerfile = "dfscripts.generate_dockerfile:main"
-
-dependencies = [
-    "argparse"
-]

@@ -1,11 +1,11 @@
 {
-  "name": "dockerfiles-repo",
-  "version": "1.0.0",
-  "description": "Repository for Dockerfiles",
+  "name": "containers",
+  "version": "0.0.0",
+  "description": "A collection of containers",
   "scripts": {
-    "lint": "npx dockerfilelint ./Dockerfile"
+    "format": "prettier --write ."
   },
   "devDependencies": {
-    "dockerfilelint": "^2.0.7"
+    "prettier": "3.5.3"
   }
 }

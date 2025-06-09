@@ -21,6 +21,10 @@ name: Renovate
         required: false
         type: boolean
         default: false
+  workflow_run:
+    branches: [main]
+    types: [completed]
+    workflows: [Main]
 
 jobs:
   renovate:
