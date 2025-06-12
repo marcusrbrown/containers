@@ -1,12 +1,12 @@
-[tool.poetry]
+[project]
 name = "containers"
 version = "0.1.0"
 description = "A repository containing various Dockerfiles."
-authors = ["Marcus R. Brown <git@mrbro.dev>"]
-maintainers = ["Marcus R. Brown <git@mrbro.dev>"]
+authors = [{ name = "Marcus R. Brown", email = "<git@mrbro.dev>" }]
 license = "MIT"
 readme = "README.md"
-package-mode = false
+requires-python = ">=3.8,<4.0"
+dependencies = ["argparse (>=1.4.0,<2.0.0)", "pyyaml (>=6.0.2,<7.0.0)", "requests (>=2.32.4,<3.0.0)"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -20,9 +20,8 @@ target-version = ['py37']
 profile = "black"
 known_third_party = ["pytest"]
 
-[tool.poetry.dependencies]
-python = "3.13.4"
-argparse = "^1.4.0"
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.scripts]
 generate_documentation = "scripts.generate_documentation:main"

@@ -18,7 +18,7 @@ def generate_dockerfile_content(base_image, packages, env_vars, architecture=Non
         else:
             package_install_cmd += f"apt-get update && apt-get install -y {packages}"
         lines.append(package_install_cmd)
-    
+
     if env_vars:
         for env_var in env_vars.split(" "):
             lines.append(f"ENV {env_var}")
