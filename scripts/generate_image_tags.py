@@ -30,7 +30,7 @@ def generate_tags(metadata):
 def main():
     repo_path = '.'  # Replace with actual repo path
     dockerfiles = identify_target_dockerfiles(repo_path)
-    
+
     all_tags = {}
     for dockerfile in dockerfiles:
         metadata = extract_metadata(dockerfile)
