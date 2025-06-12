@@ -22,6 +22,10 @@
       groupName: null,
     },
     {
+      matchPackageNames: ['aquasecurity/trivy-action'],
+      versioning: 'github-releases',
+    },
+    {
       description: 'Show Merge Confidence, OpenSSF Scorecard, and GitHub Search badges for Renovate dependencies.',
       matchDatasources: ['go', 'maven', 'npm', 'nuget', 'packagist', 'pypi', 'rubygems'],
       matchUpdateTypes: ['pin', 'patch', 'minor', 'major'],
