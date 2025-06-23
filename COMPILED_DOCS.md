@@ -370,6 +370,17 @@ error(message: string)
 
 ---
 
+Patches that are applied at runtime to the virtual environment.
+
+    Distutils allows user to configure some arguments via a configuration file:
+    https://docs.python.org/3/install/index.html#distutils-configuration-files.
+
+    Some of this arguments though don't make sense in context of the virtual environment files, let's fix them up.
+    
+A meta path finder that allows patching the imported distutils modules.
+
+---
+
 
     Base abstract class used for mess detection plugins.
     All detectors MUST extend and implement given methods.
@@ -25594,6 +25605,17 @@ Detects whether the hostname given is an IPv4 or IPv6 address.
     :return: True if the hostname is an IP address, False otherwise.
     
 Detects if a key file is encrypted or not.
+
+---
+
+
+Activate virtualenv for current interpreter:
+
+import runpy
+runpy.run_path(this_file)
+
+This can be used when you must use an existing Python interpreter, not the virtualenv bin/python.
+
 
 ---
 
