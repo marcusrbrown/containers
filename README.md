@@ -20,7 +20,7 @@ This repository contains a collection of Dockerfiles for various purposes. It al
 
 ### Dockerfile Generation
 
-To generate a new Dockerfile, you can use the `generate_dockerfiles.py` script:
+To generate a new Dockerfile, you can use the [`generate_dockerfile.py`](scripts/generate_dockerfile.py) script:
 
 ```bash
 python generate_dockerfiles.py --base_image debian --python_version 3.9
@@ -75,7 +75,7 @@ This project is licensed under the MIT License. See the [LICENSE.md](repo/LICENS
 1. Install the required Node.js packages:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 ## Usage Instructions
@@ -85,25 +85,11 @@ This project is licensed under the MIT License. See the [LICENSE.md](repo/LICENS
 1. Generate Dockerfiles:
 
    ```bash
-   python scripts/generate_dockerfiles.py
+   poetry run generate-dockerfile
    ```
 
 2. Collect Docker Metrics:
 
    ```bash
-   python scripts/collect_docker_metrics.py
+   poetry run collect-docker-metrics
    ```
-
-### Using scripts CLI
-
-You can also use the `scripts` CLI to invoke the above scripts:
-
-```bash
-python scripts/cli.py --script generate_dockerfiles
-```
-
-For more options, run:
-
-```bash
-python scripts/cli.py --help
-```

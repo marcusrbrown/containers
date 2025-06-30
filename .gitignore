@@ -3,3 +3,7 @@ node_modules
 .DS_Store
 .env
 .venv
+__pycache__
+*.py[co]
+generated_tags.json
+collected_metrics.yaml

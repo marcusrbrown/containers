@@ -3,11 +3,11 @@ name: Dockerfile Generation Workflow
 on:
   workflow_dispatch:
     inputs:
-      base_image:
+      base-image:
         description: 'Base image for the Dockerfile'
         required: true
-      python_version:
-        description: 'Python version to install'
+      output-directory:
+        description: 'Directory to save the generated Dockerfile'
         required: false
       packages:
         description: 'Additional packages to install'
@@ -24,7 +24,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Generate Dockerfile
-        run: python scripts/generate_dockerfiles.py --base_image ${{ github.event.inputs.base_image }} --python_version ${{ github.event.inputs.python_version }} --packages ${{ github.event.inputs.packages }}
+        run: poetry run generate-dockerfile --base-image ${{ inputs.base-image }} ${{ inputs.output-directory && format('--output-dir {0}', inputs.output-directory) }} ${{ inputs.packages && format('--packages {0}', inputs.packages) }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
