@@ -55,8 +55,8 @@ def main():
     all_metrics = {}
     for dockerfile in dockerfiles:
         build_metrics = collect_build_metrics(dockerfile)
-        image_metrics = collect_image_metrics("test_image")
-        usage_metrics = collect_usage_metrics("test_image", args.registry)
+        image_metrics = {}  # collect_image_metrics("test_image")
+        usage_metrics = {}  # collect_usage_metrics("test_image", args.registry)
 
         all_metrics[dockerfile] = {
             "build_metrics": build_metrics,

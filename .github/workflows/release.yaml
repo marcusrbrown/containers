@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Generate Docker Image Tags
-        run: python scripts/generate_image_tags.py
+        run: poetry run generate-image-tags
 
       # - name: Apply Git Tags
       #   run: |
