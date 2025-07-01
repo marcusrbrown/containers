@@ -13,7 +13,7 @@ runs:
   steps:
     - name: Install mise
       env:
-        MISE_VERSION: 2025.6.0 # renovate: datasource=github-releases packageName=jdx/mise
+        MISE_VERSION: 2025.7.0 # renovate: datasource=github-releases packageName=jdx/mise
       uses: jdx/mise-action@429184fe4bc03ec959a8c13a993f514e6633ed3d # v2.3.0
       with:
         version: ${{ env.MISE_VERSION }}
