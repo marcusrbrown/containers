@@ -35,7 +35,6 @@ jobs:
     outputs:
       matrix: ${{ steps.detect.outputs.matrix }}
       has_changes: ${{ steps.detect.outputs.has_changes }}
-      has_dockerhub: ${{ steps.detect.outputs.has_dockerhub }}
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -85,7 +84,6 @@ jobs:
           done
 
           echo "has_changes=true" >> $GITHUB_OUTPUT
-          echo "has_dockerhub=${{ secrets.DOCKERHUB_USERNAME != '' }}" # Check if Docker Hub credentials are set
           echo "matrix={\"include\":[$matrix_include]}" >> $GITHUB_OUTPUT
 
   build-multiarch:
@@ -122,12 +120,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub
-        if: github.event_name != 'pull_request' && needs.detect-changes.outputs.has_dockerhub == 'true'
+        if: github.event_name != 'pull_request' && env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != ''
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
           registry: ${{ env.REGISTRY_DOCKERHUB }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
@@ -135,13 +136,28 @@ jobs:
         with:
           images: |
             ${{ env.REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ matrix.image }}
-            ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/{1}/{2}', env.REGISTRY_DOCKERHUB, secrets.DOCKERHUB_USERNAME, matrix.image) || '' }}
+            ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, matrix.image) || '' }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=sha,prefix={{branch}}-
+            type=sha,format=short,prefix={{branch}}-,enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value={{branch}},enable={{is_default_branch}}
+
+      - name: Validate generated tags
+        run: |
+          echo "Generated tags:"
+          echo "${{ steps.meta.outputs.tags }}"
+          echo "Generated labels:"
+          echo "${{ steps.meta.outputs.labels }}"
+
+          # Validate tag format (basic check for invalid characters)
+          for tag in $(echo "${{ steps.meta.outputs.tags }}"); do
+            if [[ "$tag" =~ :-|:$ ]]; then
+              echo "ERROR: Invalid tag format detected: $tag"
+              exit 1
+            fi
+          done
 
       - name: Build and push multi-arch container
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
