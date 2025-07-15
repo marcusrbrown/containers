@@ -7,3 +7,4 @@ __pycache__
 *.py[co]
 generated_tags.json
 collected_metrics.yaml
+.ai/
