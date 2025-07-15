@@ -14,13 +14,13 @@
 
 **Problem**: Invalid tag format `***/parity-branch:main` where `***` represents empty Docker Hub username
 
-**Root Cause**: Docker metadata action was trying to generate Docker Hub tags even when DOCKER_HUB_USERNAME secret was not set, resulting in malformed image names
+**Root Cause**: Using `secrets.DOCKERHUB_USERNAME` directly in metadata action was causing access issues, resulting in empty/masked usernames
 
 **Solution**:
 
-- Reverted to single metadata extraction step with both registries
-- Used secrets directly since Docker Hub credentials are configured
-- Simplified conditional logic to avoid complex secret checking in workflow conditions
+- Changed DOCKER_HUB_USERNAME from secret to environment variable since usernames aren't sensitive
+- Used `env.DOCKERHUB_USERNAME` instead of `secrets.DOCKERHUB_USERNAME` in metadata action
+- Kept DOCKER_HUB_TOKEN as secret since it contains sensitive authentication data
 
 ### 3. Docker Hub Authentication
 
@@ -30,11 +30,11 @@
 
 ## Changes Made
 
-1. **Simplified metadata extraction**: Back to single step with both GHCR and Docker Hub images
-2. **Direct secret usage**: Using secrets directly in metadata action since they are configured
-3. **Removed complex conditionals**: Simplified Docker Hub login since credentials are available
+1. **Converted username to environment variable**: Changed DOCKER_HUB_USERNAME from secret to env var
+2. **Direct environment variable usage**: Using `env.DOCKERHUB_USERNAME` in metadata action reliably
+3. **Proper secret usage**: Only DOCKER_HUB_TOKEN remains as secret (contains sensitive data)
 4. **Enhanced validation**: Added tag validation step with improved error detection
-5. **Streamlined workflow**: Removed unnecessary tag combination logic
+5. **Streamlined workflow**: Single metadata step with reliable variable access
 
 ## Testing
 
