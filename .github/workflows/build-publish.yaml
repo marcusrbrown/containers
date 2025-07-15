@@ -120,15 +120,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub
-        if: github.event_name != 'pull_request' && env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != ''
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
           registry: ${{ env.REGISTRY_DOCKERHUB }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
@@ -136,7 +133,7 @@ jobs:
         with:
           images: |
             ${{ env.REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ matrix.image }}
-            ${{ secrets.DOCKERHUB_USERNAME != '' && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, matrix.image) || '' }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -153,7 +150,7 @@ jobs:
 
           # Validate tag format (basic check for invalid characters)
           for tag in $(echo "${{ steps.meta.outputs.tags }}"); do
-            if [[ "$tag" =~ :-|:$ ]]; then
+            if [[ "$tag" =~ :-|:$|\*\*\* ]]; then
               echo "ERROR: Invalid tag format detected: $tag"
               exit 1
             fi

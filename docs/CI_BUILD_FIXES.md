@@ -12,14 +12,15 @@
 
 ### 2. Main Branch Docker Hub Failures
 
-**Problem**: Invalid tag format `docker.io/***/parity-branch:main`
+**Problem**: Invalid tag format `***/parity-branch:main` where `***` represents empty Docker Hub username
 
-**Root Cause**: Incorrect Docker Hub image name format including registry prefix
+**Root Cause**: Docker metadata action was trying to generate Docker Hub tags even when DOCKER_HUB_USERNAME secret was not set, resulting in malformed image names
 
 **Solution**:
 
-- Changed from `format('{0}/{1}/{2}', env.REGISTRY_DOCKERHUB, secrets.DOCKERHUB_USERNAME, matrix.image)`
-- To `format('{0}/{1}', secrets.DOCKERHUB_USERNAME, matrix.image)`
+- Reverted to single metadata extraction step with both registries
+- Used secrets directly since Docker Hub credentials are configured
+- Simplified conditional logic to avoid complex secret checking in workflow conditions
 
 ### 3. Docker Hub Authentication
 
@@ -29,10 +30,11 @@
 
 ## Changes Made
 
-1. **Fixed Docker Hub image format**: Removed unnecessary registry prefix
-2. **Improved SHA tag generation**: Limited to main branch only with proper formatting
-3. **Enhanced validation**: Added tag validation step to catch future issues
-4. **Simplified authentication**: Direct secret checking instead of job output dependency
+1. **Simplified metadata extraction**: Back to single step with both GHCR and Docker Hub images
+2. **Direct secret usage**: Using secrets directly in metadata action since they are configured
+3. **Removed complex conditionals**: Simplified Docker Hub login since credentials are available
+4. **Enhanced validation**: Added tag validation step with improved error detection
+5. **Streamlined workflow**: Removed unnecessary tag combination logic
 
 ## Testing
 
