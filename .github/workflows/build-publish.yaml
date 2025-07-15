@@ -47,8 +47,8 @@ jobs:
         run: |
           # Get list of changed Dockerfile paths
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # For manual runs, build all containers
-            changed_files=$(find . -name "Dockerfile" -type f | grep -E "(parity|containers)/" | head -10)
+            # For manual runs, build all containers (excluding archived)
+            changed_files=$(find . -name "Dockerfile" -type f | grep -E "(node|containers)/" | grep -v "archived/" | head -10)
           else
             # For push/PR, detect changed files
             if [ "${{ github.event_name }}" = "pull_request" ]; then
