@@ -12,7 +12,7 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     version: process.env.npm_package_version || '1.0.0',
     node_version: process.version,
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 });
 
@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
     version: process.env.npm_package_version || '1.0.0',
     endpoints: {
       health: '/health',
-      info: '/info'
-    }
+      info: '/info',
+    },
   });
 });
 
@@ -37,7 +37,7 @@ app.get('/info', (req, res) => {
     architecture: process.arch,
     memory_usage: process.memoryUsage(),
     environment: process.env.NODE_ENV || 'development',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
