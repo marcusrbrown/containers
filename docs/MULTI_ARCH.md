@@ -27,13 +27,13 @@ All containers are built using Docker Buildx with cross-compilation support and 
 
 ## Supported Platforms
 
-| Platform | Architecture | Support Level | Notes |
-|----------|-------------|---------------|-------|
-| `linux/amd64` | x86_64 | ✅ Full | Primary development platform |
-| `linux/arm64` | AArch64 | ✅ Full | Apple Silicon, AWS Graviton |
-| `linux/arm/v7` | ARMv7 | ⚠️ Experimental | Raspberry Pi, embedded systems |
-| `linux/arm/v6` | ARMv6 | ⚠️ Limited | Older Raspberry Pi models |
-| `linux/386` | i386 | ⚠️ Limited | Legacy 32-bit x86 systems |
+| Platform       | Architecture | Support Level   | Notes                          |
+| -------------- | ------------ | --------------- | ------------------------------ |
+| `linux/amd64`  | x86_64       | ✅ Full         | Primary development platform   |
+| `linux/arm64`  | AArch64      | ✅ Full         | Apple Silicon, AWS Graviton    |
+| `linux/arm/v7` | ARMv7        | ⚠️ Experimental | Raspberry Pi, embedded systems |
+| `linux/arm/v6` | ARMv6        | ⚠️ Limited      | Older Raspberry Pi models      |
+| `linux/386`    | i386         | ⚠️ Limited      | Legacy 32-bit x86 systems      |
 
 ## Quick Start
 
@@ -102,17 +102,17 @@ The repository includes a comprehensive GitHub Actions workflow that automatical
 on:
   push:
     paths:
-      - '**/Dockerfile'
-      - 'scripts/**'
+      - "**/Dockerfile"
+      - "scripts/**"
 
 # Manual workflow dispatch with custom options
 workflow_dispatch:
   inputs:
     platforms:
-      description: 'Platforms to build for'
-      default: 'linux/amd64,linux/arm64'
+      description: "Platforms to build for"
+      default: "linux/amd64,linux/arm64"
     push_images:
-      description: 'Push images to registry'
+      description: "Push images to registry"
       default: true
 ```
 
@@ -352,7 +352,7 @@ registry/namespace/image:main-abc123     # Main branch with commit SHA
 
 ```yaml
 # Use GitHub ARM64 runners
-runs-on: ubuntu-latest-arm64  # If available
+runs-on: ubuntu-latest-arm64 # If available
 ```
 
 #### 2. Cross-Compilation Errors
