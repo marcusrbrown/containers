@@ -5,12 +5,16 @@ on:
     paths:
       - '**/Dockerfile'
       - 'scripts/**'
+      - '!archived/**'
+      - '!.devcontainer/**'
     branches:
       - main
   pull_request:
     paths:
       - '**/Dockerfile'
       - 'scripts/**'
+      - '!archived/**'
+      - '!.devcontainer/**'
   workflow_dispatch:
     inputs:
       platforms:
@@ -47,14 +51,14 @@ jobs:
         run: |
           # Get list of changed Dockerfile paths
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # For manual runs, build all containers (excluding archived)
-            changed_files=$(find . -name "Dockerfile" -type f | grep -E "(node|containers)/" | grep -v "archived/" | head -10)
+            # For manual runs, build all active containers (excluding archived and system files)
+            changed_files=$(find . -name "Dockerfile" -type f | grep -v -E "(archived/|\.devcontainer/|\.github/)" | head -10)
           else
-            # For push/PR, detect changed files
+            # For push/PR, detect changed files and filter out archived/system containers
             if [ "${{ github.event_name }}" = "pull_request" ]; then
-              changed_files=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep "Dockerfile$" || true)
+              changed_files=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|\.devcontainer/|\.github/)" || true)
             else
-              changed_files=$(git diff --name-only HEAD~1..HEAD | grep "Dockerfile$" || true)
+              changed_files=$(git diff --name-only HEAD~1..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|\.devcontainer/|\.github/)" || true)
             fi
           fi
 
@@ -64,12 +68,18 @@ jobs:
             exit 0
           fi
 
-          # Generate matrix for changed containers
+          # Generate matrix for changed containers with validation
           matrix_include=""
           for dockerfile in $changed_files; do
             container_dir=$(dirname "$dockerfile")
             container_name=$(basename "$container_dir")
             parent_dir=$(basename "$(dirname "$container_dir")")
+
+            # Skip if this is an archived, system, or invalid container
+            if [[ "$dockerfile" =~ ^(\./)?(archived/|\.devcontainer/|\.github/) ]]; then
+              echo "Skipping archived/system container: $dockerfile"
+              continue
+            fi
 
             # Create a unique identifier for the container
             if [ "$parent_dir" != "." ]; then
@@ -78,11 +88,29 @@ jobs:
               image_name="$container_name"
             fi
 
+            # Validate image name format (no special characters)
+            if [[ ! "$image_name" =~ ^[a-z0-9][a-z0-9_.-]*$ ]]; then
+              echo "Skipping invalid image name: $image_name (from $dockerfile)"
+              continue
+            fi
+
             if [ -n "$matrix_include" ]; then
               matrix_include="$matrix_include,"
             fi
             matrix_include="$matrix_include{\"dockerfile\":\"$dockerfile\",\"context\":\"$container_dir\",\"image\":\"$image_name\",\"name\":\"$container_name\",\"category\":\"$parent_dir\"}"
           done
+
+          # Final validation - ensure no archived containers in matrix
+          if [[ "$matrix_include" =~ archived ]]; then
+            echo "ERROR: Archived containers detected in build matrix!"
+            echo "Matrix content: $matrix_include"
+            exit 1
+          fi
+
+          # Debug output
+          echo "Detected containers for build:"
+          echo "$changed_files"
+          echo "Generated matrix include: $matrix_include"
 
           echo "has_changes=true" >> $GITHUB_OUTPUT
           echo "matrix={\"include\":[$matrix_include]}" >> $GITHUB_OUTPUT
