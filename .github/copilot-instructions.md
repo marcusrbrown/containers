@@ -2,37 +2,218 @@
 
 ## Project Overview
 
-This is the **marcusrbrown/containers** repository - a comprehensive collection of Dockerfiles, container automation tools, and CI/CD workflows designed for efficient container management and distribution.
+This is the **marcusrbrown/containers** repository - a comprehensive collection of Dockerfiles, container automation tools, and CI/CD workflows designed for efficient container management and distribution with advanced multi-architecture support.
 
 ### Key Features
 
-- **Container Collection**: Curated Dockerfiles for various applications and use cases
-- **Automated Generation**: Python scripts for dynamic Dockerfile creation and customization
-- **Metrics & Analytics**: Docker image build time, size, and usage tracking capabilities
-- **CI/CD Integration**: GitHub Actions workflows for building, testing, and publishing containers
-- **Development Environment**: Docker-in-Docker devcontainer setup for seamless development
-- **Security & Compliance**: Automated vulnerability scanning and security best practices
-- **Cross-Platform Support**: Multi-architecture container builds and distribution
+- **Container Collection**: Curated Dockerfiles for Node.js applications and archived Ethereum Parity client
+- **Multi-Architecture Build System**: Advanced ARM64/AMD64 builds with platform-specific optimizations via Docker Buildx
+- **Automated Generation**: Python scripts for dynamic Dockerfile creation, metrics collection, and intelligent tagging
+- **CI/CD Integration**: Sophisticated GitHub Actions workflows with conditional building, security scanning, and registry publishing
+- **Development Environment**: Docker-in-Docker devcontainer setup with mise tool management for consistent environments
 
 ### Tech Stack
 
-- **Python**: Primary automation language with Poetry for dependency management
-- **Node.js/pnpm**: JavaScript tooling and formatting with Prettier
-- **Docker**: Container platform with multi-stage builds and security scanning
+- **Python 3.13.4**: Primary automation language with Poetry for dependency management
+- **Node.js 22.17.0/pnpm**: JavaScript tooling and formatting with Prettier
+- **Docker + Buildx**: Multi-architecture container platform with advanced caching and manifest creation
 - **mise**: Polyglot tool version manager for consistent development environments
-- **GitHub Actions**: CI/CD automation and workflow orchestration
-- **Trivy**: Container vulnerability scanning and security analysis
-- **Hadolint**: Dockerfile linting and best practices enforcement
+- **GitHub Actions**: CI/CD automation with matrix builds and security scanning
+- **Trivy**: Container vulnerability scanning integrated into workflows
 
 ## Project Architecture
 
-### Top-Level Directory Structure
+### Critical Directory Structure
 
-#### Container Definitions
+#### Active Container Definitions
 
-- **`parity/`**: Container definitions for Ethereum Parity client
-  - **`branch/`**: Development builds from specific Git branches
-  - **`release/`**: Production builds from stable releases
+- **`node/`**: Production-ready Node.js container variants
+  - **`alpine/`**: Alpine Linux-based (~70MB) - Size-optimized builds
+  - **`release/`**: Debian Bookworm-based (~160MB) - Full compatibility
+- **`archived/parity/`**: Legacy Ethereum Parity client containers (excluded from CI/CD)
+
+#### Automation Scripts (`scripts/`)
+
+- **`generate_dockerfile.py`**: Dynamic Dockerfile generation with multi-arch platform support and package managers
+- **`collect_docker_metrics.py`**: Build performance and image size metrics with registry analytics
+- **`generate_image_tags.py`**: Automated Docker image tagging based on metadata extraction
+- **`build_multiarch.py`**: **[NEW]** Advanced multi-architecture build utility with buildx management
+
+#### Critical Configuration Files
+
+- **`pyproject.toml`**: Poetry configuration with script entry points (`generate-dockerfile`, `collect-docker-metrics`, `generate-image-tags`)
+- **`.mise.toml`**: Tool version management with automatic Poetry venv creation
+- **`.github/workflows/build-publish.yaml`**: **[CORE]** Smart container detection and multi-arch CI/CD pipeline
+
+## Essential Workflows & Patterns
+
+### Container Build Detection Logic
+
+The CI/CD system uses intelligent detection in `build-publish.yaml`:
+
+```yaml
+# Detects changed Dockerfiles but excludes archived/system containers
+changed_files=$(git diff --name-only | grep "Dockerfile$" | grep -v -E "(archived/|\.devcontainer/|\.github/)")
+```
+
+### Multi-Architecture Build Commands
+
+```bash
+# Local multi-arch builds using the build utility
+python3 scripts/build_multiarch.py build \
+  --dockerfile ./node/alpine/Dockerfile \
+  --context ./node/alpine \
+  --image myapp:latest \
+  --platforms linux/amd64,linux/arm64
+
+# Build all containers in directory
+python3 scripts/build_multiarch.py build-all \
+  --directory ./node \
+  --registry ghcr.io \
+  --namespace username \
+  --platforms linux/amd64,linux/arm64 \
+  --push
+```
+
+### Development Environment Setup Pattern
+
+```bash
+# Critical: mise manages ALL tools - never use direct pip/npm
+mise install              # Installs Python 3.13.4, Node.js 22.17.0, Poetry, pnpm
+poetry install           # Installs Python dependencies in auto-created venv
+pnpm install            # Installs Node.js tooling (Prettier, etc.)
+pre-commit install      # Sets up automated code quality hooks
+```
+
+### Script Usage Patterns (via Poetry)
+
+```bash
+# Dockerfile generation with platform-aware package management
+poetry run generate-dockerfile \
+  --base-image alpine:3.18 \
+  --packages "nodejs npm git" \
+  --env "NODE_ENV=production" \
+  --architecture "linux/amd64,linux/arm64"
+
+# Registry metrics collection
+poetry run collect-docker-metrics --registry github
+
+# Tag generation from container metadata
+poetry run generate-image-tags
+```
+
+## Critical Integration Points
+
+### CI/CD Matrix Build System
+
+The `build-publish.yaml` workflow creates dynamic matrices:
+
+- **Container Detection**: Scans for changed Dockerfiles, excluding archived/system containers
+- **Image Naming**: Uses directory structure (`parent-dir-container-name` format)
+- **Platform Building**: Defaults to `linux/amd64,linux/arm64` with manual override support
+- **Registry Publishing**: Dual-publishes to GitHub Container Registry and Docker Hub
+
+### Security & Compliance Integration
+
+- **Trivy Scanning**: Automated vulnerability scanning in `container-scan.yaml`
+- **SARIF Reports**: Security findings integrated into GitHub Security tab
+- **Hash Pinning**: All GitHub Actions use SHA256 hashes for security
+- **Secret Management**: Supports DOCKERHUB_TOKEN and automatic GITHUB_TOKEN
+
+### Development Environment Dependencies
+
+- **mise Integration**: ALL tool management goes through mise - never install tools directly
+- **Poetry Scripts**: Use `poetry run <script-name>` - scripts are defined as entry points in pyproject.toml
+- **Pre-commit Hooks**: Automatic formatting (Black, Prettier) and linting (yamllint)
+- **VS Code DevContainer**: Provides Docker-in-Docker with all tools pre-configured
+
+## Key Code Patterns
+
+### Multi-Architecture Dockerfile Patterns
+
+```dockerfile
+# Platform-aware builds with BuildKit
+FROM --platform=$TARGETPLATFORM node:18-alpine
+ARG TARGETARCH
+
+# Platform-specific package installation
+RUN case "$TARGETARCH" in \
+      "arm64") apk add --no-cache python3 make g++ ;; \
+      "amd64") apk add --no-cache python3 make g++ ;; \
+    esac
+```
+
+### Build Script Error Handling
+
+```python
+# Standard pattern from build_multiarch.py
+def run_command(self, cmd: List[str], capture_output: bool = False) -> subprocess.CompletedProcess:
+    """Run shell command with error handling."""
+    try:
+        result = subprocess.run(cmd, capture_output=capture_output, text=True, check=True)
+        return result
+    except subprocess.CalledProcessError as e:
+        self.log(f"Command failed: {' '.join(cmd)}", "ERROR")
+        if capture_output:
+            self.log(f"Error output: {e.stderr}", "ERROR")
+        raise
+```
+
+### Container Registry Publishing Pattern
+
+```yaml
+# GitHub Actions pattern for multi-registry publishing
+images: |
+  ${{ env.REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ matrix.image }}
+  ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image }}
+tags: |
+  type=ref,event=branch
+  type=sha,format=short,prefix={{branch}}-,enable={{is_default_branch}}
+  type=raw,value=latest,enable={{is_default_branch}}
+```
+
+## Project-Specific Conventions
+
+### Container Naming Strategy
+
+- **Directory Structure**: `category/variant/` (e.g., `node/alpine/`, `node/release/`)
+- **Image Names**: `category-variant` format in CI/CD (e.g., `node-alpine`, `node-release`)
+- **Registry Paths**: `ghcr.io/marcusrbrown/IMAGE` and `marcusrbrown/IMAGE`
+
+### Exclusion Patterns
+
+- **Archived Containers**: `archived/` directory excluded from CI/CD builds
+- **System Containers**: `.devcontainer/`, `.github/` excluded from automatic builds
+- **Development Files**: Build scripts ignore test/development Dockerfiles
+
+### Build Optimization Strategies
+
+- **Cache Mounts**: Leverage BuildKit cache mounts for package installations
+- **Multi-stage Builds**: Separate build and runtime stages for smaller images
+- **Platform Detection**: Use `$TARGETPLATFORM` and `$TARGETARCH` for conditional builds
+
+## Security Best Practices
+
+### Action Security Patterns
+
+```yaml
+# Always pin actions with SHA256 hashes
+- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+- uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
+```
+
+### Dockerfile Security Patterns
+
+```dockerfile
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash appuser
+USER appuser
+
+# Pin base images with SHA256 hashes (when available)
+FROM debian:bullseye-slim@sha256:...
+```
+
+This repository serves as a sophisticated container development platform with emphasis on automation, security, and multi-architecture support. Understanding the integration between mise, Poetry, GitHub Actions, and Docker Buildx is crucial for effective development.
 
 #### Automation Scripts (`scripts/`)
 
