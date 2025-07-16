@@ -1,119 +1,119 @@
-name: "postgresql"
-version: "1.0.0"
-description: "PostgreSQL database server with security hardening and performance optimization"
-category: "database"
-author: "Container Template Engine"
-license: "MIT"
-tags: ["postgresql", "database", "sql", "postgres"]
+name: 'postgresql'
+version: '1.0.0'
+description: 'PostgreSQL database server with security hardening and performance optimization'
+category: 'database'
+author: 'Container Template Engine'
+license: 'MIT'
+tags: ['postgresql', 'database', 'sql', 'postgres']
 
 parameters:
   postgres_version:
-    type: "string"
-    description: "PostgreSQL version"
-    default: "16"
-    enum: ["13", "14", "15", "16", "latest"]
+    type: 'string'
+    description: 'PostgreSQL version'
+    default: '16'
+    enum: ['13', '14', '15', '16', 'latest']
 
   postgres_db:
-    type: "string"
-    description: "Default database name"
-    default: "app_db"
-    pattern: "^[a-zA-Z][a-zA-Z0-9_]*$"
+    type: 'string'
+    description: 'Default database name'
+    default: 'app_db'
+    pattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
 
   postgres_user:
-    type: "string"
-    description: "Database user name"
-    default: "app_user"
-    pattern: "^[a-zA-Z][a-zA-Z0-9_]*$"
+    type: 'string'
+    description: 'Database user name'
+    default: 'app_user'
+    pattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
 
   postgres_password:
-    type: "string"
-    description: "Database password (use secrets in production)"
-    default: "secure_password_123"
+    type: 'string'
+    description: 'Database password (use secrets in production)'
+    default: 'secure_password_123'
 
   max_connections:
-    type: "integer"
-    description: "Maximum number of connections"
+    type: 'integer'
+    description: 'Maximum number of connections'
     default: 100
     min: 10
     max: 1000
 
   shared_buffers:
-    type: "string"
-    description: "Shared buffers size"
-    default: "256MB"
+    type: 'string'
+    description: 'Shared buffers size'
+    default: '256MB'
 
   effective_cache_size:
-    type: "string"
-    description: "Effective cache size"
-    default: "1GB"
+    type: 'string'
+    description: 'Effective cache size'
+    default: '1GB'
 
   maintenance_work_mem:
-    type: "string"
-    description: "Maintenance work memory"
-    default: "64MB"
+    type: 'string'
+    description: 'Maintenance work memory'
+    default: '64MB'
 
   checkpoint_completion_target:
-    type: "string"
-    description: "Checkpoint completion target"
-    default: "0.9"
+    type: 'string'
+    description: 'Checkpoint completion target'
+    default: '0.9'
 
   wal_buffers:
-    type: "string"
-    description: "WAL buffers size"
-    default: "16MB"
+    type: 'string'
+    description: 'WAL buffers size'
+    default: '16MB'
 
   default_statistics_target:
-    type: "integer"
-    description: "Default statistics target"
+    type: 'integer'
+    description: 'Default statistics target'
     default: 100
     min: 10
     max: 10000
 
   enable_ssl:
-    type: "boolean"
-    description: "Enable SSL connections"
+    type: 'boolean'
+    description: 'Enable SSL connections'
     default: true
 
   enable_logging:
-    type: "boolean"
-    description: "Enable query logging"
+    type: 'boolean'
+    description: 'Enable query logging'
     default: true
 
   backup_enabled:
-    type: "boolean"
-    description: "Enable automated backups"
+    type: 'boolean'
+    description: 'Enable automated backups'
     default: true
 
 files:
-  dockerfile: "Dockerfile"
-  compose: "docker-compose.yml"
-  config: ["postgresql.conf", "pg_hba.conf", "init.sql", "backup.sh"]
-  scripts: ["healthcheck.sh", "restore.sh"]
-  docs: ["README.md", "BACKUP.md", "PERFORMANCE.md"]
+  dockerfile: 'Dockerfile'
+  compose: 'docker-compose.yml'
+  config: ['postgresql.conf', 'pg_hba.conf', 'init.sql', 'backup.sh']
+  scripts: ['healthcheck.sh', 'restore.sh']
+  docs: ['README.md', 'BACKUP.md', 'PERFORMANCE.md']
 
 dependencies:
-  build: ["postgresql"]
-  runtime: ["postgresql", "curl"]
-  test: ["docker", "psql"]
+  build: ['postgresql']
+  runtime: ['postgresql', 'curl']
+  test: ['docker', 'psql']
 
 testing:
   build_args:
-    POSTGRES_VERSION: "16"
-    POSTGRES_DB: "test_db"
-    POSTGRES_USER: "test_user"
+    POSTGRES_VERSION: '16'
+    POSTGRES_DB: 'test_db'
+    POSTGRES_USER: 'test_user'
   env_vars:
-    POSTGRES_PASSWORD: "test_password"
-  health_check: "/healthcheck.sh"
+    POSTGRES_PASSWORD: 'test_password'
+  health_check: '/healthcheck.sh'
   test_commands:
-    - "docker run --rm -e POSTGRES_PASSWORD=test_password -d {{ template_name }}:latest"
-    - "sleep 10"
+    - 'docker run --rm -e POSTGRES_PASSWORD=test_password -d {{ template_name }}:latest'
+    - 'sleep 10'
     - "docker exec container_id psql -U test_user -d test_db -c 'SELECT version();'"
   integration_tests:
-    - "pg_prove tests/"
+    - 'pg_prove tests/'
 
-platforms: ["linux/amd64", "linux/arm64"]
+platforms: ['linux/amd64', 'linux/arm64']
 
 registry:
-  namespace: "databases"
-  repository: "postgresql"
-  tags: ["latest", "{{ postgres_version }}", "{{ postgres_version }}-alpine"]
+  namespace: 'databases'
+  repository: 'postgresql'
+  tags: ['latest', '{{ postgres_version }}', '{{ postgres_version }}-alpine']

@@ -4,22 +4,22 @@ Complete reference for all available parameters.
 
 ## Parameter Overview
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `redis_version` | string | ❌ | `7.2` | Redis version |
-| `redis_port` | integer | ❌ | `6379` | Redis port |
-| `redis_password` | string | ❌ | `secure_redis_password_123` | Redis authentication password |
-| `max_memory` | string | ❌ | `256mb` | Maximum memory usage |
-| `max_memory_policy` | string | ❌ | `allkeys-lru` | Memory eviction policy |
-| `enable_persistence` | boolean | ❌ | `True` | Enable data persistence |
-| `save_policy` | string | ❌ | `900 1 300 10 60 10000` | Save policy for persistence |
-| `enable_aof` | boolean | ❌ | `True` | Enable Append Only File |
-| `aof_rewrite_percentage` | integer | ❌ | `100` | AOF rewrite percentage |
-| `enable_cluster` | boolean | ❌ | `False` | Enable Redis cluster mode |
-| `cluster_announce_ip` | string | ❌ | `127.0.0.1` | Cluster announce IP |
-| `log_level` | string | ❌ | `notice` | Redis log level |
-| `timeout` | integer | ❌ | `300` | Client idle timeout (seconds) |
-| `databases` | integer | ❌ | `16` | Number of databases |
+| Parameter                | Type    | Required | Default                     | Description                   |
+| ------------------------ | ------- | -------- | --------------------------- | ----------------------------- |
+| `redis_version`          | string  | ❌       | `7.2`                       | Redis version                 |
+| `redis_port`             | integer | ❌       | `6379`                      | Redis port                    |
+| `redis_password`         | string  | ❌       | `secure_redis_password_123` | Redis authentication password |
+| `max_memory`             | string  | ❌       | `256mb`                     | Maximum memory usage          |
+| `max_memory_policy`      | string  | ❌       | `allkeys-lru`               | Memory eviction policy        |
+| `enable_persistence`     | boolean | ❌       | `True`                      | Enable data persistence       |
+| `save_policy`            | string  | ❌       | `900 1 300 10 60 10000`     | Save policy for persistence   |
+| `enable_aof`             | boolean | ❌       | `True`                      | Enable Append Only File       |
+| `aof_rewrite_percentage` | integer | ❌       | `100`                       | AOF rewrite percentage        |
+| `enable_cluster`         | boolean | ❌       | `False`                     | Enable Redis cluster mode     |
+| `cluster_announce_ip`    | string  | ❌       | `127.0.0.1`                 | Cluster announce IP           |
+| `log_level`              | string  | ❌       | `notice`                    | Redis log level               |
+| `timeout`                | integer | ❌       | `300`                       | Client idle timeout (seconds) |
+| `databases`              | integer | ❌       | `16`                        | Number of databases           |
 
 ## Detailed Parameter Descriptions
 
@@ -132,7 +132,6 @@ Complete reference for all available parameters.
 - **Minimum**: 1
 - **Maximum**: 16384
 
-
 ## Parameter Examples
 
 ### Basic Usage
@@ -166,4 +165,4 @@ poetry run template-engine generate template_name ./output --params params.json
 
 ---
 
-*Parameter reference generated automatically from template metadata*
+_Parameter reference generated automatically from template metadata_

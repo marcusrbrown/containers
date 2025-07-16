@@ -46,10 +46,11 @@ docker run -d --name my-Python FastAPI my-Python FastAPI:latest
 ## Parameters
 
 ### Required Parameters
+
 - `app_name` (string): Application name (default: `fastapi-app`)
 
-
 ### Optional Parameters
+
 - `alpine_version` (string): Alpine Linux version (default: `3.20`)
 - `packages` (array): Additional packages to install (default: `['curl', 'wget', 'ca-certificates']`)
 - `user_name` (string): Non-root user name (default: `appuser`)
@@ -65,7 +66,6 @@ docker run -d --name my-Python FastAPI my-Python FastAPI:latest
 - `enable_docs` (boolean): Enable API documentation (default: `True`)
 - `workers` (integer): Number of worker processes (default: `1`)
 
-
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
 ## Generated Files
@@ -73,27 +73,32 @@ docker run -d --name my-Python FastAPI my-Python FastAPI:latest
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `requirements.txt`
 - `app.py`
 - `config.py`
 
 ### Docs
+
 - `README.md`
 - `api_docs.md`
 
 ### Scripts
+
 - `entrypoint.sh`
 - `healthcheck.py`
 
 ### Tests
-- `test_app.py`
 
+- `test_app.py`
 
 ## Examples
 
@@ -106,12 +111,14 @@ This template generates the following files:
 ## Dependencies
 
 ### Build
+
 - python:{{ python_version }}-alpine
 - gcc
 - musl-dev
 - postgresql-dev
 
 ### Runtime
+
 - fastapi[all]
 - uvicorn[standard]
 - sqlalchemy
@@ -120,6 +127,7 @@ This template generates the following files:
 - pydantic-settings
 
 ### Test
+
 - pytest
 - pytest-asyncio
 - httpx
@@ -133,9 +141,9 @@ linux/amd64, linux/arm64
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `python -m pytest tests/ -v`
 - `python -c 'import app; print("App imports successfully")'`
-
 
 ## Contributing
 
@@ -152,5 +160,5 @@ Browse other templates in the same category: [**App Templates**](../app/README.m
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_
