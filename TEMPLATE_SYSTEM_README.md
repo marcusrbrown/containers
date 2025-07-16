@@ -16,18 +16,22 @@ A comprehensive containerization toolkit with pre-built templates for common app
 ## 📦 Available Templates
 
 ### Application Stacks
+
 - **Node.js Express** (`apps/nodejs/express`) - TypeScript, hot reload, security middleware
 - **Python FastAPI** (`apps/python/fastapi`) - Async APIs, database integration, OpenAPI docs
 - **Go Microservices** (`microservices/go`) - gRPC + REST, metrics, distributed tracing
 
 ### Databases
+
 - **PostgreSQL** (`databases/postgresql`) - Performance tuned, backup automation
 - **Redis** (`databases/redis`) - Caching, persistence, clustering support
 
 ### Infrastructure
+
 - **nginx** (`infrastructure/nginx`) - Reverse proxy, SSL termination, load balancing
 
 ### Base Images
+
 - **Alpine Linux** (`base/alpine`) - Secure base with hardening
 
 ## 🛠 Installation
@@ -47,16 +51,19 @@ poetry run containers list
 ## 🎯 Quick Start
 
 ### List Available Templates
+
 ```bash
 poetry run containers list
 ```
 
 ### Get Template Information
+
 ```bash
 poetry run containers info apps/nodejs/express
 ```
 
 ### Generate a Project
+
 ```bash
 # Basic generation
 poetry run containers generate apps/nodejs/express ./my-app
@@ -72,6 +79,7 @@ poetry run containers generate apps/nodejs/express ./my-app --dry-run
 ```
 
 ### Generate Documentation
+
 ```bash
 # Generate docs for all templates
 poetry run containers docs
@@ -86,20 +94,25 @@ poetry run containers docs --serve --port 8000
 ## 📋 CLI Commands
 
 ### `containers list [--format table|json] [--category app|database|infrastructure]`
+
 List available templates with filtering options.
 
 ### `containers info <template>`
+
 Show detailed information about a template including parameters and dependencies.
 
 ### `containers generate <template> <output-dir> [options]`
+
 Generate a project from a template.
 
 Options:
+
 - `--dry-run` - Show what would be generated without creating files
 - `--param key=value` - Set template parameters
 - `--params file.json` - Load parameters from JSON file
 
 ### `containers docs [--template <template>] [--output dir] [--serve]`
+
 Generate comprehensive documentation for templates.
 
 ## 🏗 Template Structure
@@ -123,7 +136,7 @@ name: "Template Name"
 version: "1.0.0"
 description: "Template description"
 category: "app|database|infrastructure|microservice|base"
-inherits: "base/alpine"  # Optional inheritance
+inherits: "base/alpine" # Optional inheritance
 
 parameters:
   param_name:
@@ -175,6 +188,7 @@ inherits: "base/alpine"
 ```
 
 This allows:
+
 - Reusing common configuration
 - Layered security and optimization
 - Consistent base images across templates
@@ -207,6 +221,7 @@ parameters:
 ## 🧪 Testing
 
 ### Template Validation
+
 ```bash
 # Validate template structure
 poetry run template-engine validate apps/nodejs/express
@@ -219,6 +234,7 @@ poetry run template-testing test apps/nodejs/express --params test-params.json
 ```
 
 ### Integration Testing
+
 ```bash
 # Test actual Docker builds
 poetry run template-testing test apps/nodejs/express --integration
@@ -239,6 +255,7 @@ poetry run template-testing test apps/nodejs/express --performance
 ## 🏭 Production Deployment
 
 ### Docker Compose Stack
+
 ```bash
 # Generate and deploy a complete stack
 poetry run containers generate apps/python/fastapi ./my-api
@@ -250,6 +267,7 @@ docker-compose up -d --scale api=3
 ```
 
 ### Kubernetes Deployment
+
 ```bash
 # Generate Kubernetes manifests (if template supports it)
 poetry run containers generate apps/nodejs/express ./my-app --platform kubernetes
@@ -257,6 +275,7 @@ kubectl apply -f my-app/k8s/
 ```
 
 ### Multi-Architecture Builds
+
 ```bash
 # Build for multiple platforms
 docker buildx build --platform linux/amd64,linux/arm64 -t myapp:latest .
@@ -265,6 +284,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t myapp:latest .
 ## 📊 Monitoring and Observability
 
 Templates include built-in support for:
+
 - **Health checks**: Standardized health endpoints
 - **Metrics**: Prometheus metrics collection
 - **Logging**: Structured logging with correlation IDs

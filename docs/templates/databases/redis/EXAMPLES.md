@@ -56,7 +56,6 @@ docker run -d \
   my-redis-cache:prod
 ```
 
-
 ## Database-Specific Examples
 
 ### Data Persistence
@@ -220,4 +219,4 @@ poetry run template-engine generate databases/redis ./prod \
 
 ---
 
-*Examples generated automatically for template: databases/redis*
+_Examples generated automatically for template: databases/redis_

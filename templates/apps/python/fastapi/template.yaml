@@ -1,10 +1,10 @@
-name: "Python FastAPI"
-version: "1.0.0"
-description: "High-performance Python web API with FastAPI framework"
-category: "app"
-author: "Container Template Engine"
-license: "MIT"
-inherits: "base/alpine"
+name: 'Python FastAPI'
+version: '1.0.0'
+description: 'High-performance Python web API with FastAPI framework'
+category: 'app'
+author: 'Container Template Engine'
+license: 'MIT'
+inherits: 'base/alpine'
 
 tags:
   - python
@@ -16,98 +16,98 @@ tags:
 parameters:
   app_name:
     type: string
-    description: "Application name"
-    default: "fastapi-app"
+    description: 'Application name'
+    default: 'fastapi-app'
     required: true
-    pattern: "^[a-z][a-z0-9-]*[a-z0-9]$"
+    pattern: '^[a-z][a-z0-9-]*[a-z0-9]$'
 
   python_version:
     type: string
-    description: "Python version"
-    default: "3.11"
-    enum: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+    description: 'Python version'
+    default: '3.11'
+    enum: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
   port:
     type: integer
-    description: "Application port"
+    description: 'Application port'
     default: 8000
     minimum: 1024
     maximum: 65535
 
   debug:
     type: boolean
-    description: "Enable debug mode"
+    description: 'Enable debug mode'
     default: false
 
   cors_origins:
     type: array
-    description: "CORS allowed origins"
-    default: ["http://localhost:3000"]
+    description: 'CORS allowed origins'
+    default: ['http://localhost:3000']
     items:
       type: string
 
   database_url:
     type: string
-    description: "Database connection URL"
-    default: "sqlite:///./app.db"
+    description: 'Database connection URL'
+    default: 'sqlite:///./app.db'
 
   secret_key:
     type: string
-    description: "Application secret key"
-    default: "{{ random_string(32) }}"
+    description: 'Application secret key'
+    default: '{{ random_string(32) }}'
 
   enable_docs:
     type: boolean
-    description: "Enable API documentation"
+    description: 'Enable API documentation'
     default: true
 
   workers:
     type: integer
-    description: "Number of worker processes"
+    description: 'Number of worker processes'
     default: 1
     minimum: 1
     maximum: 8
 
 files:
-  dockerfile: "Dockerfile"
-  compose: "docker-compose.yml"
-  config: ["requirements.txt", "app.py", "config.py"]
-  docs: ["README.md", "api_docs.md"]
-  scripts: ["entrypoint.sh", "healthcheck.py"]
-  tests: ["test_app.py"]
+  dockerfile: 'Dockerfile'
+  compose: 'docker-compose.yml'
+  config: ['requirements.txt', 'app.py', 'config.py']
+  docs: ['README.md', 'api_docs.md']
+  scripts: ['entrypoint.sh', 'healthcheck.py']
+  tests: ['test_app.py']
 
 dependencies:
   build:
-    - "python:{{ python_version }}-alpine"
-    - "gcc"
-    - "musl-dev"
-    - "postgresql-dev"
+    - 'python:{{ python_version }}-alpine'
+    - 'gcc'
+    - 'musl-dev'
+    - 'postgresql-dev'
   runtime:
-    - "fastapi[all]"
-    - "uvicorn[standard]"
-    - "sqlalchemy"
-    - "asyncpg"
-    - "alembic"
-    - "pydantic-settings"
+    - 'fastapi[all]'
+    - 'uvicorn[standard]'
+    - 'sqlalchemy'
+    - 'asyncpg'
+    - 'alembic'
+    - 'pydantic-settings'
   test:
-    - "pytest"
-    - "pytest-asyncio"
-    - "httpx"
+    - 'pytest'
+    - 'pytest-asyncio'
+    - 'httpx'
 
 testing:
-  health_check: "curl -f http://localhost:{{ port }}/health || exit 1"
+  health_check: 'curl -f http://localhost:{{ port }}/health || exit 1'
   test_commands:
-    - "python -m pytest tests/ -v"
-    - "python -c 'import app; print(\"App imports successfully\")'"
+    - 'python -m pytest tests/ -v'
+    - 'python -c ''import app; print("App imports successfully")'''
   performance_tests:
-    - "ab -n 1000 -c 10 http://localhost:{{ port }}/health"
+    - 'ab -n 1000 -c 10 http://localhost:{{ port }}/health'
 
 platforms:
-  - "linux/amd64"
-  - "linux/arm64"
+  - 'linux/amd64'
+  - 'linux/arm64'
 
 security:
   non_root_user: true
   read_only_filesystem: false
-  capabilities_drop: ["ALL"]
-  seccomp_profile: "runtime/default"
+  capabilities_drop: ['ALL']
+  seccomp_profile: 'runtime/default'

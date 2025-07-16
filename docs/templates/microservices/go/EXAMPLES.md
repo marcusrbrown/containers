@@ -56,7 +56,6 @@ docker run -d \
   my-Go Microservice:prod
 ```
 
-
 ## CI/CD Integration
 
 ### GitHub Actions
@@ -177,4 +176,4 @@ poetry run template-engine generate microservices/go ./prod \
 
 ---
 
-*Examples generated automatically for template: microservices/go*
+_Examples generated automatically for template: microservices/go_

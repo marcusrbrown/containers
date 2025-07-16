@@ -4,24 +4,24 @@ Complete reference for all available parameters.
 
 ## Parameter Overview
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `alpine_version` | string | ❌ | `3.20` | Alpine Linux version |
-| `packages` | array | ❌ | `['curl', 'wget', 'ca-certificates']` | Additional packages to install |
-| `user_name` | string | ❌ | `appuser` | Non-root user name |
-| `user_uid` | integer | ❌ | `1000` | User UID |
-| `timezone` | string | ❌ | `UTC` | System timezone |
-| `enable_security_updates` | boolean | ❌ | `True` | Enable automatic security updates |
-| `service_name` | string | ✅ | `go-service` | Microservice name |
-| `go_version` | string | ❌ | `1.21` | Go version |
-| `http_port` | integer | ❌ | `8080` | HTTP port |
-| `grpc_port` | integer | ❌ | `9090` | gRPC port |
-| `metrics_port` | integer | ❌ | `9091` | Metrics port |
-| `debug` | boolean | ❌ | `False` | Enable debug mode |
-| `database_type` | string | ❌ | `postgres` | Database type |
-| `enable_metrics` | boolean | ❌ | `True` | Enable Prometheus metrics |
-| `enable_tracing` | boolean | ❌ | `True` | Enable distributed tracing |
-| `log_level` | string | ❌ | `info` | Log level |
+| Parameter                 | Type    | Required | Default                               | Description                       |
+| ------------------------- | ------- | -------- | ------------------------------------- | --------------------------------- |
+| `alpine_version`          | string  | ❌       | `3.20`                                | Alpine Linux version              |
+| `packages`                | array   | ❌       | `['curl', 'wget', 'ca-certificates']` | Additional packages to install    |
+| `user_name`               | string  | ❌       | `appuser`                             | Non-root user name                |
+| `user_uid`                | integer | ❌       | `1000`                                | User UID                          |
+| `timezone`                | string  | ❌       | `UTC`                                 | System timezone                   |
+| `enable_security_updates` | boolean | ❌       | `True`                                | Enable automatic security updates |
+| `service_name`            | string  | ✅       | `go-service`                          | Microservice name                 |
+| `go_version`              | string  | ❌       | `1.21`                                | Go version                        |
+| `http_port`               | integer | ❌       | `8080`                                | HTTP port                         |
+| `grpc_port`               | integer | ❌       | `9090`                                | gRPC port                         |
+| `metrics_port`            | integer | ❌       | `9091`                                | Metrics port                      |
+| `debug`                   | boolean | ❌       | `False`                               | Enable debug mode                 |
+| `database_type`           | string  | ❌       | `postgres`                            | Database type                     |
+| `enable_metrics`          | boolean | ❌       | `True`                                | Enable Prometheus metrics         |
+| `enable_tracing`          | boolean | ❌       | `True`                                | Enable distributed tracing        |
+| `log_level`               | string  | ❌       | `info`                                | Log level                         |
 
 ## Detailed Parameter Descriptions
 
@@ -145,7 +145,6 @@ Complete reference for all available parameters.
 - **Default**: `info`
 - **Allowed Values**: `debug`, `info`, `warn`, `error`
 
-
 ## Parameter Examples
 
 ### Basic Usage
@@ -179,4 +178,4 @@ poetry run template-engine generate template_name ./output --params params.json
 
 ---
 
-*Parameter reference generated automatically from template metadata*
+_Parameter reference generated automatically from template metadata_

@@ -56,7 +56,6 @@ docker run -d \
   my-alpine-base:prod
 ```
 
-
 ## CI/CD Integration
 
 ### GitHub Actions
@@ -177,4 +176,4 @@ poetry run template-engine generate base/alpine ./prod \
 
 ---
 
-*Examples generated automatically for template: base/alpine*
+_Examples generated automatically for template: base/alpine_

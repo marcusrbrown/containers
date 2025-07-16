@@ -23,10 +23,12 @@ poetry run template-engine list [--category CATEGORY] [--format FORMAT]
 ```
 
 **Options:**
+
 - `--category`: Filter by category (app, database, infrastructure, microservice, base)
 - `--format`: Output format (table, json)
 
 **Examples:**
+
 ```bash
 # List all templates
 poetry run template-engine list
@@ -47,15 +49,18 @@ poetry run template-engine generate TEMPLATE OUTPUT [options]
 ```
 
 **Arguments:**
+
 - `TEMPLATE`: Template path (e.g., apps/nodejs/express)
 - `OUTPUT`: Output directory
 
 **Options:**
+
 - `--params FILE`: Parameters JSON file
 - `--param KEY=VALUE`: Individual parameter (can be used multiple times)
 - `--dry-run`: Show what would be generated without writing files
 
 **Examples:**
+
 ```bash
 # Basic generation
 poetry run template-engine generate apps/nodejs/express ./my-app
@@ -82,9 +87,11 @@ poetry run template-engine validate TEMPLATE
 ```
 
 **Arguments:**
+
 - `TEMPLATE`: Template path
 
 **Examples:**
+
 ```bash
 poetry run template-engine validate apps/nodejs/express
 ```
@@ -98,12 +105,15 @@ poetry run template-engine test TEMPLATE [--params FILE]
 ```
 
 **Arguments:**
+
 - `TEMPLATE`: Template path
 
 **Options:**
+
 - `--params FILE`: Parameters JSON file for testing
 
 **Examples:**
+
 ```bash
 poetry run template-engine test apps/nodejs/express
 poetry run template-engine test apps/nodejs/express --params test-config.json
@@ -118,9 +128,11 @@ poetry run template-testing TEMPLATE [options]
 ```
 
 **Arguments:**
+
 - `TEMPLATE`: Template path
 
 **Options:**
+
 - `--params FILE`: Parameters JSON file
 - `--integration`: Include integration tests
 - `--performance`: Include performance tests
@@ -128,6 +140,7 @@ poetry run template-testing TEMPLATE [options]
 - `--format FORMAT`: Output format (text, json)
 
 **Examples:**
+
 ```bash
 # Basic testing
 poetry run template-testing apps/nodejs/express
@@ -153,10 +166,12 @@ poetry run generate-docs [options]
 ```
 
 **Options:**
+
 - `--output DIR`: Output directory (default: docs/templates)
 - `--template PATH`: Generate docs for specific template only
 
 **Examples:**
+
 ```bash
 # Generate all documentation
 poetry run generate-docs
@@ -209,6 +224,7 @@ test_results = engine.test_template("apps/nodejs/express", {"app_name": "test"})
 Initialize the template engine.
 
 **Parameters:**
+
 - `templates_dir`: Path to templates directory
 
 ##### `list_templates(category: Optional[str] = None) -> List[Dict[str, Any]]`
@@ -216,9 +232,11 @@ Initialize the template engine.
 List available templates.
 
 **Parameters:**
+
 - `category`: Optional category filter
 
 **Returns:**
+
 - List of template information dictionaries
 
 ##### `load_template_metadata(template_path: str) -> Dict[str, Any]`
@@ -226,12 +244,15 @@ List available templates.
 Load template metadata from template.yaml.
 
 **Parameters:**
+
 - `template_path`: Path to template
 
 **Returns:**
+
 - Template metadata dictionary
 
 **Raises:**
+
 - `FileNotFoundError`: If template.yaml not found
 - `ValidationError`: If metadata is invalid
 
@@ -240,9 +261,11 @@ Load template metadata from template.yaml.
 Resolve template inheritance chain.
 
 **Parameters:**
+
 - `template_path`: Path to template
 
 **Returns:**
+
 - Merged metadata with inheritance resolved
 
 ##### `generate_template(template_path: str, output_dir: str, parameters: Optional[Dict[str, Any]] = None, dry_run: bool = False) -> Dict[str, str]`
@@ -250,15 +273,18 @@ Resolve template inheritance chain.
 Generate files from template.
 
 **Parameters:**
+
 - `template_path`: Path to template
 - `output_dir`: Output directory
 - `parameters`: Template parameters
 - `dry_run`: If True, don't write files
 
 **Returns:**
+
 - Dictionary mapping file paths to content
 
 **Raises:**
+
 - `TemplateError`: If template rendering fails
 - `ValueError`: If required parameters missing
 
@@ -267,9 +293,11 @@ Generate files from template.
 Validate template structure and syntax.
 
 **Parameters:**
+
 - `template_path`: Path to template
 
 **Returns:**
+
 - Validation results dictionary
 
 ##### `test_template(template_path: str, test_params: Optional[Dict] = None) -> Dict[str, Any]`
@@ -277,10 +305,12 @@ Validate template structure and syntax.
 Test template by generating and building.
 
 **Parameters:**
+
 - `template_path`: Path to template
 - `test_params`: Test parameters
 
 **Returns:**
+
 - Test results dictionary
 
 ### TemplateTestFramework Class
@@ -337,25 +367,25 @@ doc_path = doc_gen.generate_template_documentation("apps/nodejs/express")
 name: "template-name"
 version: "1.0.0"
 description: "Template description"
-category: "app"  # app, database, infrastructure, microservice, base
+category: "app" # app, database, infrastructure, microservice, base
 
 # Optional fields
 author: "Author Name"
 license: "MIT"
 tags: ["tag1", "tag2"]
-inherits: "base/alpine"  # Template inheritance
+inherits: "base/alpine" # Template inheritance
 
 # Parameters definition
 parameters:
   param_name:
-    type: "string"  # string, integer, boolean, array, object
+    type: "string" # string, integer, boolean, array, object
     description: "Parameter description"
     default: "default_value"
     required: true
-    enum: ["option1", "option2"]  # For string types
-    pattern: "^[a-z]+$"  # Regex pattern for strings
-    min: 1  # For numeric types
-    max: 100  # For numeric types
+    enum: ["option1", "option2"] # For string types
+    pattern: "^[a-z]+$" # Regex pattern for strings
+    min: 1 # For numeric types
+    max: 100 # For numeric types
 
 # Files to generate
 files:
@@ -396,16 +426,18 @@ registry:
 ### Parameter Types
 
 #### string
+
 ```yaml
 param_name:
   type: "string"
   description: "String parameter"
   default: "default"
-  pattern: "^[a-z]+$"  # Optional regex validation
-  enum: ["option1", "option2"]  # Optional allowed values
+  pattern: "^[a-z]+$" # Optional regex validation
+  enum: ["option1", "option2"] # Optional allowed values
 ```
 
 #### integer
+
 ```yaml
 param_name:
   type: "integer"
@@ -416,6 +448,7 @@ param_name:
 ```
 
 #### boolean
+
 ```yaml
 param_name:
   type: "boolean"
@@ -424,6 +457,7 @@ param_name:
 ```
 
 #### array
+
 ```yaml
 param_name:
   type: "array"
@@ -432,6 +466,7 @@ param_name:
 ```
 
 #### object
+
 ```yaml
 param_name:
   type: "object"
@@ -446,6 +481,7 @@ param_name:
 ### Common Errors
 
 #### ValidationError
+
 Template metadata validation failed.
 
 ```python
@@ -456,6 +492,7 @@ except ValidationError as e:
 ```
 
 #### TemplateError
+
 Template rendering failed.
 
 ```python
@@ -466,6 +503,7 @@ except TemplateError as e:
 ```
 
 #### FileNotFoundError
+
 Template or file not found.
 
 ```python
@@ -501,5 +539,5 @@ except FileNotFoundError as e:
 
 ---
 
-*API documentation for Container Template Engine*
-*Generated automatically from source code*
+_API documentation for Container Template Engine_
+_Generated automatically from source code_

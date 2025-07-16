@@ -17,7 +17,6 @@ poetry run template-engine generate infrastructure/nginx ./my-nginx-proxy
 
 ---
 
-
 ## Category Overview
 
 Infrastructure templates provide pre-configured containers for common infrastructure scenarios. Each template includes:
@@ -30,12 +29,10 @@ Infrastructure templates provide pre-configured containers for common infrastruc
 
 ## Common Use Cases
 
-
 - **Load Balancers**: Traffic distribution and SSL termination
 - **Reverse Proxies**: Request routing and caching
 - **API Gateways**: Service mesh entry points
 - **Monitoring**: Observability and alerting systems
-
 
 ## Getting Started
 
@@ -49,10 +46,9 @@ Infrastructure templates provide pre-configured containers for common infrastruc
 
 ## Template Comparison
 
-| Template | Use Case | Size | Complexity | Best For |
-|----------|----------|------|------------|----------|
-| nginx-proxy | nginx reverse proxy with SSL t... | TBD | Complex | Production use |
-
+| Template    | Use Case                          | Size | Complexity | Best For       |
+| ----------- | --------------------------------- | ---- | ---------- | -------------- |
+| nginx-proxy | nginx reverse proxy with SSL t... | TBD  | Complex    | Production use |
 
 ## Related Categories
 
@@ -65,5 +61,5 @@ Infrastructure templates provide pre-configured containers for common infrastruc
 
 ---
 
-*Infrastructure category documentation*
-*1 templates available*
+_Infrastructure category documentation_
+_1 templates available_

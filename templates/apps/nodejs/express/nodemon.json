@@ -1,7 +1,10 @@
 {
   "watch": ["src"],
   "ext": "{% if enable_typescript %}ts,js{% else %}js{% endif %}",
-  "ignore": ["src/**/*.test.{% if enable_typescript %}ts{% else %}js{% endif %}", "src/**/*.spec.{% if enable_typescript %}ts{% else %}js{% endif %}"],
+  "ignore": [
+    "src/**/*.test.{% if enable_typescript %}ts{% else %}js{% endif %}",
+    "src/**/*.spec.{% if enable_typescript %}ts{% else %}js{% endif %}"
+  ],
   "exec": "{% if enable_typescript %}npm run build && npm start{% else %}node src/app.js{% endif %}",
   "env": {
     "NODE_ENV": "development",
