@@ -53,7 +53,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     .
 
 # Runtime stage
-FROM alpine:latest
+FROM alpine:latest@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
 
 # Install runtime dependencies
 RUN apk --no-cache add \
