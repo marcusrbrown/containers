@@ -1,3 +1,27 @@
 # Auto detect text files and perform LF normalization
 # http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
 * text=auto
+
+# Binary files that should not have line ending conversion
+*.db binary
+*.sqlite binary
+*.sqlite3 binary
+*.zip binary
+*.tar.gz binary
+*.tgz binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# Ensure shell scripts have LF line endings
+*.sh text eol=lf
+
+# Ensure Python files have LF line endings
+*.py text eol=lf
+
+# Ensure YAML files have LF line endings (important for CI/CD)
+*.yml text eol=lf
+*.yaml text eol=lf

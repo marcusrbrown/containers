@@ -7,6 +7,32 @@ license: 'MIT'
 tags: ['nodejs', 'express', 'typescript', 'web', 'api']
 inherits: 'base/alpine'
 
+# AI-enhanced metadata for intelligent recommendations
+ai_metadata:
+  tags: ['rest-api', 'microservice', 'backend', 'express', 'nodejs']
+  use_cases: ['web-api', 'microservice', 'backend-service', 'rest-api']
+  tech_stack: ['nodejs', 'express', 'typescript', 'javascript']
+  performance_profile: 'medium-latency-high-throughput'
+  security_considerations: ['input-validation', 'cors', 'helmet', 'rate-limiting']
+  common_integrations: ['database', 'authentication', 'logging', 'monitoring']
+  difficulty_indicators:
+    setup: 2 # 1-5 scale (1=very easy, 5=very hard)
+    customization: 3
+    maintenance: 2
+  complexity_score: 0.6
+  resource_requirements:
+    memory_mb: 256
+    cpu_cores: 0.5
+    disk_mb: 500
+  best_practices:
+    - 'Use TypeScript for better type safety'
+    - 'Implement proper error handling'
+    - 'Add input validation middleware'
+    - 'Use environment variables for configuration'
+    - 'Enable security middleware (helmet, cors)'
+  similar_templates: ['nodejs-fastify', 'nodejs-koa', 'nodejs-nest']
+  upgrade_paths: ['Add GraphQL support', 'Implement microservice patterns']
+
 parameters:
   node_version:
     type: 'string'

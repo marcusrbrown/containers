@@ -13,13 +13,15 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 
-from template_engine import TemplateEngine
+from .template_engine import TemplateEngine
 
 
 class DocumentationGenerator:
     """Generates documentation for container templates."""
 
-    def __init__(self, templates_dir: str = "templates", docs_dir: str = "docs/templates"):
+    def __init__(
+        self, templates_dir: str = "templates", docs_dir: str = "docs/templates"
+    ):
         """Initialize the documentation generator.
 
         Args:
@@ -57,7 +59,9 @@ class DocumentationGenerator:
         categories = set(template["category"] for template in templates)
         for category in categories:
             category_templates = [t for t in templates if t["category"] == category]
-            category_path = self.generate_category_documentation(category, category_templates)
+            category_path = self.generate_category_documentation(
+                category, category_templates
+            )
             generated_docs[f"category_{category}"] = category_path
 
         # Generate API documentation
@@ -87,28 +91,30 @@ class DocumentationGenerator:
             readme_path = doc_dir / "README.md"
             readme_content = self._generate_template_readme(metadata, template_path)
 
-            with open(readme_path, 'w') as f:
+            with open(readme_path, "w") as f:
                 f.write(readme_content)
 
             # Generate parameter reference
             params_path = doc_dir / "PARAMETERS.md"
             params_content = self._generate_parameter_reference(metadata)
 
-            with open(params_path, 'w') as f:
+            with open(params_path, "w") as f:
                 f.write(params_content)
 
             # Generate usage examples
             examples_path = doc_dir / "EXAMPLES.md"
             examples_content = self._generate_usage_examples(metadata, template_path)
 
-            with open(examples_path, 'w') as f:
+            with open(examples_path, "w") as f:
                 f.write(examples_content)
 
             # Generate troubleshooting guide
             troubleshooting_path = doc_dir / "TROUBLESHOOTING.md"
-            troubleshooting_content = self._generate_troubleshooting_guide(metadata, template_path)
+            troubleshooting_content = self._generate_troubleshooting_guide(
+                metadata, template_path
+            )
 
-            with open(troubleshooting_path, 'w') as f:
+            with open(troubleshooting_path, "w") as f:
                 f.write(troubleshooting_content)
 
             print(f"  ✅ {template_path}")
@@ -130,8 +136,14 @@ class DocumentationGenerator:
 
         # Get parameters for quick reference
         parameters = metadata.get("parameters", {})
-        required_params = [name for name, param in parameters.items() if param.get("required", False)]
-        optional_params = [name for name, param in parameters.items() if not param.get("required", False)]
+        required_params = [
+            name for name, param in parameters.items() if param.get("required", False)
+        ]
+        optional_params = [
+            name
+            for name, param in parameters.items()
+            if not param.get("required", False)
+        ]
 
         # Get file types
         files = metadata.get("files", {})
@@ -324,7 +336,9 @@ Complete reference for all available parameters.
             content += f"### `{param_name}`\n\n"
             content += f"- **Type**: {param_def.get('type', 'string')}\n"
             content += f"- **Required**: {'Yes' if param_def.get('required', False) else 'No'}\n"
-            content += f"- **Description**: {param_def.get('description', 'No description')}\n"
+            content += (
+                f"- **Description**: {param_def.get('description', 'No description')}\n"
+            )
 
             if "default" in param_def:
                 content += f"- **Default**: `{param_def['default']}`\n"
@@ -354,7 +368,9 @@ poetry run template-engine generate {metadata.get('name', 'template')} ./output 
 
         # Add example parameters
         example_params = []
-        for param_name, param_def in list(parameters.items())[:3]:  # Show first 3 parameters
+        for param_name, param_def in list(parameters.items())[
+            :3
+        ]:  # Show first 3 parameters
             if "default" in param_def:
                 example_params.append(f"  --param {param_name}={param_def['default']}")
 
@@ -372,7 +388,9 @@ Create a `params.json` file:
 
         # Add JSON example
         json_params = []
-        for param_name, param_def in list(parameters.items())[:5]:  # Show first 5 parameters
+        for param_name, param_def in list(parameters.items())[
+            :5
+        ]:  # Show first 5 parameters
             if "default" in param_def:
                 value = param_def["default"]
                 if isinstance(value, str):
@@ -471,7 +489,8 @@ docker run -d \\
         elif category == "infrastructure":
             content += self._generate_infrastructure_examples(metadata, template_path)
 
-        content += """
+        content += (
+            """
 ## CI/CD Integration
 
 ### GitHub Actions
@@ -492,7 +511,9 @@ jobs:
       - name: Generate from template
         run: |
           poetry install
-          poetry run template-engine generate """ + template_path + """ ./app
+          poetry run template-engine generate """
+            + template_path
+            + """ ./app
 
       - name: Build Docker image
         run: |
@@ -516,7 +537,9 @@ build:
   stage: build
   script:
     - poetry install
-    - poetry run template-engine generate """ + template_path + """ ./app
+    - poetry run template-engine generate """
+            + template_path
+            + """ ./app
     - cd app
     - docker build -t my-app:$CI_COMMIT_SHA .
     - docker push my-app:$CI_COMMIT_SHA
@@ -533,16 +556,24 @@ deploy:
 
 ```bash
 # Validate template
-poetry run template-engine validate """ + template_path + """
+poetry run template-engine validate """
+            + template_path
+            + """
 
 # Test template generation
-poetry run template-engine test """ + template_path + """
+poetry run template-engine test """
+            + template_path
+            + """
 
 # Test with custom parameters
-poetry run template-engine test """ + template_path + """ --params test-params.json
+poetry run template-engine test """
+            + template_path
+            + """ --params test-params.json
 
 # Run comprehensive tests
-poetry run template-testing """ + template_path + """ --integration --performance
+poetry run template-testing """
+            + template_path
+            + """ --integration --performance
 ```
 
 ## Customization Examples
@@ -563,7 +594,9 @@ Create `custom-params.json`:
 ```
 
 ```bash
-poetry run template-engine generate """ + template_path + """ ./custom-app \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./custom-app \\
   --params custom-params.json
 ```
 
@@ -571,19 +604,25 @@ poetry run template-engine generate """ + template_path + """ ./custom-app \\
 
 ```bash
 # Development
-poetry run template-engine generate """ + template_path + """ ./dev \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./dev \\
   --param environment=dev \\
   --param debug=true \\
   --param hot_reload=true
 
 # Staging
-poetry run template-engine generate """ + template_path + """ ./staging \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./staging \\
   --param environment=staging \\
   --param monitoring=true \\
   --param ssl=true
 
 # Production
-poetry run template-engine generate """ + template_path + """ ./prod \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./prod \\
   --param environment=prod \\
   --param security_hardening=true \\
   --param backup_enabled=true \\
@@ -592,21 +631,27 @@ poetry run template-engine generate """ + template_path + """ ./prod \\
 
 ---
 
-*Examples generated automatically for template: """ + template_path + """*
+*Examples generated automatically for template: """
+            + template_path
+            + """*
 """
+        )
 
         return content
 
     def _generate_app_examples(self, metadata: Dict, template_path: str) -> str:
         """Generate application-specific examples."""
-        return """
+        return (
+            """
 ## Application-Specific Examples
 
 ### Multi-Container Setup
 
 ```bash
 # Generate app
-poetry run template-engine generate """ + template_path + """ ./my-app
+poetry run template-engine generate """
+            + template_path
+            + """ ./my-app
 
 # Generate database
 poetry run template-engine generate databases/postgresql ./my-db
@@ -638,7 +683,9 @@ docker-compose up -d
 ```bash
 # Generate multiple app instances
 for i in {1..3}; do
-  poetry run template-engine generate """ + template_path + """ ./app-$i \\
+  poetry run template-engine generate """
+            + template_path
+            + """ ./app-$i \\
     --param app_name=app-$i \\
     --param port=$((3000 + $i))
 done
@@ -648,10 +695,12 @@ poetry run template-engine generate infrastructure/nginx ./nginx \\
   --param upstream_servers="app-1:3001,app-2:3002,app-3:3003"
 ```
 """
+        )
 
     def _generate_database_examples(self, metadata: Dict, template_path: str) -> str:
         """Generate database-specific examples."""
-        return """
+        return (
+            """
 ## Database-Specific Examples
 
 ### Data Persistence
@@ -685,27 +734,37 @@ docker exec my-database /usr/local/bin/restore.sh backup-2024-01-15.sql
 
 ```bash
 # Master database
-poetry run template-engine generate """ + template_path + """ ./db-master \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./db-master \\
   --param replication_role=master \\
   --param max_wal_senders=3
 
 # Replica database
-poetry run template-engine generate """ + template_path + """ ./db-replica \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./db-replica \\
   --param replication_role=replica \\
   --param master_host=db-master
 ```
 """
+        )
 
-    def _generate_infrastructure_examples(self, metadata: Dict, template_path: str) -> str:
+    def _generate_infrastructure_examples(
+        self, metadata: Dict, template_path: str
+    ) -> str:
         """Generate infrastructure-specific examples."""
-        return """
+        return (
+            """
 ## Infrastructure-Specific Examples
 
 ### SSL Termination
 
 ```bash
 # Generate with SSL support
-poetry run template-engine generate """ + template_path + """ ./nginx-ssl \\
+poetry run template-engine generate """
+            + template_path
+            + """ ./nginx-ssl \\
   --param enable_ssl=true \\
   --param ssl_cert_path=/etc/ssl/certs/cert.pem \\
   --param ssl_key_path=/etc/ssl/private/key.pem
@@ -724,7 +783,9 @@ docker run -d \\
 ```bash
 # Generate multiple instances
 for i in {1..3}; do
-  poetry run template-engine generate """ + template_path + """ ./nginx-$i \\
+  poetry run template-engine generate """
+            + template_path
+            + """ ./nginx-$i \\
     --param instance_id=$i \\
     --param cluster_mode=true
 done
@@ -732,8 +793,11 @@ done
 # Use with keepalived or similar for HA
 ```
 """
+        )
 
-    def _generate_troubleshooting_guide(self, metadata: Dict, template_path: str) -> str:
+    def _generate_troubleshooting_guide(
+        self, metadata: Dict, template_path: str
+    ) -> str:
         """Generate troubleshooting guide."""
         name = metadata.get("name", template_path)
         category = metadata.get("category", "unknown")
@@ -1111,7 +1175,9 @@ docker-compose up -d
             for template in sorted(category_templates, key=lambda x: x["name"]):
                 content += f"- **[{template['name']}]({template['path']}/README.md)** - {template['description']}\n"
 
-            content += f"\n[📋 **Browse all {category} templates**]({category}/README.md)\n\n"
+            content += (
+                f"\n[📋 **Browse all {category} templates**]({category}/README.md)\n\n"
+            )
 
         content += """
 ## Template Library
@@ -1332,12 +1398,14 @@ MIT License - see [LICENSE.md](../LICENSE.md) for details.
 *Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
 """
 
-        with open(index_path, 'w') as f:
+        with open(index_path, "w") as f:
             f.write(content)
 
         return str(index_path)
 
-    def generate_category_documentation(self, category: str, templates: List[Dict]) -> str:
+    def generate_category_documentation(
+        self, category: str, templates: List[Dict]
+    ) -> str:
         """Generate documentation for a template category."""
         category_dir = self.docs_dir / category
         category_dir.mkdir(parents=True, exist_ok=True)
@@ -1431,8 +1499,12 @@ poetry run template-engine generate {template['path']} ./my-{template['name']}
 """
 
         for template in templates:
-            complexity = "Simple" if len(template.get('tags', [])) <= 3 else "Complex"
-            use_case = template['description'][:30] + "..." if len(template['description']) > 30 else template['description']
+            complexity = "Simple" if len(template.get("tags", [])) <= 3 else "Complex"
+            use_case = (
+                template["description"][:30] + "..."
+                if len(template["description"]) > 30
+                else template["description"]
+            )
 
             content += f"| {template['name']} | {use_case} | TBD | {complexity} | Production use |\n"
 
@@ -1453,7 +1525,7 @@ poetry run template-engine generate {template['path']} ./my-{template['name']}
 *{len(templates)} templates available*
 """
 
-        with open(readme_path, 'w') as f:
+        with open(readme_path, "w") as f:
             f.write(content)
 
         return str(readme_path)
@@ -1969,7 +2041,7 @@ except FileNotFoundError as e:
 *Generated automatically from source code*
 """
 
-        with open(api_path, 'w') as f:
+        with open(api_path, "w") as f:
             f.write(content)
 
         return str(api_path)

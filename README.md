@@ -1,6 +1,6 @@
 # Container Collection & Automation Framework
 
-> A comprehensive collection of Dockerfiles with advanced automation tools for multi-architecture container builds, metrics collection, and CI/CD workflows.
+> A comprehensive collection of Dockerfiles with advanced automation tools for multi-architecture container builds, metrics collection, AI-powered template assistance, and CI/CD workflows.
 
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/marcusrbrown/containers/build-publish.yaml?branch=main&label=build&style=for-the-badge)](https://github.com/marcusrbrown/containers/actions)
 [![License](https://img.shields.io/github/license/marcusrbrown/containers?style=for-the-badge)](LICENSE.md)
@@ -13,6 +13,7 @@ This repository provides a comprehensive container development ecosystem featuri
 
 - **Container Collection**: Curated Dockerfiles for Node.js applications and archived Ethereum Parity client
 - **Automation Framework**: Python scripts for dynamic Dockerfile generation, metrics collection, and image tagging
+- **🧠 AI-Enhanced Template System**: Intelligent template recommendations, project analysis, and automated parameter inference
 - **Multi-Architecture Support**: ARM64 and AMD64 builds with platform-specific optimizations
 - **CI/CD Integration**: GitHub Actions workflows for building, testing, vulnerability scanning, and publishing
 - **Development Environment**: Docker-in-Docker devcontainer setup with mise tool management
@@ -20,11 +21,54 @@ This repository provides a comprehensive container development ecosystem featuri
 ## ✨ Features
 
 - **🐳 Dynamic Dockerfile Generation**: Multi-architecture support with customizable base images and packages
+- **🤖 AI-Powered Template Intelligence**: Smart recommendations, project analysis, and automated containerization
 - **📊 Container Metrics Collection**: Build time, image size, and registry usage analytics
 - **🏷️ Intelligent Image Tagging**: Metadata-based tagging with semantic versioning
 - **🔒 Security Integration**: Automated vulnerability scanning with Trivy
-- **⚡ Modern Tooling**: Poetry, mise, pre-commit hooks, and automated dependency updates
+- **⚡ Modern Tooling**: Poetry, mise-en-place, pre-commit hooks, and automated dependency updates
 - **🚀 CI/CD Workflows**: Comprehensive GitHub Actions for container lifecycle management
+
+## 🧠 AI-Enhanced Features
+
+The container system now includes comprehensive AI capabilities:
+
+### Template Intelligence
+
+```bash
+# Get AI recommendations for your project
+poetry run containers ai recommend /path/to/your/project
+
+# Deep project analysis
+poetry run containers ai analyze /path/to/your/project --output analysis.md
+
+# Interactive AI assistant
+poetry run containers ai chat
+```
+
+### Smart Automation
+
+```bash
+# Automatically infer template parameters
+poetry run containers ai infer apps/nodejs/express /my/project
+
+# AI-powered code review
+poetry run containers ai review /path/to/code
+
+# Generate intelligent documentation
+poetry run containers ai docs --template base/alpine --type readme
+```
+
+### Predictive Maintenance
+
+```bash
+# Analyze template health and usage patterns
+poetry run containers ai maintenance --report
+
+# Get optimization suggestions
+poetry run containers ai maintenance --template base/alpine
+```
+
+**[📚 Complete AI Guide](docs/AI_CLI_GUIDE.md)** - Comprehensive documentation for AI features
 
 ## 📦 Available Containers
 

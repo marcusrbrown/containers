@@ -12,6 +12,8 @@ dependencies = [
   "requests (>=2.32.4,<3.0.0)",
   "jinja2 (>=3.0.0,<4.0.0)",
   "jsonschema (>=4.0.0,<5.0.0)",
+  "openai (>=1.0.0,<2.0.0)",
+  "anthropic (>=0.30.0,<1.0.0)",
 ]
 
 [build-system]
@@ -36,10 +38,13 @@ extend_skip = ["templates"]
 packages = [{ include = "scripts" }]
 
 [tool.poetry.scripts]
-containers = "scripts.containers_simple:main"
+containers = "scripts.containers_cli:main"
 collect-docker-metrics = "scripts.collect_docker_metrics:main"
 generate-image-tags = "scripts.generate_image_tags:main"
 generate-dockerfile = "scripts.generate_dockerfile:main"
 template-engine = "scripts.template_engine:main"
 template-testing = "scripts.template_testing:main"
 generate-docs = "scripts.template_documentation:main"
+ai-chat = "scripts.ai_chat_interface:main"
+ai-analyze = "scripts.template_intelligence:analyze_project"
+ai-recommend = "scripts.template_intelligence:recommend_templates"
