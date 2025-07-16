@@ -1,0 +1,122 @@
+name: "redis-cache"
+version: "1.0.0"
+description: "Redis in-memory data store with persistence and security"
+category: "database"
+author: "Container Template Engine"
+license: "MIT"
+tags: ["redis", "cache", "nosql", "memory", "session-store"]
+
+parameters:
+  redis_version:
+    type: "string"
+    description: "Redis version"
+    default: "7.2"
+    enum: ["6.2", "7.0", "7.2", "latest"]
+
+  redis_port:
+    type: "integer"
+    description: "Redis port"
+    default: 6379
+    min: 1000
+    max: 65535
+
+  redis_password:
+    type: "string"
+    description: "Redis authentication password"
+    default: "secure_redis_password_123"
+
+  max_memory:
+    type: "string"
+    description: "Maximum memory usage"
+    default: "256mb"
+
+  max_memory_policy:
+    type: "string"
+    description: "Memory eviction policy"
+    default: "allkeys-lru"
+    enum: ["noeviction", "allkeys-lru", "volatile-lru", "allkeys-random", "volatile-random", "volatile-ttl"]
+
+  enable_persistence:
+    type: "boolean"
+    description: "Enable data persistence"
+    default: true
+
+  save_policy:
+    type: "string"
+    description: "Save policy for persistence"
+    default: "900 1 300 10 60 10000"
+
+  enable_aof:
+    type: "boolean"
+    description: "Enable Append Only File"
+    default: true
+
+  aof_rewrite_percentage:
+    type: "integer"
+    description: "AOF rewrite percentage"
+    default: 100
+    min: 1
+    max: 1000
+
+  enable_cluster:
+    type: "boolean"
+    description: "Enable Redis cluster mode"
+    default: false
+
+  cluster_announce_ip:
+    type: "string"
+    description: "Cluster announce IP"
+    default: "127.0.0.1"
+
+  log_level:
+    type: "string"
+    description: "Redis log level"
+    default: "notice"
+    enum: ["debug", "verbose", "notice", "warning"]
+
+  timeout:
+    type: "integer"
+    description: "Client idle timeout (seconds)"
+    default: 300
+    min: 0
+    max: 3600
+
+  databases:
+    type: "integer"
+    description: "Number of databases"
+    default: 16
+    min: 1
+    max: 16384
+
+files:
+  dockerfile: "Dockerfile"
+  compose: "docker-compose.yml"
+  config: ["redis.conf", "sentinel.conf"]
+  scripts: ["healthcheck.sh", "backup.sh", "restore.sh"]
+  docs: ["README.md", "CLUSTERING.md", "BACKUP.md"]
+
+dependencies:
+  build: ["redis"]
+  runtime: ["redis", "curl"]
+  test: ["docker", "redis-cli"]
+
+testing:
+  build_args:
+    REDIS_VERSION: "7.2"
+  env_vars:
+    REDIS_PASSWORD: "test_password"
+  health_check: "redis-cli ping"
+  test_commands:
+    - "docker run --rm -p 6379:6379 -d {{ template_name }}:latest"
+    - "sleep 5"
+    - "redis-cli ping"
+  integration_tests:
+    - "redis-cli set test_key test_value"
+    - "redis-cli get test_key"
+
+platforms: ["linux/amd64", "linux/arm64"]
+
+registry:
+  namespace: "databases"
+  repository: "redis-cache"
+  tags: ["latest", "{{ redis_version }}", "{{ redis_version }}-alpine"]

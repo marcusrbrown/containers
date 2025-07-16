@@ -10,6 +10,8 @@ dependencies = [
   "argparse (>=1.4.0,<2.0.0)",
   "pyyaml (>=6.0.2,<7.0.0)",
   "requests (>=2.32.4,<3.0.0)",
+  "jinja2 (>=3.0.0,<4.0.0)",
+  "jsonschema (>=4.0.0,<5.0.0)",
 ]
 
 [build-system]
@@ -19,15 +21,25 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 88
 target-version = ['py37']
+extend-exclude = '''
+(
+  ^/templates/
+)
+'''
 
 [tool.isort]
 profile = "black"
 known_third_party = ["pytest"]
+extend_skip = ["templates"]
 
 [tool.poetry]
 packages = [{ include = "scripts" }]
 
 [tool.poetry.scripts]
+containers = "scripts.containers_simple:main"
 collect-docker-metrics = "scripts.collect_docker_metrics:main"
 generate-image-tags = "scripts.generate_image_tags:main"
 generate-dockerfile = "scripts.generate_dockerfile:main"
+template-engine = "scripts.template_engine:main"
+template-testing = "scripts.template_testing:main"
+generate-docs = "scripts.template_documentation:main"

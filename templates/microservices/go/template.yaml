@@ -1,0 +1,120 @@
+name: "Go Microservice"
+version: "1.0.0"
+description: "High-performance Go microservice with gRPC and REST APIs"
+category: "microservice"
+author: "Container Template Engine"
+license: "MIT"
+inherits: "base/alpine"
+
+tags:
+  - go
+  - microservice
+  - grpc
+  - rest
+  - api
+
+parameters:
+  service_name:
+    type: string
+    description: "Microservice name"
+    default: "go-service"
+    required: true
+    pattern: "^[a-z][a-z0-9-]*[a-z0-9]$"
+
+  go_version:
+    type: string
+    description: "Go version"
+    default: "1.21"
+    enum: ["1.19", "1.20", "1.21", "1.22"]
+
+  http_port:
+    type: integer
+    description: "HTTP port"
+    default: 8080
+    minimum: 1024
+    maximum: 65535
+
+  grpc_port:
+    type: integer
+    description: "gRPC port"
+    default: 9090
+    minimum: 1024
+    maximum: 65535
+
+  metrics_port:
+    type: integer
+    description: "Metrics port"
+    default: 9091
+    minimum: 1024
+    maximum: 65535
+
+  debug:
+    type: boolean
+    description: "Enable debug mode"
+    default: false
+
+  database_type:
+    type: string
+    description: "Database type"
+    default: "postgres"
+    enum: ["postgres", "mysql", "mongodb", "redis"]
+
+  enable_metrics:
+    type: boolean
+    description: "Enable Prometheus metrics"
+    default: true
+
+  enable_tracing:
+    type: boolean
+    description: "Enable distributed tracing"
+    default: true
+
+  log_level:
+    type: string
+    description: "Log level"
+    default: "info"
+    enum: ["debug", "info", "warn", "error"]
+
+files:
+  dockerfile: "Dockerfile"
+  compose: "docker-compose.yml"
+  config: ["go.mod", "go.sum", "main.go", "config.go"]
+  docs: ["README.md", "api.md"]
+  scripts: ["entrypoint.sh", "health.sh"]
+  proto: ["proto/service.proto"]
+  tests: ["main_test.go", "integration_test.go"]
+
+dependencies:
+  build:
+    - "golang:{{ go_version }}-alpine"
+    - "protoc"
+    - "protoc-gen-go"
+    - "protoc-gen-go-grpc"
+  runtime:
+    - "github.com/gin-gonic/gin"
+    - "google.golang.org/grpc"
+    - "github.com/prometheus/client_golang"
+    - "go.opentelemetry.io/otel"
+    - "github.com/spf13/viper"
+  test:
+    - "github.com/stretchr/testify"
+    - "github.com/golang/mock"
+
+testing:
+  health_check: "curl -f http://localhost:{{ http_port }}/health || exit 1"
+  test_commands:
+    - "go test -v ./..."
+    - "go vet ./..."
+    - "go run -race ."
+  performance_tests:
+    - "ab -n 1000 -c 10 http://localhost:{{ http_port }}/health"
+
+platforms:
+  - "linux/amd64"
+  - "linux/arm64"
+
+security:
+  non_root_user: true
+  read_only_filesystem: true
+  capabilities_drop: ["ALL"]
+  seccomp_profile: "runtime/default"

@@ -1,0 +1,34 @@
+services:
+  {{ template_name }}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ALPINE_VERSION: "{{ alpine_version }}"
+        USER_NAME: "{{ user_name }}"
+        USER_UID: {{ user_uid }}
+        TIMEZONE: "{{ timezone }}"
+      platforms:
+        {% for platform in platforms -%}
+        - {{ platform }}
+        {% endfor %}
+    image: {{ template_name }}:{{ template_version }}
+    container_name: {{ template_name }}-container
+    restart: unless-stopped
+    environment:
+      - TZ={{ timezone }}
+    healthcheck:
+      test: {{ health_check | default('["CMD", "true"]') }}
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    # Uncomment for development
+    # volumes:
+    #   - .:/workspace
+    # ports:
+    #   - "8080:8080"
+
+networks:
+  default:
+    name: {{ template_name }}-network
