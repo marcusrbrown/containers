@@ -11,4 +11,4 @@ httpx==0.25.2
 aiofiles==23.2.1
 python-dateutil==2.9.0.post0
 celery==5.5.3
-redis==5.0.1
+redis==5.3.0
