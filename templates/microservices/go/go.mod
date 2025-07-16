@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.10.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/viper v1.20.1
-	google.golang.org/grpc v1.59.0
+	google.golang.org/grpc v1.73.0
 	google.golang.org/protobuf v1.36.6
 	go.opentelemetry.io/otel v1.37.0
 	go.opentelemetry.io/otel/trace v1.37.0
