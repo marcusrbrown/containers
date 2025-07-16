@@ -56,7 +56,6 @@ docker run -d \
   my-Python FastAPI:prod
 ```
 
-
 ## Application-Specific Examples
 
 ### Multi-Container Setup
@@ -225,4 +224,4 @@ poetry run template-engine generate apps/python/fastapi ./prod \
 
 ---
 
-*Examples generated automatically for template: apps/python/fastapi*
+_Examples generated automatically for template: apps/python/fastapi_

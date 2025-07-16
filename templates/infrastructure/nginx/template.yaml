@@ -1,123 +1,123 @@
-name: "nginx-proxy"
-version: "1.0.0"
-description: "nginx reverse proxy with SSL termination and load balancing"
-category: "infrastructure"
-author: "Container Template Engine"
-license: "MIT"
-tags: ["nginx", "proxy", "load-balancer", "ssl", "web-server"]
+name: 'nginx-proxy'
+version: '1.0.0'
+description: 'nginx reverse proxy with SSL termination and load balancing'
+category: 'infrastructure'
+author: 'Container Template Engine'
+license: 'MIT'
+tags: ['nginx', 'proxy', 'load-balancer', 'ssl', 'web-server']
 
 parameters:
   nginx_version:
-    type: "string"
-    description: "nginx version"
-    default: "1.25"
-    enum: ["1.24", "1.25", "latest"]
+    type: 'string'
+    description: 'nginx version'
+    default: '1.25'
+    enum: ['1.24', '1.25', 'latest']
 
   server_name:
-    type: "string"
-    description: "Server name for nginx"
-    default: "localhost"
+    type: 'string'
+    description: 'Server name for nginx'
+    default: 'localhost'
 
   listen_port:
-    type: "integer"
-    description: "HTTP listen port"
+    type: 'integer'
+    description: 'HTTP listen port'
     default: 80
     min: 1
     max: 65535
 
   ssl_port:
-    type: "integer"
-    description: "HTTPS listen port"
+    type: 'integer'
+    description: 'HTTPS listen port'
     default: 443
     min: 1
     max: 65535
 
   enable_ssl:
-    type: "boolean"
-    description: "Enable SSL/TLS support"
+    type: 'boolean'
+    description: 'Enable SSL/TLS support'
     default: true
 
   ssl_cert_path:
-    type: "string"
-    description: "SSL certificate path"
-    default: "/etc/ssl/certs/nginx.crt"
+    type: 'string'
+    description: 'SSL certificate path'
+    default: '/etc/ssl/certs/nginx.crt'
 
   ssl_key_path:
-    type: "string"
-    description: "SSL private key path"
-    default: "/etc/ssl/private/nginx.key"
+    type: 'string'
+    description: 'SSL private key path'
+    default: '/etc/ssl/private/nginx.key'
 
   upstream_servers:
-    type: "array"
-    description: "Backend servers for load balancing"
-    default: ["backend1:8080", "backend2:8080"]
+    type: 'array'
+    description: 'Backend servers for load balancing'
+    default: ['backend1:8080', 'backend2:8080']
 
   load_balancing_method:
-    type: "string"
-    description: "Load balancing method"
-    default: "round_robin"
-    enum: ["round_robin", "least_conn", "ip_hash", "random"]
+    type: 'string'
+    description: 'Load balancing method'
+    default: 'round_robin'
+    enum: ['round_robin', 'least_conn', 'ip_hash', 'random']
 
   enable_gzip:
-    type: "boolean"
-    description: "Enable gzip compression"
+    type: 'boolean'
+    description: 'Enable gzip compression'
     default: true
 
   enable_rate_limiting:
-    type: "boolean"
-    description: "Enable rate limiting"
+    type: 'boolean'
+    description: 'Enable rate limiting'
     default: true
 
   rate_limit:
-    type: "string"
-    description: "Rate limit (requests per second)"
-    default: "10r/s"
+    type: 'string'
+    description: 'Rate limit (requests per second)'
+    default: '10r/s'
 
   enable_caching:
-    type: "boolean"
-    description: "Enable response caching"
+    type: 'boolean'
+    description: 'Enable response caching'
     default: true
 
   worker_processes:
-    type: "string"
-    description: "Number of worker processes"
-    default: "auto"
+    type: 'string'
+    description: 'Number of worker processes'
+    default: 'auto'
 
   worker_connections:
-    type: "integer"
-    description: "Worker connections"
+    type: 'integer'
+    description: 'Worker connections'
     default: 1024
     min: 100
     max: 10000
 
 files:
-  dockerfile: "Dockerfile"
-  compose: "docker-compose.yml"
-  config: ["nginx.conf", "ssl.conf", "upstream.conf", "cache.conf"]
-  scripts: ["healthcheck.sh", "reload.sh"]
-  docs: ["README.md", "SSL_SETUP.md"]
+  dockerfile: 'Dockerfile'
+  compose: 'docker-compose.yml'
+  config: ['nginx.conf', 'ssl.conf', 'upstream.conf', 'cache.conf']
+  scripts: ['healthcheck.sh', 'reload.sh']
+  docs: ['README.md', 'SSL_SETUP.md']
 
 dependencies:
-  build: ["nginx"]
-  runtime: ["nginx", "curl"]
-  test: ["docker", "curl"]
+  build: ['nginx']
+  runtime: ['nginx', 'curl']
+  test: ['docker', 'curl']
 
 testing:
   build_args:
-    NGINX_VERSION: "1.25"
+    NGINX_VERSION: '1.25'
   env_vars:
-    NGINX_ENVSUBST_OUTPUT_DIR: "/etc/nginx"
-  health_check: "curl -f http://localhost/health || exit 1"
+    NGINX_ENVSUBST_OUTPUT_DIR: '/etc/nginx'
+  health_check: 'curl -f http://localhost/health || exit 1'
   test_commands:
-    - "docker run --rm -p 80:80 -d {{ template_name }}:latest"
-    - "sleep 5"
-    - "curl -f http://localhost/health"
+    - 'docker run --rm -p 80:80 -d {{ template_name }}:latest'
+    - 'sleep 5'
+    - 'curl -f http://localhost/health'
   integration_tests:
-    - "nginx -t"
+    - 'nginx -t'
 
-platforms: ["linux/amd64", "linux/arm64"]
+platforms: ['linux/amd64', 'linux/arm64']
 
 registry:
-  namespace: "infrastructure"
-  repository: "nginx-proxy"
-  tags: ["latest", "{{ nginx_version }}", "{{ nginx_version }}-alpine"]
+  namespace: 'infrastructure'
+  repository: 'nginx-proxy'
+  tags: ['latest', '{{ nginx_version }}', '{{ nginx_version }}-alpine']

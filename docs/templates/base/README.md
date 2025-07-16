@@ -17,7 +17,6 @@ poetry run template-engine generate base/alpine ./my-alpine-base
 
 ---
 
-
 ## Category Overview
 
 Base templates provide pre-configured containers for common base scenarios. Each template includes:
@@ -30,12 +29,10 @@ Base templates provide pre-configured containers for common base scenarios. Each
 
 ## Common Use Cases
 
-
 - **Foundation Images**: Secure, minimal base containers
 - **Multi-stage Builds**: Optimized build environments
 - **Language Runtimes**: Pre-configured runtime environments
 - **Security Hardening**: Compliance-ready base images
-
 
 ## Getting Started
 
@@ -49,10 +46,9 @@ Base templates provide pre-configured containers for common base scenarios. Each
 
 ## Template Comparison
 
-| Template | Use Case | Size | Complexity | Best For |
-|----------|----------|------|------------|----------|
-| alpine-base | Alpine Linux base template wit... | TBD | Complex | Production use |
-
+| Template    | Use Case                          | Size | Complexity | Best For       |
+| ----------- | --------------------------------- | ---- | ---------- | -------------- |
+| alpine-base | Alpine Linux base template wit... | TBD  | Complex    | Production use |
 
 ## Related Categories
 
@@ -65,5 +61,5 @@ Base templates provide pre-configured containers for common base scenarios. Each
 
 ---
 
-*Base category documentation*
-*1 templates available*
+_Base category documentation_
+_1 templates available_

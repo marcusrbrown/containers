@@ -46,9 +46,11 @@ docker run -d --name my-nginx-proxy my-nginx-proxy:latest
 ## Parameters
 
 ### Required Parameters
+
 None
 
 ### Optional Parameters
+
 - `nginx_version` (string): nginx version (default: `1.25`)
 - `server_name` (string): Server name for nginx (default: `localhost`)
 - `listen_port` (integer): HTTP listen port (default: `80`)
@@ -65,7 +67,6 @@ None
 - `worker_processes` (string): Number of worker processes (default: `auto`)
 - `worker_connections` (integer): Worker connections (default: `1024`)
 
-
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
 ## Generated Files
@@ -73,25 +74,29 @@ None
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `nginx.conf`
 - `ssl.conf`
 - `upstream.conf`
 - `cache.conf`
 
 ### Scripts
+
 - `healthcheck.sh`
 - `reload.sh`
 
 ### Docs
+
 - `README.md`
 - `SSL_SETUP.md`
-
 
 ## Examples
 
@@ -104,13 +109,16 @@ This template generates the following files:
 ## Dependencies
 
 ### Build
+
 - nginx
 
 ### Runtime
+
 - nginx
 - curl
 
 ### Test
+
 - docker
 - curl
 
@@ -123,13 +131,14 @@ linux/amd64, linux/arm64
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `docker run --rm -p 80:80 -d {{ template_name }}:latest`
 - `sleep 5`
 - `curl -f http://localhost/health`
 
 ### Integration Tests
-- `nginx -t`
 
+- `nginx -t`
 
 ## Contributing
 
@@ -146,5 +155,5 @@ Browse other templates in the same category: [**Infrastructure Templates**](../i
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_

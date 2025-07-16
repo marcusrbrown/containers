@@ -17,7 +17,6 @@ poetry run template-engine generate microservices/go ./my-Go Microservice
 
 ---
 
-
 ## Category Overview
 
 Microservice templates provide pre-configured containers for common microservice scenarios. Each template includes:
@@ -29,8 +28,6 @@ Microservice templates provide pre-configured containers for common microservice
 - Automated testing
 
 ## Common Use Cases
-
-
 
 ## Getting Started
 
@@ -44,10 +41,9 @@ Microservice templates provide pre-configured containers for common microservice
 
 ## Template Comparison
 
-| Template | Use Case | Size | Complexity | Best For |
-|----------|----------|------|------------|----------|
-| Go Microservice | High-performance Go microservi... | TBD | Complex | Production use |
-
+| Template        | Use Case                          | Size | Complexity | Best For       |
+| --------------- | --------------------------------- | ---- | ---------- | -------------- |
+| Go Microservice | High-performance Go microservi... | TBD  | Complex    | Production use |
 
 ## Related Categories
 
@@ -60,5 +56,5 @@ Microservice templates provide pre-configured containers for common microservice
 
 ---
 
-*Microservice category documentation*
-*1 templates available*
+_Microservice category documentation_
+_1 templates available_

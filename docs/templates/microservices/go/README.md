@@ -46,10 +46,11 @@ docker run -d --name my-Go Microservice my-Go Microservice:latest
 ## Parameters
 
 ### Required Parameters
+
 - `service_name` (string): Microservice name (default: `go-service`)
 
-
 ### Optional Parameters
+
 - `alpine_version` (string): Alpine Linux version (default: `3.20`)
 - `packages` (array): Additional packages to install (default: `['curl', 'wget', 'ca-certificates']`)
 - `user_name` (string): Non-root user name (default: `appuser`)
@@ -66,7 +67,6 @@ docker run -d --name my-Go Microservice my-Go Microservice:latest
 - `enable_tracing` (boolean): Enable distributed tracing (default: `True`)
 - `log_level` (string): Log level (default: `info`)
 
-
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
 ## Generated Files
@@ -74,32 +74,38 @@ docker run -d --name my-Go Microservice my-Go Microservice:latest
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `go.mod`
 - `go.sum`
 - `main.go`
 - `config.go`
 
 ### Docs
+
 - `README.md`
 - `api.md`
 
 ### Scripts
+
 - `entrypoint.sh`
 - `health.sh`
 
 ### Proto
+
 - `proto/service.proto`
 
 ### Tests
+
 - `main_test.go`
 - `integration_test.go`
-
 
 ## Examples
 
@@ -112,12 +118,14 @@ This template generates the following files:
 ## Dependencies
 
 ### Build
+
 - golang:{{ go_version }}-alpine
 - protoc
 - protoc-gen-go
 - protoc-gen-go-grpc
 
 ### Runtime
+
 - github.com/gin-gonic/gin
 - google.golang.org/grpc
 - github.com/prometheus/client_golang
@@ -125,6 +133,7 @@ This template generates the following files:
 - github.com/spf13/viper
 
 ### Test
+
 - github.com/stretchr/testify
 - github.com/golang/mock
 
@@ -137,10 +146,10 @@ linux/amd64, linux/arm64
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `go test -v ./...`
 - `go vet ./...`
 - `go run -race .`
-
 
 ## Contributing
 
@@ -157,5 +166,5 @@ Browse other templates in the same category: [**Microservice Templates**](../mic
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_

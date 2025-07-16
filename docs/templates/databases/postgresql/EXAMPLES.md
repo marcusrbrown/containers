@@ -56,7 +56,6 @@ docker run -d \
   my-postgresql:prod
 ```
 
-
 ## Database-Specific Examples
 
 ### Data Persistence
@@ -220,4 +219,4 @@ poetry run template-engine generate databases/postgresql ./prod \
 
 ---
 
-*Examples generated automatically for template: databases/postgresql*
+_Examples generated automatically for template: databases/postgresql_
