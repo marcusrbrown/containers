@@ -30,7 +30,6 @@ poetry run template-engine generate apps/nodejs/express ./my-nodejs-express
 
 ---
 
-
 ## Category Overview
 
 App templates provide pre-configured containers for common app scenarios. Each template includes:
@@ -43,12 +42,10 @@ App templates provide pre-configured containers for common app scenarios. Each t
 
 ## Common Use Cases
 
-
 - **Web Applications**: Full-stack web apps with frameworks like Express, FastAPI
 - **API Services**: RESTful and GraphQL API backends
 - **Microservices**: Containerized microservice components
 - **Background Workers**: Queue processors and scheduled tasks
-
 
 ## Getting Started
 
@@ -62,11 +59,10 @@ App templates provide pre-configured containers for common app scenarios. Each t
 
 ## Template Comparison
 
-| Template | Use Case | Size | Complexity | Best For |
-|----------|----------|------|------------|----------|
-| Python FastAPI | High-performance Python web AP... | TBD | Complex | Production use |
-| nodejs-express | Node.js Express web applicatio... | TBD | Complex | Production use |
-
+| Template       | Use Case                          | Size | Complexity | Best For       |
+| -------------- | --------------------------------- | ---- | ---------- | -------------- |
+| Python FastAPI | High-performance Python web AP... | TBD  | Complex    | Production use |
+| nodejs-express | Node.js Express web applicatio... | TBD  | Complex    | Production use |
 
 ## Related Categories
 
@@ -79,5 +75,5 @@ App templates provide pre-configured containers for common app scenarios. Each t
 
 ---
 
-*App category documentation*
-*2 templates available*
+_App category documentation_
+_2 templates available_

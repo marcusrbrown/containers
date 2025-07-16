@@ -46,9 +46,11 @@ docker run -d --name my-postgresql my-postgresql:latest
 ## Parameters
 
 ### Required Parameters
+
 None
 
 ### Optional Parameters
+
 - `postgres_version` (string): PostgreSQL version (default: `16`)
 - `postgres_db` (string): Default database name (default: `app_db`)
 - `postgres_user` (string): Database user name (default: `app_user`)
@@ -64,7 +66,6 @@ None
 - `enable_logging` (boolean): Enable query logging (default: `True`)
 - `backup_enabled` (boolean): Enable automated backups (default: `True`)
 
-
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
 ## Generated Files
@@ -72,26 +73,30 @@ None
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `postgresql.conf`
 - `pg_hba.conf`
 - `init.sql`
 - `backup.sh`
 
 ### Scripts
+
 - `healthcheck.sh`
 - `restore.sh`
 
 ### Docs
+
 - `README.md`
 - `BACKUP.md`
 - `PERFORMANCE.md`
-
 
 ## Examples
 
@@ -104,13 +109,16 @@ This template generates the following files:
 ## Dependencies
 
 ### Build
+
 - postgresql
 
 ### Runtime
+
 - postgresql
 - curl
 
 ### Test
+
 - docker
 - psql
 
@@ -123,13 +131,14 @@ linux/amd64, linux/arm64
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `docker run --rm -e POSTGRES_PASSWORD=test_password -d {{ template_name }}:latest`
 - `sleep 10`
 - `docker exec container_id psql -U test_user -d test_db -c 'SELECT version();'`
 
 ### Integration Tests
-- `pg_prove tests/`
 
+- `pg_prove tests/`
 
 ## Contributing
 
@@ -146,5 +155,5 @@ Browse other templates in the same category: [**Database Templates**](../databas
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_

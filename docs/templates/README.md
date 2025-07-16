@@ -36,7 +36,7 @@ docker-compose up -d
 
 ### App Templates
 
-*2 templates available*
+_2 templates available_
 
 - **[Python FastAPI](apps/python/fastapi/README.md)** - High-performance Python web API with FastAPI framework
 - **[nodejs-express](apps/nodejs/express/README.md)** - Node.js Express web application template with TypeScript support
@@ -45,7 +45,7 @@ docker-compose up -d
 
 ### Base Templates
 
-*1 templates available*
+_1 templates available_
 
 - **[alpine-base](base/alpine/README.md)** - Alpine Linux base template with security hardening and common utilities
 
@@ -53,7 +53,7 @@ docker-compose up -d
 
 ### Database Templates
 
-*2 templates available*
+_2 templates available_
 
 - **[postgresql](databases/postgresql/README.md)** - PostgreSQL database server with security hardening and performance optimization
 - **[redis-cache](databases/redis/README.md)** - Redis in-memory data store with persistence and security
@@ -62,7 +62,7 @@ docker-compose up -d
 
 ### Infrastructure Templates
 
-*1 templates available*
+_1 templates available_
 
 - **[nginx-proxy](infrastructure/nginx/README.md)** - nginx reverse proxy with SSL termination and load balancing
 
@@ -70,25 +70,23 @@ docker-compose up -d
 
 ### Microservice Templates
 
-*1 templates available*
+_1 templates available_
 
 - **[Go Microservice](microservices/go/README.md)** - High-performance Go microservice with gRPC and REST APIs
 
 [📋 **Browse all microservice templates**](microservice/README.md)
 
-
 ## Template Library
 
-| Name | Category | Description | Version |
-|------|----------|-------------|---------|
-| [Python FastAPI](apps/python/fastapi/README.md) | app | High-performance Python web API with FastAPI framework | 1.0.0 |
-| [nodejs-express](apps/nodejs/express/README.md) | app | Node.js Express web application template with TypeScript support | 1.0.0 |
-| [alpine-base](base/alpine/README.md) | base | Alpine Linux base template with security hardening and common utilities | 1.0.0 |
-| [postgresql](databases/postgresql/README.md) | database | PostgreSQL database server with security hardening and performance optimization | 1.0.0 |
-| [redis-cache](databases/redis/README.md) | database | Redis in-memory data store with persistence and security | 1.0.0 |
-| [nginx-proxy](infrastructure/nginx/README.md) | infrastructure | nginx reverse proxy with SSL termination and load balancing | 1.0.0 |
-| [Go Microservice](microservices/go/README.md) | microservice | High-performance Go microservice with gRPC and REST APIs | 1.0.0 |
-
+| Name                                            | Category       | Description                                                                     | Version |
+| ----------------------------------------------- | -------------- | ------------------------------------------------------------------------------- | ------- |
+| [Python FastAPI](apps/python/fastapi/README.md) | app            | High-performance Python web API with FastAPI framework                          | 1.0.0   |
+| [nodejs-express](apps/nodejs/express/README.md) | app            | Node.js Express web application template with TypeScript support                | 1.0.0   |
+| [alpine-base](base/alpine/README.md)            | base           | Alpine Linux base template with security hardening and common utilities         | 1.0.0   |
+| [postgresql](databases/postgresql/README.md)    | database       | PostgreSQL database server with security hardening and performance optimization | 1.0.0   |
+| [redis-cache](databases/redis/README.md)        | database       | Redis in-memory data store with persistence and security                        | 1.0.0   |
+| [nginx-proxy](infrastructure/nginx/README.md)   | infrastructure | nginx reverse proxy with SSL termination and load balancing                     | 1.0.0   |
+| [Go Microservice](microservices/go/README.md)   | microservice   | High-performance Go microservice with gRPC and REST APIs                        | 1.0.0   |
 
 ## Using Templates
 
@@ -155,7 +153,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install Poetry
         run: curl -sSL https://install.python-poetry.org | python3 -
@@ -180,6 +178,7 @@ jobs:
 ### Creating New Templates
 
 1. **Create template directory structure:**
+
    ```
    templates/category/name/
    ├── template.yaml      # Template metadata
@@ -190,11 +189,12 @@ jobs:
    ```
 
 2. **Define template.yaml:**
+
    ```yaml
    name: "my-template"
    version: "1.0.0"
    description: "Description of the template"
-   category: "app"  # app, database, infrastructure, microservice, base
+   category: "app" # app, database, infrastructure, microservice, base
 
    parameters:
      param_name:
@@ -209,6 +209,7 @@ jobs:
    ```
 
 3. **Test your template:**
+
    ```bash
    poetry run template-engine validate category/name
    poetry run template-engine test category/name
@@ -293,5 +294,5 @@ MIT License - see [LICENSE.md](../LICENSE.md) for details.
 
 ---
 
-*Documentation generated automatically from 7 templates*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from 7 templates_
+_Last updated: 2025-07-15 21:54:36_

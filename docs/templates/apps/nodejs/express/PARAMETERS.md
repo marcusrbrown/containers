@@ -4,21 +4,21 @@ Complete reference for all available parameters.
 
 ## Parameter Overview
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `alpine_version` | string | ❌ | `3.20` | Alpine Linux version |
-| `packages` | array | ❌ | `['curl', 'wget', 'ca-certificates']` | Additional packages to install |
-| `user_name` | string | ❌ | `appuser` | Non-root user name |
-| `user_uid` | integer | ❌ | `1000` | User UID |
-| `timezone` | string | ❌ | `UTC` | System timezone |
-| `enable_security_updates` | boolean | ❌ | `True` | Enable automatic security updates |
-| `node_version` | string | ❌ | `22` | Node.js version |
-| `app_name` | string | ❌ | `express-app` | Application name |
-| `app_port` | integer | ❌ | `3000` | Application port |
-| `enable_typescript` | boolean | ❌ | `True` | Enable TypeScript support |
-| `enable_hot_reload` | boolean | ❌ | `True` | Enable hot reload for development |
-| `install_packages` | array | ❌ | `['helmet', 'cors', 'compression', 'morgan']` | Additional npm packages to install |
-| `dev_packages` | array | ❌ | `['nodemon', '@types/node', '@types/express']` | Development packages to install |
+| Parameter                 | Type    | Required | Default                                        | Description                        |
+| ------------------------- | ------- | -------- | ---------------------------------------------- | ---------------------------------- |
+| `alpine_version`          | string  | ❌       | `3.20`                                         | Alpine Linux version               |
+| `packages`                | array   | ❌       | `['curl', 'wget', 'ca-certificates']`          | Additional packages to install     |
+| `user_name`               | string  | ❌       | `appuser`                                      | Non-root user name                 |
+| `user_uid`                | integer | ❌       | `1000`                                         | User UID                           |
+| `timezone`                | string  | ❌       | `UTC`                                          | System timezone                    |
+| `enable_security_updates` | boolean | ❌       | `True`                                         | Enable automatic security updates  |
+| `node_version`            | string  | ❌       | `22`                                           | Node.js version                    |
+| `app_name`                | string  | ❌       | `express-app`                                  | Application name                   |
+| `app_port`                | integer | ❌       | `3000`                                         | Application port                   |
+| `enable_typescript`       | boolean | ❌       | `True`                                         | Enable TypeScript support          |
+| `enable_hot_reload`       | boolean | ❌       | `True`                                         | Enable hot reload for development  |
+| `install_packages`        | array   | ❌       | `['helmet', 'cors', 'compression', 'morgan']`  | Additional npm packages to install |
+| `dev_packages`            | array   | ❌       | `['nodemon', '@types/node', '@types/express']` | Development packages to install    |
 
 ## Detailed Parameter Descriptions
 
@@ -121,7 +121,6 @@ Complete reference for all available parameters.
 - **Description**: Development packages to install
 - **Default**: `['nodemon', '@types/node', '@types/express']`
 
-
 ## Parameter Examples
 
 ### Basic Usage
@@ -155,4 +154,4 @@ poetry run template-engine generate template_name ./output --params params.json
 
 ---
 
-*Parameter reference generated automatically from template metadata*
+_Parameter reference generated automatically from template metadata_

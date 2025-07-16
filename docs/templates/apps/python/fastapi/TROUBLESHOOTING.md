@@ -11,11 +11,13 @@ poetry run template-engine validate apps/python/fastapi
 ```
 
 **Common causes:**
+
 - Missing required parameters
 - Invalid parameter values
 - Template syntax errors
 
 **Solutions:**
+
 - Check parameter requirements: `poetry run template-engine list`
 - Validate your parameters against the schema
 - Check template files for syntax errors
@@ -23,10 +25,12 @@ poetry run template-engine validate apps/python/fastapi
 ### Issue: Template generation produces empty files
 
 **Symptoms:**
+
 - Files are created but have no content
 - Jinja2 template errors in output
 
 **Solutions:**
+
 - Verify all required parameters are provided
 - Check parameter types match template expectations
 - Review template syntax in source files
@@ -44,12 +48,14 @@ docker build -t Python FastAPI:debug . --progress=plain
 ```
 
 **Common causes:**
+
 - Base image not available
 - Package installation failures
 - File permission issues
 - Network connectivity problems
 
 **Solutions:**
+
 - Verify base image exists and is accessible
 - Check package manager commands
 - Ensure proper file permissions in Dockerfile
@@ -58,6 +64,7 @@ docker build -t Python FastAPI:debug . --progress=plain
 ### Issue: Build takes too long
 
 **Solutions:**
+
 - Use multi-stage builds
 - Optimize package installation order
 - Use .dockerignore to exclude unnecessary files
@@ -76,12 +83,14 @@ docker run -it --entrypoint /bin/sh Python FastAPI:latest
 ```
 
 **Common causes:**
+
 - Application startup failures
 - Missing environment variables
 - Permission issues
 - Port conflicts
 
 **Solutions:**
+
 - Check application logs
 - Verify all required environment variables are set
 - Ensure proper user permissions
@@ -98,23 +107,25 @@ docker inspect container_name | grep Health -A 10
 ```
 
 **Solutions:**
+
 - Verify health check script exists and is executable
 - Check application is actually running
 - Verify health check endpoint is accessible
 - Adjust health check timeouts
-
 
 ## Application-Specific Issues
 
 ### Issue: Application won't start
 
 **Common causes:**
+
 - Missing dependencies
 - Configuration errors
 - Database connection failures
 - Port already in use
 
 **Solutions:**
+
 ```bash
 # Check dependencies
 docker exec container_name npm list  # Node.js
@@ -130,6 +141,7 @@ docker exec container_name nc -zv database_host 5432
 ### Issue: API endpoints not responding
 
 **Debugging:**
+
 ```bash
 # Check if application is listening
 docker exec container_name netstat -tlnp
@@ -154,6 +166,7 @@ docker inspect container_name | grep -i memory
 ```
 
 **Solutions:**
+
 - Set appropriate memory limits
 - Optimize application memory usage
 - Use lighter base images
@@ -162,6 +175,7 @@ docker inspect container_name | grep -i memory
 ### Issue: Slow response times
 
 **Debugging steps:**
+
 ```bash
 # Check CPU usage
 docker stats container_name
@@ -176,6 +190,7 @@ docker exec container_name curl localhost:port/metrics
 ## Getting Help
 
 ### Check logs
+
 ```bash
 # Container logs
 docker logs container_name
@@ -188,6 +203,7 @@ sudo journalctl -u docker.service
 ```
 
 ### Debug mode
+
 ```bash
 # Run with debug output
 poetry run template-engine generate apps/python/fastapi ./debug \
@@ -199,6 +215,7 @@ docker run -it --entrypoint /bin/bash Python FastAPI:latest
 ```
 
 ### Community resources
+
 - Template documentation: [README.md](README.md)
 - Parameter reference: [PARAMETERS.md](PARAMETERS.md)
 - Usage examples: [EXAMPLES.md](EXAMPLES.md)
@@ -206,5 +223,5 @@ docker run -it --entrypoint /bin/bash Python FastAPI:latest
 
 ---
 
-*Troubleshooting guide for template: apps/python/fastapi*
-*Last updated: 2025-07-15 21:54:36*
+_Troubleshooting guide for template: apps/python/fastapi_
+_Last updated: 2025-07-15 21:54:36_

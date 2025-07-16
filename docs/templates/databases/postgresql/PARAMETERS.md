@@ -4,22 +4,22 @@ Complete reference for all available parameters.
 
 ## Parameter Overview
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `postgres_version` | string | ❌ | `16` | PostgreSQL version |
-| `postgres_db` | string | ❌ | `app_db` | Default database name |
-| `postgres_user` | string | ❌ | `app_user` | Database user name |
-| `postgres_password` | string | ❌ | `secure_password_123` | Database password (use secrets in production) |
-| `max_connections` | integer | ❌ | `100` | Maximum number of connections |
-| `shared_buffers` | string | ❌ | `256MB` | Shared buffers size |
-| `effective_cache_size` | string | ❌ | `1GB` | Effective cache size |
-| `maintenance_work_mem` | string | ❌ | `64MB` | Maintenance work memory |
-| `checkpoint_completion_target` | string | ❌ | `0.9` | Checkpoint completion target |
-| `wal_buffers` | string | ❌ | `16MB` | WAL buffers size |
-| `default_statistics_target` | integer | ❌ | `100` | Default statistics target |
-| `enable_ssl` | boolean | ❌ | `True` | Enable SSL connections |
-| `enable_logging` | boolean | ❌ | `True` | Enable query logging |
-| `backup_enabled` | boolean | ❌ | `True` | Enable automated backups |
+| Parameter                      | Type    | Required | Default               | Description                                   |
+| ------------------------------ | ------- | -------- | --------------------- | --------------------------------------------- |
+| `postgres_version`             | string  | ❌       | `16`                  | PostgreSQL version                            |
+| `postgres_db`                  | string  | ❌       | `app_db`              | Default database name                         |
+| `postgres_user`                | string  | ❌       | `app_user`            | Database user name                            |
+| `postgres_password`            | string  | ❌       | `secure_password_123` | Database password (use secrets in production) |
+| `max_connections`              | integer | ❌       | `100`                 | Maximum number of connections                 |
+| `shared_buffers`               | string  | ❌       | `256MB`               | Shared buffers size                           |
+| `effective_cache_size`         | string  | ❌       | `1GB`                 | Effective cache size                          |
+| `maintenance_work_mem`         | string  | ❌       | `64MB`                | Maintenance work memory                       |
+| `checkpoint_completion_target` | string  | ❌       | `0.9`                 | Checkpoint completion target                  |
+| `wal_buffers`                  | string  | ❌       | `16MB`                | WAL buffers size                              |
+| `default_statistics_target`    | integer | ❌       | `100`                 | Default statistics target                     |
+| `enable_ssl`                   | boolean | ❌       | `True`                | Enable SSL connections                        |
+| `enable_logging`               | boolean | ❌       | `True`                | Enable query logging                          |
+| `backup_enabled`               | boolean | ❌       | `True`                | Enable automated backups                      |
 
 ## Detailed Parameter Descriptions
 
@@ -128,7 +128,6 @@ Complete reference for all available parameters.
 - **Description**: Enable automated backups
 - **Default**: `True`
 
-
 ## Parameter Examples
 
 ### Basic Usage
@@ -162,4 +161,4 @@ poetry run template-engine generate template_name ./output --params params.json
 
 ---
 
-*Parameter reference generated automatically from template metadata*
+_Parameter reference generated automatically from template metadata_
