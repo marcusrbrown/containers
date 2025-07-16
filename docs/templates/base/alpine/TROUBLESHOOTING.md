@@ -11,11 +11,13 @@ poetry run template-engine validate base/alpine
 ```
 
 **Common causes:**
+
 - Missing required parameters
 - Invalid parameter values
 - Template syntax errors
 
 **Solutions:**
+
 - Check parameter requirements: `poetry run template-engine list`
 - Validate your parameters against the schema
 - Check template files for syntax errors
@@ -23,10 +25,12 @@ poetry run template-engine validate base/alpine
 ### Issue: Template generation produces empty files
 
 **Symptoms:**
+
 - Files are created but have no content
 - Jinja2 template errors in output
 
 **Solutions:**
+
 - Verify all required parameters are provided
 - Check parameter types match template expectations
 - Review template syntax in source files
@@ -44,12 +48,14 @@ docker build -t alpine-base:debug . --progress=plain
 ```
 
 **Common causes:**
+
 - Base image not available
 - Package installation failures
 - File permission issues
 - Network connectivity problems
 
 **Solutions:**
+
 - Verify base image exists and is accessible
 - Check package manager commands
 - Ensure proper file permissions in Dockerfile
@@ -58,6 +64,7 @@ docker build -t alpine-base:debug . --progress=plain
 ### Issue: Build takes too long
 
 **Solutions:**
+
 - Use multi-stage builds
 - Optimize package installation order
 - Use .dockerignore to exclude unnecessary files
@@ -76,12 +83,14 @@ docker run -it --entrypoint /bin/sh alpine-base:latest
 ```
 
 **Common causes:**
+
 - Application startup failures
 - Missing environment variables
 - Permission issues
 - Port conflicts
 
 **Solutions:**
+
 - Check application logs
 - Verify all required environment variables are set
 - Ensure proper user permissions
@@ -98,11 +107,11 @@ docker inspect container_name | grep Health -A 10
 ```
 
 **Solutions:**
+
 - Verify health check script exists and is executable
 - Check application is actually running
 - Verify health check endpoint is accessible
 - Adjust health check timeouts
-
 
 ## Performance Issues
 
@@ -117,6 +126,7 @@ docker inspect container_name | grep -i memory
 ```
 
 **Solutions:**
+
 - Set appropriate memory limits
 - Optimize application memory usage
 - Use lighter base images
@@ -125,6 +135,7 @@ docker inspect container_name | grep -i memory
 ### Issue: Slow response times
 
 **Debugging steps:**
+
 ```bash
 # Check CPU usage
 docker stats container_name
@@ -139,6 +150,7 @@ docker exec container_name curl localhost:port/metrics
 ## Getting Help
 
 ### Check logs
+
 ```bash
 # Container logs
 docker logs container_name
@@ -151,6 +163,7 @@ sudo journalctl -u docker.service
 ```
 
 ### Debug mode
+
 ```bash
 # Run with debug output
 poetry run template-engine generate base/alpine ./debug \
@@ -162,6 +175,7 @@ docker run -it --entrypoint /bin/bash alpine-base:latest
 ```
 
 ### Community resources
+
 - Template documentation: [README.md](README.md)
 - Parameter reference: [PARAMETERS.md](PARAMETERS.md)
 - Usage examples: [EXAMPLES.md](EXAMPLES.md)
@@ -169,5 +183,5 @@ docker run -it --entrypoint /bin/bash alpine-base:latest
 
 ---
 
-*Troubleshooting guide for template: base/alpine*
-*Last updated: 2025-07-15 21:54:36*
+_Troubleshooting guide for template: base/alpine_
+_Last updated: 2025-07-15 21:54:36_

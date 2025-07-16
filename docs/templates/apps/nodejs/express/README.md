@@ -46,9 +46,11 @@ docker run -d --name my-nodejs-express my-nodejs-express:latest
 ## Parameters
 
 ### Required Parameters
+
 None
 
 ### Optional Parameters
+
 - `alpine_version` (string): Alpine Linux version (default: `3.20`)
 - `packages` (array): Additional packages to install (default: `['curl', 'wget', 'ca-certificates']`)
 - `user_name` (string): Non-root user name (default: `appuser`)
@@ -63,7 +65,6 @@ None
 - `install_packages` (array): Additional npm packages to install (default: `['helmet', 'cors', 'compression', 'morgan']`)
 - `dev_packages` (array): Development packages to install (default: `['nodemon', '@types/node', '@types/express']`)
 
-
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
 ## Generated Files
@@ -71,26 +72,30 @@ None
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `package.json`
 - `tsconfig.json`
 - `nodemon.json`
 - `.dockerignore`
 
 ### Docs
+
 - `README.md`
 - `API.md`
 
 ### Scripts
+
 - `src/app.ts`
 - `src/routes/health.ts`
 - `src/middleware/error.ts`
-
 
 ## Examples
 
@@ -103,14 +108,17 @@ This template generates the following files:
 ## Dependencies
 
 ### Build
+
 - nodejs
 - npm
 
 ### Runtime
+
 - nodejs
 - npm
 
 ### Test
+
 - docker
 - curl
 
@@ -123,14 +131,15 @@ linux/amd64, linux/arm64
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `docker run --rm -p 3000:3000 -d {{ template_name }}:latest`
 - `sleep 5`
 - `curl -f http://localhost:3000/health`
 
 ### Integration Tests
+
 - `npm test`
 - `npm run test:e2e`
-
 
 ## Contributing
 
@@ -147,5 +156,5 @@ Browse other templates in the same category: [**App Templates**](../app/README.m
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_

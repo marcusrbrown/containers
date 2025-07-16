@@ -56,7 +56,6 @@ docker run -d \
   my-nodejs-express:prod
 ```
 
-
 ## Application-Specific Examples
 
 ### Multi-Container Setup
@@ -225,4 +224,4 @@ poetry run template-engine generate apps/nodejs/express ./prod \
 
 ---
 
-*Examples generated automatically for template: apps/nodejs/express*
+_Examples generated automatically for template: apps/nodejs/express_

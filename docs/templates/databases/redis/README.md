@@ -46,9 +46,11 @@ docker run -d --name my-redis-cache my-redis-cache:latest
 ## Parameters
 
 ### Required Parameters
+
 None
 
 ### Optional Parameters
+
 - `redis_version` (string): Redis version (default: `7.2`)
 - `redis_port` (integer): Redis port (default: `6379`)
 - `redis_password` (string): Redis authentication password (default: `secure_redis_password_123`)
@@ -64,7 +66,6 @@ None
 - `timeout` (integer): Client idle timeout (seconds) (default: `300`)
 - `databases` (integer): Number of databases (default: `16`)
 
-
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
 ## Generated Files
@@ -72,25 +73,29 @@ None
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `redis.conf`
 - `sentinel.conf`
 
 ### Scripts
+
 - `healthcheck.sh`
 - `backup.sh`
 - `restore.sh`
 
 ### Docs
+
 - `README.md`
 - `CLUSTERING.md`
 - `BACKUP.md`
-
 
 ## Examples
 
@@ -103,13 +108,16 @@ This template generates the following files:
 ## Dependencies
 
 ### Build
+
 - redis
 
 ### Runtime
+
 - redis
 - curl
 
 ### Test
+
 - docker
 - redis-cli
 
@@ -122,14 +130,15 @@ linux/amd64, linux/arm64
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `docker run --rm -p 6379:6379 -d {{ template_name }}:latest`
 - `sleep 5`
 - `redis-cli ping`
 
 ### Integration Tests
+
 - `redis-cli set test_key test_value`
 - `redis-cli get test_key`
-
 
 ## Contributing
 
@@ -146,5 +155,5 @@ Browse other templates in the same category: [**Database Templates**](../databas
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_

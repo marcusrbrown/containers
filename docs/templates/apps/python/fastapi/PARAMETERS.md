@@ -4,23 +4,23 @@ Complete reference for all available parameters.
 
 ## Parameter Overview
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `alpine_version` | string | ❌ | `3.20` | Alpine Linux version |
-| `packages` | array | ❌ | `['curl', 'wget', 'ca-certificates']` | Additional packages to install |
-| `user_name` | string | ❌ | `appuser` | Non-root user name |
-| `user_uid` | integer | ❌ | `1000` | User UID |
-| `timezone` | string | ❌ | `UTC` | System timezone |
-| `enable_security_updates` | boolean | ❌ | `True` | Enable automatic security updates |
-| `app_name` | string | ✅ | `fastapi-app` | Application name |
-| `python_version` | string | ❌ | `3.11` | Python version |
-| `port` | integer | ❌ | `8000` | Application port |
-| `debug` | boolean | ❌ | `False` | Enable debug mode |
-| `cors_origins` | array | ❌ | `['http://localhost:3000']` | CORS allowed origins |
-| `database_url` | string | ❌ | `sqlite:///./app.db` | Database connection URL |
-| `secret_key` | string | ❌ | `{{ random_string(32) }}` | Application secret key |
-| `enable_docs` | boolean | ❌ | `True` | Enable API documentation |
-| `workers` | integer | ❌ | `1` | Number of worker processes |
+| Parameter                 | Type    | Required | Default                               | Description                       |
+| ------------------------- | ------- | -------- | ------------------------------------- | --------------------------------- |
+| `alpine_version`          | string  | ❌       | `3.20`                                | Alpine Linux version              |
+| `packages`                | array   | ❌       | `['curl', 'wget', 'ca-certificates']` | Additional packages to install    |
+| `user_name`               | string  | ❌       | `appuser`                             | Non-root user name                |
+| `user_uid`                | integer | ❌       | `1000`                                | User UID                          |
+| `timezone`                | string  | ❌       | `UTC`                                 | System timezone                   |
+| `enable_security_updates` | boolean | ❌       | `True`                                | Enable automatic security updates |
+| `app_name`                | string  | ✅       | `fastapi-app`                         | Application name                  |
+| `python_version`          | string  | ❌       | `3.11`                                | Python version                    |
+| `port`                    | integer | ❌       | `8000`                                | Application port                  |
+| `debug`                   | boolean | ❌       | `False`                               | Enable debug mode                 |
+| `cors_origins`            | array   | ❌       | `['http://localhost:3000']`           | CORS allowed origins              |
+| `database_url`            | string  | ❌       | `sqlite:///./app.db`                  | Database connection URL           |
+| `secret_key`              | string  | ❌       | `{{ random_string(32) }}`             | Application secret key            |
+| `enable_docs`             | boolean | ❌       | `True`                                | Enable API documentation          |
+| `workers`                 | integer | ❌       | `1`                                   | Number of worker processes        |
 
 ## Detailed Parameter Descriptions
 
@@ -135,7 +135,6 @@ Complete reference for all available parameters.
 - **Description**: Number of worker processes
 - **Default**: `1`
 
-
 ## Parameter Examples
 
 ### Basic Usage
@@ -169,4 +168,4 @@ poetry run template-engine generate template_name ./output --params params.json
 
 ---
 
-*Parameter reference generated automatically from template metadata*
+_Parameter reference generated automatically from template metadata_

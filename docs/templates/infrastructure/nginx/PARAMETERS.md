@@ -4,23 +4,23 @@ Complete reference for all available parameters.
 
 ## Parameter Overview
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `nginx_version` | string | ❌ | `1.25` | nginx version |
-| `server_name` | string | ❌ | `localhost` | Server name for nginx |
-| `listen_port` | integer | ❌ | `80` | HTTP listen port |
-| `ssl_port` | integer | ❌ | `443` | HTTPS listen port |
-| `enable_ssl` | boolean | ❌ | `True` | Enable SSL/TLS support |
-| `ssl_cert_path` | string | ❌ | `/etc/ssl/certs/nginx.crt` | SSL certificate path |
-| `ssl_key_path` | string | ❌ | `/etc/ssl/private/nginx.key` | SSL private key path |
-| `upstream_servers` | array | ❌ | `['backend1:8080', 'backend2:8080']` | Backend servers for load balancing |
-| `load_balancing_method` | string | ❌ | `round_robin` | Load balancing method |
-| `enable_gzip` | boolean | ❌ | `True` | Enable gzip compression |
-| `enable_rate_limiting` | boolean | ❌ | `True` | Enable rate limiting |
-| `rate_limit` | string | ❌ | `10r/s` | Rate limit (requests per second) |
-| `enable_caching` | boolean | ❌ | `True` | Enable response caching |
-| `worker_processes` | string | ❌ | `auto` | Number of worker processes |
-| `worker_connections` | integer | ❌ | `1024` | Worker connections |
+| Parameter               | Type    | Required | Default                              | Description                        |
+| ----------------------- | ------- | -------- | ------------------------------------ | ---------------------------------- |
+| `nginx_version`         | string  | ❌       | `1.25`                               | nginx version                      |
+| `server_name`           | string  | ❌       | `localhost`                          | Server name for nginx              |
+| `listen_port`           | integer | ❌       | `80`                                 | HTTP listen port                   |
+| `ssl_port`              | integer | ❌       | `443`                                | HTTPS listen port                  |
+| `enable_ssl`            | boolean | ❌       | `True`                               | Enable SSL/TLS support             |
+| `ssl_cert_path`         | string  | ❌       | `/etc/ssl/certs/nginx.crt`           | SSL certificate path               |
+| `ssl_key_path`          | string  | ❌       | `/etc/ssl/private/nginx.key`         | SSL private key path               |
+| `upstream_servers`      | array   | ❌       | `['backend1:8080', 'backend2:8080']` | Backend servers for load balancing |
+| `load_balancing_method` | string  | ❌       | `round_robin`                        | Load balancing method              |
+| `enable_gzip`           | boolean | ❌       | `True`                               | Enable gzip compression            |
+| `enable_rate_limiting`  | boolean | ❌       | `True`                               | Enable rate limiting               |
+| `rate_limit`            | string  | ❌       | `10r/s`                              | Rate limit (requests per second)   |
+| `enable_caching`        | boolean | ❌       | `True`                               | Enable response caching            |
+| `worker_processes`      | string  | ❌       | `auto`                               | Number of worker processes         |
+| `worker_connections`    | integer | ❌       | `1024`                               | Worker connections                 |
 
 ## Detailed Parameter Descriptions
 
@@ -137,7 +137,6 @@ Complete reference for all available parameters.
 - **Minimum**: 100
 - **Maximum**: 10000
 
-
 ## Parameter Examples
 
 ### Basic Usage
@@ -171,4 +170,4 @@ poetry run template-engine generate template_name ./output --params params.json
 
 ---
 
-*Parameter reference generated automatically from template metadata*
+_Parameter reference generated automatically from template metadata_

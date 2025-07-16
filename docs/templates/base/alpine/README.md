@@ -46,16 +46,17 @@ docker run -d --name my-alpine-base my-alpine-base:latest
 ## Parameters
 
 ### Required Parameters
+
 None
 
 ### Optional Parameters
+
 - `alpine_version` (string): Alpine Linux version (default: `3.20`)
 - `packages` (array): Additional packages to install (default: `['curl', 'wget', 'ca-certificates']`)
 - `user_name` (string): Non-root user name (default: `appuser`)
 - `user_uid` (integer): User UID (default: `1000`)
 - `timezone` (string): System timezone (default: `UTC`)
 - `enable_security_updates` (boolean): Enable automatic security updates (default: `True`)
-
 
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 
@@ -64,17 +65,20 @@ None
 This template generates the following files:
 
 ### Dockerfile
+
 - `Dockerfile`
 
 ### Compose
+
 - `docker-compose.yml`
 
 ### Config
+
 - `entrypoint.sh`
 
 ### Docs
-- `README.md`
 
+- `README.md`
 
 ## Examples
 
@@ -87,10 +91,12 @@ This template generates the following files:
 ## Dependencies
 
 ### Runtime
+
 - curl
 - ca-certificates
 
 ### Test
+
 - docker
 
 ## Supported Platforms
@@ -102,9 +108,9 @@ linux/amd64, linux/arm64, linux/arm/v7
 This template includes comprehensive testing:
 
 ### Test Commands
+
 - `docker run --rm {{ template_name }}:latest whoami`
 - `docker run --rm {{ template_name }}:latest id`
-
 
 ## Contributing
 
@@ -121,5 +127,5 @@ Browse other templates in the same category: [**Base Templates**](../base/README
 
 ---
 
-*Documentation generated automatically from template metadata*
-*Last updated: 2025-07-15 21:54:36*
+_Documentation generated automatically from template metadata_
+_Last updated: 2025-07-15 21:54:36_
