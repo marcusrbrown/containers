@@ -6,6 +6,29 @@ author: 'Container Template Engine'
 license: 'MIT'
 tags: ['alpine', 'base', 'minimal', 'security']
 
+# AI-enhanced metadata for intelligent recommendations
+ai_metadata:
+  tags: ['base-image', 'minimal', 'security-hardened', 'production-ready']
+  use_cases: ['base-layer', 'microservice-foundation', 'minimal-runtime']
+  tech_stack: ['alpine-linux', 'shell']
+  performance_profile: 'low-resource-high-efficiency'
+  security_considerations: ['non-root-user', 'minimal-attack-surface', 'security-updates']
+  common_integrations: ['application-runtime', 'monitoring', 'logging']
+  difficulty_indicators:
+    setup: 2 # 1-5 scale
+    customization: 3
+    maintenance: 2
+  complexity_score: 0.3
+  resource_requirements:
+    memory_mb: 50
+    cpu_cores: 0.1
+    disk_mb: 100
+  best_practices:
+    - 'Use specific version tags'
+    - 'Minimize installed packages'
+    - 'Run as non-root user'
+    - 'Enable security updates'
+
 parameters:
   alpine_version:
     type: 'string'

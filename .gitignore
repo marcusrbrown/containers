@@ -8,3 +8,55 @@ __pycache__
 generated_tags.json
 collected_metrics.yaml
 .ai/
+
+# AI-related development files
+ai_config.yaml
+ai_config.local.yaml
+template_analytics.db
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Log files
+*.log
+logs/
+*.tmp
+*.temp
+
+# Test and coverage files
+.coverage
+coverage/
+.pytest_cache/
+.tox/
+htmlcov/
+.nyc_output/
+
+# Editor and IDE files
+.idea/
+*.swp
+*.swo
+*~
+.#*
+
+# OS-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Local configuration overrides
+*.local
+.env.local
+config.local.*
+
+# Temporary analysis and reports
+analysis_report_*.json
+maintenance_report*.json
+ai_analysis_*.txt
+temp_analysis/
+
+# Build and distribution artifacts
+dist/
+build/
+*.egg-info/
+.eggs/
