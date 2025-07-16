@@ -30,7 +30,6 @@ poetry run template-engine generate databases/redis ./my-redis-cache
 
 ---
 
-
 ## Category Overview
 
 Database templates provide pre-configured containers for common database scenarios. Each template includes:
@@ -43,12 +42,10 @@ Database templates provide pre-configured containers for common database scenari
 
 ## Common Use Cases
 
-
 - **Primary Databases**: Production database instances
 - **Read Replicas**: Scalable read-only database copies
 - **Analytics**: Data warehousing and analytics databases
 - **Caching**: In-memory data stores for performance
-
 
 ## Getting Started
 
@@ -62,11 +59,10 @@ Database templates provide pre-configured containers for common database scenari
 
 ## Template Comparison
 
-| Template | Use Case | Size | Complexity | Best For |
-|----------|----------|------|------------|----------|
-| postgresql | PostgreSQL database server wit... | TBD | Complex | Production use |
-| redis-cache | Redis in-memory data store wit... | TBD | Complex | Production use |
-
+| Template    | Use Case                          | Size | Complexity | Best For       |
+| ----------- | --------------------------------- | ---- | ---------- | -------------- |
+| postgresql  | PostgreSQL database server wit... | TBD  | Complex    | Production use |
+| redis-cache | Redis in-memory data store wit... | TBD  | Complex    | Production use |
 
 ## Related Categories
 
@@ -79,5 +75,5 @@ Database templates provide pre-configured containers for common database scenari
 
 ---
 
-*Database category documentation*
-*2 templates available*
+_Database category documentation_
+_2 templates available_

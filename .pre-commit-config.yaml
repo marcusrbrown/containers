@@ -19,7 +19,7 @@ repos:
         language: node
         files: Dockerfile$
         exclude: ^(templates/|node/)
-        args: ["--config", ".dockerfilelintrc"]
+        args: ['--config', '.dockerfilelintrc']
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.37.1
     hooks:

@@ -56,7 +56,6 @@ docker run -d \
   my-nginx-proxy:prod
 ```
 
-
 ## Infrastructure-Specific Examples
 
 ### SSL Termination
@@ -210,4 +209,4 @@ poetry run template-engine generate infrastructure/nginx ./prod \
 
 ---
 
-*Examples generated automatically for template: infrastructure/nginx*
+_Examples generated automatically for template: infrastructure/nginx_
