@@ -6,6 +6,7 @@ on:
       - '**/Dockerfile'
       - 'scripts/**'
       - '!archived/**'
+      - '!templates/**'
       - '!.devcontainer/**'
     branches:
       - main
@@ -14,6 +15,7 @@ on:
       - '**/Dockerfile'
       - 'scripts/**'
       - '!archived/**'
+      - '!templates/**'
       - '!.devcontainer/**'
   workflow_dispatch:
     inputs:
@@ -52,13 +54,13 @@ jobs:
           # Get list of changed Dockerfile paths
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             # For manual runs, build all active containers (excluding archived and system files)
-            changed_files=$(find . -name "Dockerfile" -type f | grep -v -E "(archived/|\.devcontainer/|\.github/)" | head -10)
+            changed_files=$(find . -name "Dockerfile" -type f | grep -v -E "(archived/|templates/|\.devcontainer/|\.github/)" | head -10)
           else
             # For push/PR, detect changed files and filter out archived/system containers
             if [ "${{ github.event_name }}" = "pull_request" ]; then
-              changed_files=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|\.devcontainer/|\.github/)" || true)
+              changed_files=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|templates/|\.devcontainer/|\.github/)" || true)
             else
-              changed_files=$(git diff --name-only HEAD~1..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|\.devcontainer/|\.github/)" || true)
+              changed_files=$(git diff --name-only HEAD~1..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|templates/|\.devcontainer/|\.github/)" || true)
             fi
           fi
 
@@ -76,8 +78,8 @@ jobs:
             parent_dir=$(basename "$(dirname "$container_dir")")
 
             # Skip if this is an archived, system, or invalid container
-            if [[ "$dockerfile" =~ ^(\./)?(archived/|\.devcontainer/|\.github/) ]]; then
-              echo "Skipping archived/system container: $dockerfile"
+            if [[ "$dockerfile" =~ ^(\./)?(archived/|templates/|\.devcontainer/|\.github/) ]]; then
+              echo "Skipping archived/template/system container: $dockerfile"
               continue
             fi
 
