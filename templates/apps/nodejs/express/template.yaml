@@ -1,0 +1,83 @@
+name: "nodejs-express"
+version: "1.0.0"
+description: "Node.js Express web application template with TypeScript support"
+category: "app"
+author: "Container Template Engine"
+license: "MIT"
+tags: ["nodejs", "express", "typescript", "web", "api"]
+inherits: "base/alpine"
+
+parameters:
+  node_version:
+    type: "string"
+    description: "Node.js version"
+    default: "22"
+    enum: ["18", "20", "22", "latest"]
+
+  app_name:
+    type: "string"
+    description: "Application name"
+    default: "express-app"
+    pattern: "^[a-z][a-z0-9-]*$"
+
+  app_port:
+    type: "integer"
+    description: "Application port"
+    default: 3000
+    min: 1000
+    max: 65535
+
+  enable_typescript:
+    type: "boolean"
+    description: "Enable TypeScript support"
+    default: true
+
+  enable_hot_reload:
+    type: "boolean"
+    description: "Enable hot reload for development"
+    default: true
+
+  install_packages:
+    type: "array"
+    description: "Additional npm packages to install"
+    default: ["helmet", "cors", "compression", "morgan"]
+
+  dev_packages:
+    type: "array"
+    description: "Development packages to install"
+    default: ["nodemon", "@types/node", "@types/express"]
+
+files:
+  dockerfile: "Dockerfile"
+  compose: "docker-compose.yml"
+  config: ["package.json", "tsconfig.json", "nodemon.json", ".dockerignore"]
+  scripts: ["src/app.ts", "src/routes/health.ts", "src/middleware/error.ts"]
+  docs: ["README.md", "API.md"]
+
+dependencies:
+  build: ["nodejs", "npm"]
+  runtime: ["nodejs", "npm"]
+  test: ["docker", "curl"]
+
+testing:
+  build_args:
+    NODE_VERSION: "22"
+    APP_PORT: 3000
+  env_vars:
+    NODE_ENV: "production"
+    PORT: 3000
+  health_check: "curl -f http://localhost:3000/health || exit 1"
+  test_commands:
+    - "docker run --rm -p 3000:3000 -d {{ template_name }}:latest"
+    - "sleep 5"
+    - "curl -f http://localhost:3000/health"
+  integration_tests:
+    - "npm test"
+    - "npm run test:e2e"
+
+platforms: ["linux/amd64", "linux/arm64"]
+
+registry:
+  namespace: "apps"
+  repository: "nodejs-express"
+  tags: ["latest", "{{ node_version }}", "{{ node_version }}-alpine"]

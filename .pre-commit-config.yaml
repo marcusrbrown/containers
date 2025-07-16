@@ -3,11 +3,14 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^templates/
       - id: end-of-file-fixer
+        exclude: ^templates/
   # - repo: https://github.com/pre-commit/mirrors-pylint
   #   rev: v2.7.4
   #   hooks:
   #     - id: pylint
+  #       exclude: ^templates/
   - repo: local
     hooks:
       - id: dockerfilelint
@@ -15,7 +18,11 @@ repos:
         entry: npx dockerfilelint
         language: node
         files: Dockerfile$
+        exclude: ^(templates/|node/)
+        args: ["--config", ".dockerfilelintrc"]
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.37.1
     hooks:
       - id: yamllint
+        args: [-c=.yamllint.yaml]
+        exclude: ^templates/

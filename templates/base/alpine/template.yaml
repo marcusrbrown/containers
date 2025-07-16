@@ -1,0 +1,71 @@
+name: "alpine-base"
+version: "1.0.0"
+description: "Alpine Linux base template with security hardening and common utilities"
+category: "base"
+author: "Container Template Engine"
+license: "MIT"
+tags: ["alpine", "base", "minimal", "security"]
+
+parameters:
+  alpine_version:
+    type: "string"
+    description: "Alpine Linux version"
+    default: "3.20"
+    enum: ["3.18", "3.19", "3.20", "latest"]
+
+  packages:
+    type: "array"
+    description: "Additional packages to install"
+    default: ["curl", "wget", "ca-certificates"]
+
+  user_name:
+    type: "string"
+    description: "Non-root user name"
+    default: "appuser"
+    pattern: "^[a-z][a-z0-9_-]*$"
+
+  user_uid:
+    type: "integer"
+    description: "User UID"
+    default: 1000
+    min: 1000
+    max: 65535
+
+  timezone:
+    type: "string"
+    description: "System timezone"
+    default: "UTC"
+
+  enable_security_updates:
+    type: "boolean"
+    description: "Enable automatic security updates"
+    default: true
+
+files:
+  dockerfile: "Dockerfile"
+  compose: "docker-compose.yml"
+  config: ["entrypoint.sh"]
+  docs: ["README.md"]
+
+dependencies:
+  build: []
+  runtime: ["curl", "ca-certificates"]
+  test: ["docker"]
+
+testing:
+  build_args:
+    ALPINE_VERSION: "3.20"
+  env_vars:
+    TZ: "UTC"
+  health_check: "curl -f http://localhost/ || exit 1"
+  test_commands:
+    - "docker run --rm {{ template_name }}:latest whoami"
+    - "docker run --rm {{ template_name }}:latest id"
+  integration_tests: []
+
+platforms: ["linux/amd64", "linux/arm64", "linux/arm/v7"]
+
+registry:
+  namespace: "containers"
+  repository: "alpine-base"
+  tags: ["latest", "{{ alpine_version }}"]

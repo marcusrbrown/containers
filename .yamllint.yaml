@@ -2,6 +2,8 @@ extends: default
 
 ignore: |
   .github/workflows/*.yml
+  templates/
+  **/templates/**
 
 rules:
   document-start: disable
@@ -9,5 +11,11 @@ rules:
   line-length:
     max: 120
     level: warning
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
 
 name: default_name

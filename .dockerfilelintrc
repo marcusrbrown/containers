@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "instruction_case_uppercase": "off",
+    "instruction_case_lowercase": "warn",
+    "invalid_command": "off",
+    "expose_ports": "off",
+    "invalid_argument_format": "off",
+    "possible_bug_invalid_argument_format": "off"
+  },
+  "ignore": [
+    "templates/**/*"
+  ]
+}

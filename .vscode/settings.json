@@ -3,6 +3,26 @@
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.exclude": [
+        "templates/**"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.ignorePatterns": [
+        "templates/**/*.py"
+    ],
     "editor.tabSize": 4,
-    "editor.rulers": [88]
+    "editor.rulers": [88],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    },
+    "search.exclude": {
+        "templates/**/*.py": true,
+        "templates/**/*.yaml": true,
+        "templates/**/*.yml": true
+    }
 }
