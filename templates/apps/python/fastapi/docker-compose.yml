@@ -41,7 +41,7 @@ services:
           cpus: '0.25'
 
   postgres:
-    image: postgres:15-alpine
+    image: postgres:15-alpine@sha256:de9b2e6d2c42777c009005d73462ad6d98fb22c76d90c1e93d6422938b6b6f20
     container_name: {{ app_name }}-postgres
     restart: unless-stopped
     environment:
@@ -62,7 +62,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:7-alpine
+    image: redis:7-alpine@sha256:af1d0fc3f63b02b13ff7906c9baf7c5b390b8881ca08119cd570677fe2f60b55
     container_name: {{ app_name }}-redis
     restart: unless-stopped
     command: redis-server --appendonly yes
@@ -79,7 +79,7 @@ services:
       retries: 3
 
   nginx:
-    image: nginx:alpine
+    image: nginx:alpine@sha256:6054a84cbe362215f2e2aa83e01fe29afa9a8616a5f43bceffe6d1ecb0546e41
     container_name: {{ app_name }}-nginx
     restart: unless-stopped
     ports:
