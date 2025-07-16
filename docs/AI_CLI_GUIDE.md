@@ -163,32 +163,32 @@ The system supports multiple AI providers. Configure in `ai_config.yaml`:
 ```yaml
 ai:
   enabled: true
-  default_provider: 'ollama'  # or 'openai', 'anthropic'
+  default_provider: "ollama" # or 'openai', 'anthropic'
 
   providers:
     ollama:
       enabled: true
-      base_url: 'http://localhost:11434'
+      base_url: "http://localhost:11434"
       models:
-        chat: 'llama3.2'
-        code: 'codellama'
-        analysis: 'mistral'
+        chat: "llama3.2"
+        code: "codellama"
+        analysis: "mistral"
 
     openai:
       enabled: false
-      api_key_env: 'OPENAI_API_KEY'
+      api_key_env: "OPENAI_API_KEY"
       models:
-        chat: 'gpt-4'
-        code: 'gpt-4'
-        analysis: 'gpt-3.5-turbo'
+        chat: "gpt-4"
+        code: "gpt-4"
+        analysis: "gpt-3.5-turbo"
 
     anthropic:
       enabled: false
-      api_key_env: 'ANTHROPIC_API_KEY'
+      api_key_env: "ANTHROPIC_API_KEY"
       models:
-        chat: 'claude-3-sonnet-20240229'
-        code: 'claude-3-sonnet-20240229'
-        analysis: 'claude-3-haiku-20240307'
+        chat: "claude-3-sonnet-20240229"
+        code: "claude-3-sonnet-20240229"
+        analysis: "claude-3-haiku-20240307"
 ```
 
 ### Feature Configuration
