@@ -4,17 +4,74 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**/*.py'
+      - '**/Dockerfile'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - 'pyproject.toml'
+      - '!archived/**'
+      - '!templates/**'
   pull_request:
     branches:
       - main
+    paths:
+      - '**/*.py'
+      - '**/Dockerfile'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - 'pyproject.toml'
+      - '!archived/**'
+      - '!templates/**'
+  workflow_dispatch:
 
 jobs:
-  docker-build:
+  detect-containers:
+    name: Detect Changed Containers
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     dockerfile: ['Dockerfile1', 'Dockerfile2'] # Replace with actual Dockerfile names
+    outputs:
+      containers: ${{ steps.detect.outputs.containers }}
+      has-containers: ${{ steps.detect.outputs.has-containers }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
 
+      - name: Detect containers to test
+        id: detect
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # For manual runs, test all containers
+            containers=$(find . -name "Dockerfile" -not -path "./archived/*" -not -path "./templates/*" -not -path "./.devcontainer/*" | xargs -I {} dirname {} | sort -u)
+          else
+            # For PR/push, only test changed containers
+            base_ref="${{ github.event.pull_request.base.sha || github.event.before }}"
+            containers=$(git diff --name-only "${base_ref}..HEAD" | grep "Dockerfile$" | grep -v -E "(archived/|templates/|\.devcontainer/)" | xargs -I {} dirname {} | sort -u)
+          fi
+
+          if [[ -n "$containers" ]]; then
+            # Convert to JSON array format
+            container_array=$(echo "$containers" | jq -R -s -c 'split("\n") | map(select(length > 0)) | map({path: ., name: (split("/") | join("-"))})')
+            echo "containers=$container_array" >> $GITHUB_OUTPUT
+            echo "has-containers=true" >> $GITHUB_OUTPUT
+            echo "Found containers to test:"
+            echo "$containers"
+          else
+            echo "containers=[]" >> $GITHUB_OUTPUT
+            echo "has-containers=false" >> $GITHUB_OUTPUT
+            echo "No containers to test"
+          fi
+
+  container-builds:
+    name: Test Container Builds
+    runs-on: ubuntu-latest
+    needs: detect-containers
+    if: needs.detect-containers.outputs.has-containers == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        container: ${{ fromJSON(needs.detect-containers.outputs.containers) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -22,35 +79,197 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
 
-      # - name: Build Docker image
-      #   uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # v2.10.0
-      #   with:
-      #     context: .
-      #     file: ./path/to/${{ matrix.dockerfile }} # Replace with actual path
-      #     push: false
+      - name: Build Docker image
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # v6.10.0
+        with:
+          context: ${{ matrix.container.path }}
+          file: ${{ matrix.container.path }}/Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: test/${{ matrix.container.name }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test container functionality
+        run: |
+          # Basic container inspection
+          docker image inspect test/${{ matrix.container.name }}:latest
+
+          # Test container can start (if it has an entrypoint/cmd)
+          if docker run --rm --entrypoint="" test/${{ matrix.container.name }}:latest sh -c "exit 0" 2>/dev/null; then
+            echo "✓ Container starts successfully"
+          else
+            echo "ℹ Container requires specific entrypoint (this is normal for some containers)"
+          fi
 
   python-tests:
+    name: Python Script Testing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Setup
+      - name: Setup environment
         uses: ./.github/actions/setup
 
-      # - name: Run tests
-      #   run: pytest # Replace with your testing command
+      - name: Install test dependencies
+        run: |
+          poetry add --group dev pytest pytest-cov pytest-mock
+
+      - name: Run Python script tests
+        run: |
+          # Run existing tests
+          if [ -f "test_ai_cli.py" ]; then
+            poetry run pytest test_ai_cli.py -v
+          fi
+
+          # Test script imports and basic functionality
+          poetry run python -c "
+          import sys
+          sys.path.append('scripts')
+
+          # Test core scripts can be imported
+          modules = [
+              'generate_dockerfile',
+              'collect_docker_metrics',
+              'generate_image_tags',
+              'build_multiarch',
+              'template_engine'
+          ]
+
+          for module in modules:
+              try:
+                  __import__(module)
+                  print(f'✓ {module} imports successfully')
+              except Exception as e:
+                  print(f'✗ {module} failed to import: {e}')
+                  sys.exit(1)
+          "
+
+      - name: Test Poetry script entry points
+        run: |
+          # Test that all Poetry scripts are callable
+          poetry run generate-dockerfile --help
+          poetry run collect-docker-metrics --help
+          poetry run generate-image-tags --help
+
+      - name: Validate script configurations
+        run: |
+          # Validate pyproject.toml
+          poetry check
+
+          # Test YAML configurations
+          python -c "
+          import yaml
+          with open('.yamllint.yaml') as f:
+              yaml.safe_load(f)
+          print('✓ .yamllint.yaml is valid')
+          "
 
   linting:
+    name: Code Quality & Linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-#       - name: Run Hadolint
-#         uses: hadolint/hadolint-action@0bc6199b82f7c6bbd2d41b82d523294df01f8b8f # v1.7.0
-#         with:
-#           dockerfile: ./path/to/Dockerfile # Replace with actual path
-#
-#       - name: Run yamllint
-#         run: yamllint -c .yamllint.yaml ./path/to/*.yaml # Replace with actual path
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Setup Node.js for Dockerfile linting
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install Node.js dependencies
+        run: pnpm install
+
+      - name: Run Hadolint (Dockerfile linting)
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
+        with:
+          dockerfile: './node/*/Dockerfile'
+          recursive: true
+          format: sarif
+          output-file: hadolint.sarif
+          no-fail: true
+
+      - name: Upload Hadolint SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.6
+        with:
+          sarif_file: hadolint.sarif
+
+      - name: Run yamllint
+        run: |
+          poetry run pip install yamllint
+          yamllint -c .yamllint.yaml . --format github
+
+      - name: Run Python linting with Black
+        run: |
+          poetry run pip install black
+          poetry run black --check --diff scripts/ *.py
+
+      - name: Run Python static analysis
+        run: |
+          poetry run pip install pylint
+          # Run pylint on scripts directory with some common warnings disabled for now
+          poetry run pylint scripts/ --disable=C0114,C0115,C0116,R0903,W0613 --reports=n || true
+
+      - name: Check Python import sorting
+        run: |
+          poetry run pip install isort
+          poetry run isort --check-only --diff scripts/ *.py
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    needs: detect-containers
+    if: needs.detect-containers.outputs.has-containers == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        container: ${{ fromJSON(needs.detect-containers.outputs.containers) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
+
+      - name: Build image for security scan
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # v6.10.0
+        with:
+          context: ${{ matrix.container.path }}
+          file: ${{ matrix.container.path }}/Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: scan/${{ matrix.container.name }}:latest
+          load: true
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.32.0
+        with:
+          image-ref: scan/${{ matrix.container.name }}:latest
+          format: sarif
+          output: trivy-${{ matrix.container.name }}.sarif
+
+      - name: Upload Trivy SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.6
+        with:
+          sarif_file: trivy-${{ matrix.container.name }}.sarif
+
+      - name: Run Trivy config scan
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.32.0
+        with:
+          scan-type: config
+          scan-ref: ${{ matrix.container.path }}
+          format: sarif
+          output: trivy-config-${{ matrix.container.name }}.sarif
+
+      - name: Upload Trivy config SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.6
+        with:
+          sarif_file: trivy-config-${{ matrix.container.name }}.sarif
