@@ -1,6 +1,6 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: ['github>marcusrbrown/renovate-config#4.0.0', 'security:openssf-scorecard'],
+  extends: ['github>marcusrbrown/renovate-config#4.1.0', 'security:openssf-scorecard'],
   automergeType: 'pr',
   constraints: {
     python: '3.13',
