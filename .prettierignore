@@ -1,3 +1,4 @@
 .prettierrc.yaml
 .triage
 pnpm-lock.yaml
+templates/
