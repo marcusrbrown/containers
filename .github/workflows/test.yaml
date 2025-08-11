@@ -34,7 +34,7 @@ jobs:
       has-containers: ${{ steps.detect.outputs.has-containers }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           fetch-depth: 0
 
@@ -74,7 +74,7 @@ jobs:
         container: ${{ fromJSON(needs.detect-containers.outputs.containers) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -171,7 +171,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -232,7 +232,7 @@ jobs:
         container: ${{ fromJSON(needs.detect-containers.outputs.containers) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
