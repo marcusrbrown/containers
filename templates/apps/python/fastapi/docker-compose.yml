@@ -79,7 +79,7 @@ services:
       retries: 3
 
   nginx:
-    image: nginx:alpine@sha256:33775db50ff15b07fbca709ad9631c405ed54ee5cea1f8ccc89584ffc89802e3
+    image: nginx:alpine@sha256:c0d0d0c261e8a56ddb9d445961f404a62ddd76863c00d8091221305e7c8c0c3a
     container_name: {{ app_name }}-nginx
     restart: unless-stopped
     ports:
