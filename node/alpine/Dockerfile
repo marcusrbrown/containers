@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.17@sha256:38387523653efa0039f8e1c89bb74a30504e76ee9f565e25c9a09841f9427b05
-FROM --platform=$TARGETPLATFORM node:22-alpine@sha256:1b2479dd35a99687d6638f5976fd235e26c5b37e8122f786fcd5fe231d63de5b
+FROM --platform=$TARGETPLATFORM node:22-alpine@sha256:499a6a4e8e276b0318bbb01d921011e3dc021395ca24a0467bf07a8981ca11a6
 
 # Multi-architecture build arguments
 ARG TARGETPLATFORM
