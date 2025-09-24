@@ -41,7 +41,7 @@ services:
           cpus: '0.25'
 
   postgres:
-    image: postgres:15-alpine@sha256:6336d8182bf86b34175334b8d12ce6f8b78982fb6ca38621da56dbc90250a846
+    image: postgres:15-alpine@sha256:3a4cda59817ef228718290e6886e87fb1ad3da44985aea3503d840ecf8a7e302
     container_name: {{ app_name }}-postgres
     restart: unless-stopped
     environment:
