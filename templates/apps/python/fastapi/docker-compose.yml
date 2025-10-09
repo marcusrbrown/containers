@@ -62,7 +62,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:7-alpine@sha256:9aa757f58bcd716b7be8ae0e471d3264b8b7e6c1a19aae732ae22ac7f19a3adf
+    image: redis:7-alpine@sha256:19759b3d20e68cccd22cd7e68bc4884f7e205c5e1c6f3a0291eecee2e653ea54
     container_name: {{ app_name }}-redis
     restart: unless-stopped
     command: redis-server --appendonly yes
