@@ -264,8 +264,7 @@ ai:
 ImportError: attempted relative import with no known parent package
 ```
 
-**Solution:**
-Always use Poetry to run commands:
+**Solution:** Always use Poetry to run commands:
 
 ```bash
 poetry run containers ai <command>
