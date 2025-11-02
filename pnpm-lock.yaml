@@ -8,11 +8,19 @@ importers:
 
   .:
     devDependencies:
+      '@bfra.me/prettier-config':
+        specifier: ^0.16.1
+        version: 0.16.1(prettier@3.6.0)
       prettier:
         specifier: 3.6.0
         version: 3.6.0
 
 packages:
+
+  '@bfra.me/prettier-config@0.16.1':
+    resolution: {integrity: sha512-GQAUQFFx2v5wXEkMu19okchRJnyhONTF0FWDxRyerIC6z+oURtSMoa9UW/ar6nYeVEGUJEH9iUV0+Cu0FoxWDA==}
+    peerDependencies:
+      prettier: ^3.0.0
 
   prettier@3.6.0:
     resolution: {integrity: sha512-ujSB9uXHJKzM/2GBuE0hBOUgC77CN3Bnpqa+g80bkv3T3A93wL/xlzDATHhnhkzifz/UE2SNOvmbTz5hSkDlHw==}
@@ -20,5 +28,9 @@ packages:
     hasBin: true
 
 snapshots:
+
+  '@bfra.me/prettier-config@0.16.1(prettier@3.6.0)':
+    dependencies:
+      prettier: 3.6.0
 
   prettier@3.6.0: {}

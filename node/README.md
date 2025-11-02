@@ -59,12 +59,12 @@ docker buildx build --platform linux/amd64,linux/arm64 -t node-test:multi node/r
 
 These containers are designed to validate the automation framework capabilities:
 
-✅ **Multi-Architecture Support**: Both AMD64 and ARM64
-✅ **Security Best Practices**: Non-root user, minimal dependencies
-✅ **Health Checks**: Built-in health monitoring
-✅ **Proper Labeling**: OCI-compliant metadata
-✅ **Layer Optimization**: Efficient caching strategies
-✅ **Base Image Pinning**: SHA256 hash verification
+- ✅ **Multi-Architecture Support**: Both AMD64 and ARM64
+- ✅ **Security Best Practices**: Non-root user, minimal dependencies
+- ✅ **Health Checks**: Built-in health monitoring
+- ✅ **Proper Labeling**: OCI-compliant metadata
+- ✅ **Layer Optimization**: Efficient caching strategies
+- ✅ **Base Image Pinning**: SHA256 hash verification
 
 ## CI/CD Integration
 
