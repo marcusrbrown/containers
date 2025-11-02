@@ -1,5 +1,5 @@
 # Use a Docker-in-Docker base image
-FROM docker:28.3.0@sha256:56e360024d7d35dac801b8fc87f869ccf5c89b88399dd266f7cfc1169690a86b
+FROM docker:28.5.0@sha256:c090c93b63bc690570a0cab398904c855a46f08e0b6804e51bb5ad26e3407f9a
 
 # Install essential packages
 RUN apk add --no-cache \

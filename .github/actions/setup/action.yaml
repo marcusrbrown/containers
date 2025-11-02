@@ -13,13 +13,13 @@ runs:
   steps:
     - name: Install mise
       env:
-        MISE_VERSION: 2025.7.0 # renovate: datasource=github-releases packageName=jdx/mise
-      uses: jdx/mise-action@bfb9fa0b029db830a8c570757cee683df207a6c5 # v2.4.0
+        MISE_VERSION: 2025.11.1 # renovate: datasource=github-releases packageName=jdx/mise
+      uses: jdx/mise-action@be3be2260bc02bc3fbf94c5e2fed8b7964baf074 # v3.4.0
       with:
         version: ${{ env.MISE_VERSION }}
 
     - name: Setup Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
       with:
         cache: poetry
         python-version-file: 'pyproject.toml'

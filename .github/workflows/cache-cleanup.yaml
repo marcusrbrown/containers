@@ -1,0 +1,37 @@
+---
+# https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows#force-deleting-cache-entries
+name: Cache Cleanup
+
+on:
+  pull_request:
+    types: [closed]
+  schedule:
+    - cron: '0 0 * * 0' # Every Sunday at 00:00
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    name: Cleanup cache
+    permissions:
+      actions: write
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: >-
+        ${{
+          github.event_name == 'pull_request' && github.event.pull_request.merged && format('refs/pull/{0}/merge', github.event.pull_request.number)
+          || github.event_name != 'pull_request' && github.ref
+          || ''
+        }}
+    steps:
+      - if: env.BRANCH != ''
+        name: Deleting workflow caches on ${{ env.BRANCH }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CACHE_KEYS="$(gh cache list -R ${{ github.repository }} --ref $BRANCH --limit 100 --order asc --sort last_accessed_at | cut -f 2 | tr '\n' ' ')"
+          for key in $CACHE_KEYS; do
+            gh cache delete $key -R ${{ github.repository }}
+          done

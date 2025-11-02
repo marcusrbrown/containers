@@ -15,5 +15,17 @@ branches:
       required_pull_request_reviews: null
       required_status_checks:
         strict: false
-        contexts: ['Container Scan', 'Pre-commit Checks', 'Renovate / Renovate', 'Yamllint']
+        contexts:
+          [
+            'Code Quality & Linting',
+            'Container Scan',
+            'Detect Changed Containers',
+            'Pre-commit Checks',
+            'Prepare',
+            'Python Script Testing',
+            'Renovate / Renovate',
+            'Security Scanning',
+            'Test Container Builds',
+            'Yamllint',
+          ]
       restrictions: null

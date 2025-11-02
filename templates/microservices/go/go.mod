@@ -3,19 +3,19 @@ module {{ service_name }}
 go {{ go_version }}
 
 require (
-	github.com/gin-gonic/gin v1.10.1
-	github.com/prometheus/client_golang v1.22.0
-	github.com/spf13/viper v1.20.1
-	google.golang.org/grpc v1.74.0
+	github.com/gin-gonic/gin v1.11.0
+	github.com/prometheus/client_golang v1.23.0
+	github.com/spf13/viper v1.21.0
+	google.golang.org/grpc v1.76.0
 	google.golang.org/protobuf v1.36.6
-	go.opentelemetry.io/otel v1.37.0
-	go.opentelemetry.io/otel/trace v1.37.0
+	go.opentelemetry.io/otel v1.38.0
+	go.opentelemetry.io/otel/trace v1.38.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0
-	go.opentelemetry.io/otel/sdk v1.37.0
+	go.opentelemetry.io/otel/sdk v1.38.0
 	github.com/lib/pq v1.10.9
 	github.com/go-redis/redis/v9 v9.11.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 )
 
 require (
@@ -47,8 +47,8 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230525234030-28d5490b6b19 // indirect

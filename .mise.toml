@@ -8,8 +8,8 @@ MISE_POETRY_AUTO_INSTALL = "true"
 MISE_POETRY_VENV_AUTO = "true"
 
 [tools]
-node = "22.17.0"
-pnpm = "10.13.0"
+node = "24.11.0"
+pnpm = "10.20.0"
 poetry = { version = "latest", pyproject = "{{ config_root }}/pyproject.toml" }
 pre-commit = "latest"
-python = "3.13.4"
+python = "3.13"

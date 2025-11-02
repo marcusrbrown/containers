@@ -6,8 +6,13 @@
   },
   packageRules: [
     {
+      description: ['Disable lockfile maintaenance.'],
+      matchUpdateTypes: ['lockFileMaintenance'],
+      enabled: false,
+    },
+    {
       matchDepNames: ['python'],
-      allowedVersions: '<=3.14',
+      allowedVersions: '>=3.13,<3.14',
     },
     {
       description: 'Disable patch updates except for select dependencies.',
@@ -29,4 +34,5 @@
     commands: ['pnpm install', 'pnpm format'],
     executionMode: 'branch',
   },
+  rebaseWhen: 'behind-base-branch',
 }

@@ -1,8 +1,9 @@
+import argparse
 import os
 import time
-import yaml
-import argparse
+
 import requests
+import yaml
 
 
 def identify_target_dockerfiles(repo_path):
