@@ -34,4 +34,5 @@
     commands: ['pnpm install', 'pnpm format'],
     executionMode: 'branch',
   },
+  rebaseWhen: 'behind-base-branch',
 }
