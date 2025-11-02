@@ -6,6 +6,11 @@
   },
   packageRules: [
     {
+      description: ['Disable lockfile maintaenance.'],
+      matchUpdateTypes: ['lockFileMaintenance'],
+      enabled: false,
+    },
+    {
       matchDepNames: ['python'],
       allowedVersions: '>=3.13,<3.14',
     },
