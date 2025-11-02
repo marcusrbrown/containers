@@ -9,10 +9,11 @@ This module provides a natural language interface for:
 """
 
 import json
-import yaml
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict, field
 import logging
+from dataclasses import asdict, dataclass, field
+from typing import Any, Dict, List, Optional
+
+import yaml
 
 from .ai_core import get_ai_core
 from .template_intelligence import TemplateIntelligence

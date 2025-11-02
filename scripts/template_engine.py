@@ -10,20 +10,23 @@ import argparse
 import json
 import re
 import sys
-import yaml
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import yaml
+
 try:
     from jinja2 import Environment, FileSystemLoader, TemplateError
 except ImportError:
-    print("Jinja2 is required for template processing. Install with: pip install jinja2")
+    print(
+        "Jinja2 is required for template processing. Install with: pip install jinja2"
+    )
     sys.exit(1)
 
 try:
     import jsonschema
-    from jsonschema import validate, ValidationError
+    from jsonschema import ValidationError, validate
 except ImportError:
     print("jsonschema is required for validation. Install with: pip install jsonschema")
     sys.exit(1)
@@ -64,7 +67,16 @@ class TemplateEngine:
                 "name": {"type": "string"},
                 "version": {"type": "string"},
                 "description": {"type": "string"},
-                "category": {"type": "string", "enum": ["app", "database", "infrastructure", "microservice", "base"]},
+                "category": {
+                    "type": "string",
+                    "enum": [
+                        "app",
+                        "database",
+                        "infrastructure",
+                        "microservice",
+                        "base",
+                    ],
+                },
                 "author": {"type": "string"},
                 "license": {"type": "string"},
                 "tags": {"type": "array", "items": {"type": "string"}},
@@ -76,17 +88,26 @@ class TemplateEngine:
                             "type": "object",
                             "required": ["type", "description"],
                             "properties": {
-                                "type": {"type": "string", "enum": ["string", "integer", "boolean", "array", "object"]},
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "string",
+                                        "integer",
+                                        "boolean",
+                                        "array",
+                                        "object",
+                                    ],
+                                },
                                 "description": {"type": "string"},
                                 "default": {},
                                 "required": {"type": "boolean"},
                                 "enum": {"type": "array"},
                                 "pattern": {"type": "string"},
                                 "min": {"type": "number"},
-                                "max": {"type": "number"}
-                            }
+                                "max": {"type": "number"},
+                            },
                         }
-                    }
+                    },
                 },
                 "files": {
                     "type": "object",
@@ -96,16 +117,16 @@ class TemplateEngine:
                         "compose": {"type": "string"},
                         "config": {"type": "array", "items": {"type": "string"}},
                         "scripts": {"type": "array", "items": {"type": "string"}},
-                        "docs": {"type": "array", "items": {"type": "string"}}
-                    }
+                        "docs": {"type": "array", "items": {"type": "string"}},
+                    },
                 },
                 "dependencies": {
                     "type": "object",
                     "properties": {
                         "build": {"type": "array", "items": {"type": "string"}},
                         "runtime": {"type": "array", "items": {"type": "string"}},
-                        "test": {"type": "array", "items": {"type": "string"}}
-                    }
+                        "test": {"type": "array", "items": {"type": "string"}},
+                    },
                 },
                 "testing": {
                     "type": "object",
@@ -114,8 +135,11 @@ class TemplateEngine:
                         "env_vars": {"type": "object"},
                         "health_check": {"type": "string"},
                         "test_commands": {"type": "array", "items": {"type": "string"}},
-                        "integration_tests": {"type": "array", "items": {"type": "string"}}
-                    }
+                        "integration_tests": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                        },
+                    },
                 },
                 "platforms": {"type": "array", "items": {"type": "string"}},
                 "registry": {
@@ -123,10 +147,10 @@ class TemplateEngine:
                     "properties": {
                         "namespace": {"type": "string"},
                         "repository": {"type": "string"},
-                        "tags": {"type": "array", "items": {"type": "string"}}
-                    }
-                }
-            }
+                        "tags": {"type": "array", "items": {"type": "string"}},
+                    },
+                },
+            },
         }
 
     def load_template_metadata(self, template_path: str) -> Dict[str, Any]:
@@ -148,14 +172,16 @@ class TemplateEngine:
         if not metadata_file.exists():
             raise FileNotFoundError(f"Template metadata not found: {metadata_file}")
 
-        with open(metadata_file, 'r') as f:
+        with open(metadata_file, "r") as f:
             metadata = yaml.safe_load(f)
 
         # Validate against schema
         try:
             validate(instance=metadata, schema=self.template_schema)
         except ValidationError as e:
-            raise ValidationError(f"Invalid template metadata in {template_path}: {e.message}")
+            raise ValidationError(
+                f"Invalid template metadata in {template_path}: {e.message}"
+            )
 
         # Cache the metadata
         self._template_cache[template_path] = metadata
@@ -192,7 +218,11 @@ class TemplateEngine:
         result = base.copy()
 
         for key, value in override.items():
-            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            if (
+                key in result
+                and isinstance(result[key], dict)
+                and isinstance(value, dict)
+            ):
                 result[key] = self._deep_merge(result[key], value)
             else:
                 result[key] = value
@@ -204,7 +234,7 @@ class TemplateEngine:
         template_path: str,
         output_dir: str,
         parameters: Optional[Dict[str, Any]] = None,
-        dry_run: bool = False
+        dry_run: bool = False,
     ) -> Dict[str, str]:
         """Generate a container from a template.
 
@@ -224,12 +254,14 @@ class TemplateEngine:
         final_params = self._prepare_parameters(metadata, parameters or {})
 
         # Add system parameters
-        final_params.update({
-            "template_name": metadata["name"],
-            "template_version": metadata["version"],
-            "generated_at": datetime.now().isoformat(),
-            "generated_by": "container-template-engine"
-        })
+        final_params.update(
+            {
+                "template_name": metadata["name"],
+                "template_version": metadata["version"],
+                "generated_at": datetime.now().isoformat(),
+                "generated_by": "container-template-engine",
+            }
+        )
 
         # Generate files
         generated_files = {}
@@ -243,7 +275,9 @@ class TemplateEngine:
                 template_file = template_dir / pattern
                 if template_file.exists():
                     try:
-                        template = self.jinja_env.get_template(f"{template_path}/{pattern}")
+                        template = self.jinja_env.get_template(
+                            f"{template_path}/{pattern}"
+                        )
                         content = template.render(**final_params)
 
                         output_file = Path(output_dir) / pattern
@@ -251,7 +285,7 @@ class TemplateEngine:
 
                         if not dry_run:
                             output_file.parent.mkdir(parents=True, exist_ok=True)
-                            with open(output_file, 'w') as f:
+                            with open(output_file, "w") as f:
                                 f.write(content)
 
                     except TemplateError as e:
@@ -259,7 +293,9 @@ class TemplateEngine:
 
         return generated_files
 
-    def _prepare_parameters(self, metadata: Dict, provided_params: Dict) -> Dict[str, Any]:
+    def _prepare_parameters(
+        self, metadata: Dict, provided_params: Dict
+    ) -> Dict[str, Any]:
         """Prepare and validate template parameters.
 
         Args:
@@ -312,7 +348,9 @@ class TemplateEngine:
         # Pattern validation for strings
         if param_type == "string" and "pattern" in definition:
             if not re.match(definition["pattern"], str(value)):
-                raise ValueError(f"Parameter '{name}' doesn't match pattern {definition['pattern']}")
+                raise ValueError(
+                    f"Parameter '{name}' doesn't match pattern {definition['pattern']}"
+                )
 
         # Range validation for numbers
         if param_type in ["integer", "number"]:
@@ -339,14 +377,16 @@ class TemplateEngine:
                 metadata = self.load_template_metadata(template_path)
 
                 if category is None or metadata.get("category") == category:
-                    templates.append({
-                        "path": template_path,
-                        "name": metadata["name"],
-                        "version": metadata["version"],
-                        "description": metadata["description"],
-                        "category": metadata["category"],
-                        "tags": metadata.get("tags", [])
-                    })
+                    templates.append(
+                        {
+                            "path": template_path,
+                            "name": metadata["name"],
+                            "version": metadata["version"],
+                            "description": metadata["description"],
+                            "category": metadata["category"],
+                            "tags": metadata.get("tags", []),
+                        }
+                    )
             except Exception as e:
                 print(f"Warning: Failed to load template {template_path}: {e}")
 
@@ -361,12 +401,7 @@ class TemplateEngine:
         Returns:
             Validation results
         """
-        results = {
-            "valid": True,
-            "errors": [],
-            "warnings": [],
-            "metadata": None
-        }
+        results = {"valid": True, "errors": [], "warnings": [], "metadata": None}
 
         try:
             # Load and validate metadata
@@ -395,16 +430,22 @@ class TemplateEngine:
                     file_path = template_dir / pattern
                     if file_path.exists():
                         try:
-                            template = self.jinja_env.get_template(f"{template_path}/{pattern}")
+                            template = self.jinja_env.get_template(
+                                f"{template_path}/{pattern}"
+                            )
                             # Try to render with default parameters
                             default_params = {}
-                            for param_name, param_def in metadata.get("parameters", {}).items():
+                            for param_name, param_def in metadata.get(
+                                "parameters", {}
+                            ).items():
                                 if "default" in param_def:
                                     default_params[param_name] = param_def["default"]
 
                             template.render(**default_params)
                         except TemplateError as e:
-                            results["errors"].append(f"Template syntax error in {pattern}: {e}")
+                            results["errors"].append(
+                                f"Template syntax error in {pattern}: {e}"
+                            )
                             results["valid"] = False
 
         except Exception as e:
@@ -413,7 +454,9 @@ class TemplateEngine:
 
         return results
 
-    def test_template(self, template_path: str, test_params: Optional[Dict] = None) -> Dict[str, Any]:
+    def test_template(
+        self, template_path: str, test_params: Optional[Dict] = None
+    ) -> Dict[str, Any]:
         """Test a template by generating it and running tests.
 
         Args:
@@ -423,15 +466,15 @@ class TemplateEngine:
         Returns:
             Test results
         """
-        import tempfile
         import subprocess
+        import tempfile
 
         results = {
             "success": True,
             "tests_run": 0,
             "tests_passed": 0,
             "errors": [],
-            "output": []
+            "output": [],
         }
 
         try:
@@ -445,9 +488,7 @@ class TemplateEngine:
             # Generate template in temporary directory
             with tempfile.TemporaryDirectory() as temp_dir:
                 generated_files = self.generate_template(
-                    template_path,
-                    temp_dir,
-                    test_params
+                    template_path, temp_dir, test_params
                 )
 
                 # Run build test
@@ -461,14 +502,26 @@ class TemplateEngine:
                     results["tests_run"] += 1
                     try:
                         # Test Docker build
-                        cmd = ["docker", "build", "-t", f"test-{metadata['name']}", "-f", dockerfile_path, temp_dir]
-                        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+                        cmd = [
+                            "docker",
+                            "build",
+                            "-t",
+                            f"test-{metadata['name']}",
+                            "-f",
+                            dockerfile_path,
+                            temp_dir,
+                        ]
+                        result = subprocess.run(
+                            cmd, capture_output=True, text=True, timeout=300
+                        )
 
                         if result.returncode == 0:
                             results["tests_passed"] += 1
                             results["output"].append("Docker build: PASSED")
                         else:
-                            results["errors"].append(f"Docker build failed: {result.stderr}")
+                            results["errors"].append(
+                                f"Docker build failed: {result.stderr}"
+                            )
                             results["success"] = False
 
                     except subprocess.TimeoutExpired:
@@ -483,13 +536,21 @@ class TemplateEngine:
                     results["tests_run"] += 1
                     try:
                         cmd = test_cmd.split()
-                        result = subprocess.run(cmd, capture_output=True, text=True, cwd=temp_dir, timeout=60)
+                        result = subprocess.run(
+                            cmd,
+                            capture_output=True,
+                            text=True,
+                            cwd=temp_dir,
+                            timeout=60,
+                        )
 
                         if result.returncode == 0:
                             results["tests_passed"] += 1
                             results["output"].append(f"Test '{test_cmd}': PASSED")
                         else:
-                            results["errors"].append(f"Test '{test_cmd}' failed: {result.stderr}")
+                            results["errors"].append(
+                                f"Test '{test_cmd}' failed: {result.stderr}"
+                            )
                             results["success"] = False
 
                     except Exception as e:
@@ -510,17 +571,28 @@ def main():
 
     # List templates command
     list_parser = subparsers.add_parser("list", help="List available templates")
-    list_parser.add_argument("--category", choices=["app", "database", "infrastructure", "microservice", "base"],
-                           help="Filter by category")
-    list_parser.add_argument("--format", choices=["table", "json"], default="table", help="Output format")
+    list_parser.add_argument(
+        "--category",
+        choices=["app", "database", "infrastructure", "microservice", "base"],
+        help="Filter by category",
+    )
+    list_parser.add_argument(
+        "--format", choices=["table", "json"], default="table", help="Output format"
+    )
 
     # Generate template command
-    generate_parser = subparsers.add_parser("generate", help="Generate a container from template")
+    generate_parser = subparsers.add_parser(
+        "generate", help="Generate a container from template"
+    )
     generate_parser.add_argument("template", help="Template path")
     generate_parser.add_argument("output", help="Output directory")
     generate_parser.add_argument("--params", help="Parameters JSON file")
-    generate_parser.add_argument("--param", action="append", help="Parameter (key=value)")
-    generate_parser.add_argument("--dry-run", action="store_true", help="Don't write files")
+    generate_parser.add_argument(
+        "--param", action="append", help="Parameter (key=value)"
+    )
+    generate_parser.add_argument(
+        "--dry-run", action="store_true", help="Don't write files"
+    )
 
     # Validate template command
     validate_parser = subparsers.add_parser("validate", help="Validate a template")
@@ -548,14 +620,16 @@ def main():
             print(f"{'Name':<20} {'Category':<15} {'Version':<10} {'Description'}")
             print("-" * 80)
             for template in templates:
-                print(f"{template['name']:<20} {template['category']:<15} {template['version']:<10} {template['description']}")
+                print(
+                    f"{template['name']:<20} {template['category']:<15} {template['version']:<10} {template['description']}"
+                )
 
     elif args.command == "generate":
         # Parse parameters
         params = {}
 
         if args.params:
-            with open(args.params, 'r') as f:
+            with open(args.params, "r") as f:
                 params.update(json.load(f))
 
         if args.param:
@@ -565,10 +639,7 @@ def main():
 
         try:
             generated_files = engine.generate_template(
-                args.template,
-                args.output,
-                params,
-                args.dry_run
+                args.template, args.output, params, args.dry_run
             )
 
             if args.dry_run:
@@ -609,7 +680,7 @@ def main():
         # Parse parameters
         params = {}
         if args.params:
-            with open(args.params, 'r') as f:
+            with open(args.params, "r") as f:
                 params.update(json.load(f))
 
         try:

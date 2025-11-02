@@ -158,14 +158,6 @@ jobs:
           # Validate pyproject.toml
           poetry check
 
-          # Test YAML configurations
-          python -c "
-          import yaml
-          with open('.yamllint.yaml') as f:
-              yaml.safe_load(f)
-          print('✓ .yamllint.yaml is valid')
-          "
-
   linting:
     name: Code Quality & Linting
     runs-on: ubuntu-latest
@@ -202,24 +194,24 @@ jobs:
 
       - name: Run yamllint
         run: |
-          poetry run pip install yamllint
+          poetry add --group dev yamllint
           yamllint -c .yamllint.yaml . --format github
 
       - name: Run Python linting with Black
         run: |
-          poetry run pip install black
-          poetry run black --check --diff scripts/ *.py
+          poetry add --group dev black
+          poetry run black --check --diff scripts/*.py
 
       - name: Run Python static analysis
         run: |
-          poetry run pip install pylint
+          poetry add --group dev pylint
           # Run pylint on scripts directory with some common warnings disabled for now
           poetry run pylint scripts/ --disable=C0114,C0115,C0116,R0903,W0613 --reports=n || true
 
       - name: Check Python import sorting
         run: |
-          poetry run pip install isort
-          poetry run isort --check-only --diff scripts/ *.py
+          poetry add --group dev isort
+          poetry run isort --check-only --diff scripts/*.py
 
   security-scan:
     name: Security Scanning

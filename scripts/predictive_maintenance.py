@@ -9,15 +9,15 @@ This module provides AI-powered predictive maintenance capabilities:
 - Template lifecycle management
 """
 
-import sqlite3
 import json
-import time
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
 import logging
-from datetime import datetime, timedelta
+import sqlite3
 import statistics
+import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 from .ai_core import get_ai_core
 
