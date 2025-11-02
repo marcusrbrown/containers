@@ -15,5 +15,6 @@ branches:
       required_pull_request_reviews: null
       required_status_checks:
         strict: false
-        contexts: ['Container Scan', 'Pre-commit Checks', 'Prepare', 'Renovate / Renovate', 'Yamllint']
+        contexts:
+          ['Container Scan', 'Pre-commit Checks', 'Prepare', 'Renovate / Renovate', 'Yamllint']
       restrictions: null
