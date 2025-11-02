@@ -10,10 +10,11 @@ This module automatically generates comprehensive documentation for templates:
 """
 
 import json
-import yaml
-from typing import Dict, List, Any, Optional
 import logging
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import yaml
 
 from .ai_core import get_ai_core
 from .template_intelligence import TemplateIntelligence
