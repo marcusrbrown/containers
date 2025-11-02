@@ -7,7 +7,7 @@
   packageRules: [
     {
       matchDepNames: ['python'],
-      allowedVersions: '<=3.14',
+      allowedVersions: '>=3.13,<3.14',
     },
     {
       description: 'Disable patch updates except for select dependencies.',
