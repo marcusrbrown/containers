@@ -5,6 +5,7 @@ This directory contains outdated container definitions that are no longer active
 ## Parity Ethereum Client
 
 **Archived Date**: July 15, 2025
+
 **Reason**: End-of-life software with broken dependencies
 
 ### Issues Found

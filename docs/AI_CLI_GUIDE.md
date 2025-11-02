@@ -277,8 +277,7 @@ poetry run containers ai <command>
 no such column: error_message
 ```
 
-**Solution:**
-Initialize the analytics database:
+**Solution:** Initialize the analytics database:
 
 ```bash
 # This will be implemented in a future update

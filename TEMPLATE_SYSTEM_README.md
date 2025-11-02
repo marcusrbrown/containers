@@ -341,12 +341,15 @@ See the [examples directory](examples/) for complete working examples and tutori
 ### Common Issues
 
 **Q: Template generation fails with "Template not found"**
+
 A: Verify the template path with `poetry run containers list`
 
 **Q: Docker build fails in generated project**
+
 A: Check that all required parameters are set and Docker is running
 
 **Q: Permission denied errors**
+
 A: Ensure your user has Docker permissions and the output directory is writable
 
 ### Debug Mode

@@ -2,10 +2,7 @@
 
 > A comprehensive collection of Dockerfiles with advanced automation tools for multi-architecture container builds, metrics collection, AI-powered template assistance, and CI/CD workflows.
 
-[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/marcusrbrown/containers/build-publish.yaml?branch=main&label=build&style=for-the-badge)](https://github.com/marcusrbrown/containers/actions)
-[![License](https://img.shields.io/github/license/marcusrbrown/containers?style=for-the-badge)](LICENSE.md)
-[![Python](https://img.shields.io/badge/python-3.13.4-blue.svg?style=for-the-badge)](https://python.org)
-[![Poetry](https://img.shields.io/badge/dependency%20management-poetry-blue.svg?style=for-the-badge)](https://python-poetry.org)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/marcusrbrown/containers/build-publish.yaml?branch=main&label=build&style=for-the-badge)](https://github.com/marcusrbrown/containers/actions) [![License](https://img.shields.io/github/license/marcusrbrown/containers?style=for-the-badge)](LICENSE.md) [![Python](https://img.shields.io/badge/python-3.13.4-blue.svg?style=for-the-badge)](https://python.org) [![Poetry](https://img.shields.io/badge/dependency%20management-poetry-blue.svg?style=for-the-badge)](https://python-poetry.org)
 
 ## Overview
 
