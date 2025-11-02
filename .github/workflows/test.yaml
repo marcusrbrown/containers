@@ -86,6 +86,7 @@ jobs:
           file: ${{ matrix.container.path }}/Dockerfile
           platforms: linux/amd64
           push: false
+          load: true
           tags: test/${{ matrix.container.name }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -264,4 +265,5 @@ jobs:
         if: always()
         uses: github/codeql-action/upload-sarif@d198d2fabf39a7f36b5ce57ce70d4942944f006e # v3.31.0
         with:
+          category: config
           sarif_file: trivy-config-${{ matrix.container.name }}.sarif
