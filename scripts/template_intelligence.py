@@ -10,13 +10,14 @@ Features:
 """
 
 import json
-import yaml
-from pathlib import Path
-from typing import Dict, List, Any
-from dataclasses import dataclass, asdict
 import logging
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any, Dict, List
 
-from .ai_core import get_ai_core, TemplateRecommendation
+import yaml
+
+from .ai_core import TemplateRecommendation, get_ai_core
 
 logger = logging.getLogger(__name__)
 

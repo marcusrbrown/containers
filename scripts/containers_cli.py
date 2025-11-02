@@ -13,14 +13,14 @@ import sys
 from pathlib import Path
 from typing import List
 
-from .template_engine import TemplateEngine
-from .template_testing import TemplateTestFramework
-from .template_documentation import DocumentationGenerator
-from .ai_core import AICore
-from .template_intelligence import TemplateIntelligence
 from .ai_chat_interface import TemplateAssistant
-from .predictive_maintenance import PredictiveMaintenance
+from .ai_core import AICore
 from .documentation_ai import DocumentationGenerator as AIDocumentationGenerator
+from .predictive_maintenance import PredictiveMaintenance
+from .template_documentation import DocumentationGenerator
+from .template_engine import TemplateEngine
+from .template_intelligence import TemplateIntelligence
+from .template_testing import TemplateTestFramework
 
 
 class ContainerTemplateCLI:
@@ -717,8 +717,8 @@ class ContainerTemplateCLI:
 
             if args.serve:
                 import http.server
-                import socketserver
                 import os
+                import socketserver
 
                 os.chdir(args.output)
 

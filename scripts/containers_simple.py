@@ -5,25 +5,25 @@ Container Template CLI - Simple Version
 A working CLI interface for the container template system.
 """
 
-import sys
-import os
 import argparse
 import json
+import os
+import sys
 from pathlib import Path
 
 # Add the scripts directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
+from template_documentation import DocumentationGenerator
 from template_engine import TemplateEngine
 from template_testing import TemplateTestFramework
-from template_documentation import DocumentationGenerator
 
 
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
         description="Container Template System",
-        epilog="Use 'containers <command> --help' for command-specific help"
+        epilog="Use 'containers <command> --help' for command-specific help",
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
@@ -40,12 +40,16 @@ def main():
     generate_parser = subparsers.add_parser("generate", help="Generate from template")
     generate_parser.add_argument("template", help="Template path")
     generate_parser.add_argument("output", help="Output directory")
-    generate_parser.add_argument("--dry-run", action="store_true", help="Show what would be generated")
+    generate_parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be generated"
+    )
 
     # Docs command
     docs_parser = subparsers.add_parser("docs", help="Generate documentation")
     docs_parser.add_argument("--template", help="Specific template (optional)")
-    docs_parser.add_argument("--output", default="docs/templates", help="Output directory")
+    docs_parser.add_argument(
+        "--output", default="docs/templates", help="Output directory"
+    )
 
     args = parser.parse_args()
 
@@ -69,9 +73,9 @@ def main():
                 print(f"{'Name':<25} {'Category':<15} {'Description'}")
                 print("-" * 80)
                 for template in templates:
-                    name = template['name'][:24]
-                    category = template.get('category', 'unknown')[:14]
-                    description = template.get('description', 'No description')[:40]
+                    name = template["name"][:24]
+                    category = template.get("category", "unknown")[:14]
+                    description = template.get("description", "No description")[:40]
                     print(f"{name:<25} {category:<15} {description}")
 
                 print(f"\nFound {len(templates)} templates")
@@ -80,20 +84,30 @@ def main():
             try:
                 metadata = engine.resolve_inheritance(args.template)
                 print(f"# {metadata['name']}")
-                print(f"**Description**: {metadata.get('description', 'No description')}")
+                print(
+                    f"**Description**: {metadata.get('description', 'No description')}"
+                )
                 print(f"**Version**: {metadata.get('version', '1.0.0')}")
                 print(f"**Category**: {metadata.get('category', 'unknown')}")
 
-                if metadata.get('tags'):
+                if metadata.get("tags"):
                     print(f"**Tags**: {', '.join(metadata['tags'])}")
 
-                params = metadata.get('parameters', {})
+                params = metadata.get("parameters", {})
                 if params:
                     print(f"\n## Parameters ({len(params)})")
                     for name, param in params.items():
-                        required = "Required" if param.get('required', False) else "Optional"
-                        default = f" (default: {param['default']})" if 'default' in param else ""
-                        print(f"- **{name}** ({param.get('type', 'string')}, {required}): {param.get('description', 'No description')}{default}")
+                        required = (
+                            "Required" if param.get("required", False) else "Optional"
+                        )
+                        default = (
+                            f" (default: {param['default']})"
+                            if "default" in param
+                            else ""
+                        )
+                        print(
+                            f"- **{name}** ({param.get('type', 'string')}, {required}): {param.get('description', 'No description')}{default}"
+                        )
             except Exception as e:
                 print(f"❌ Failed to get template info: {e}")
                 return 1
@@ -101,10 +115,7 @@ def main():
         elif args.command == "generate":
             try:
                 generated_files = engine.generate_template(
-                    args.template,
-                    args.output,
-                    {},  # Empty params for now
-                    args.dry_run
+                    args.template, args.output, {}, args.dry_run  # Empty params for now
                 )
 
                 if args.dry_run:
