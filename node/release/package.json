@@ -16,7 +16,7 @@
   "author": "Container Collection",
   "license": "MIT",
   "dependencies": {
-    "express": "^5.0.0"
+    "express": "^5.2.0"
   },
   "engines": {
     "node": ">=22.0.0"
