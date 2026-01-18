@@ -10,10 +10,10 @@ importers:
     devDependencies:
       '@bfra.me/prettier-config':
         specifier: ^0.16.1
-        version: 0.16.1(prettier@3.7.0)
+        version: 0.16.1(prettier@3.8.0)
       prettier:
-        specifier: 3.7.0
-        version: 3.7.0
+        specifier: 3.8.0
+        version: 3.8.0
 
 packages:
 
@@ -22,15 +22,15 @@ packages:
     peerDependencies:
       prettier: ^3.0.0
 
-  prettier@3.7.0:
-    resolution: {integrity: sha512-pBiBj/gjRY9Qpk1b7cDda6Rbwvkaggos779AHQ0Ek/odwDx6xG6DRBxtnp1QmxbuD7pAO8/SQ8vuhtGv9LoLWA==}
+  prettier@3.8.0:
+    resolution: {integrity: sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA==}
     engines: {node: '>=14'}
     hasBin: true
 
 snapshots:
 
-  '@bfra.me/prettier-config@0.16.1(prettier@3.7.0)':
+  '@bfra.me/prettier-config@0.16.1(prettier@3.8.0)':
     dependencies:
-      prettier: 3.7.0
+      prettier: 3.8.0
 
-  prettier@3.7.0: {}
+  prettier@3.8.0: {}
