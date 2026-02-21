@@ -76,7 +76,7 @@ jobs:
           fi
 
   container-builds:
-    name: Test Container Builds
+    name: Test Container Build
     runs-on: ubuntu-latest
     needs: detect-containers
     if: needs.detect-containers.outputs.has-containers == 'true'
@@ -226,7 +226,7 @@ jobs:
         run: poetry run isort --check-only --diff scripts/*.py
 
   security-scan:
-    name: Security Scanning
+    name: Security Scan
     runs-on: ubuntu-latest
     needs: detect-containers
     if: needs.detect-containers.outputs.has-containers == 'true'
@@ -278,3 +278,33 @@ jobs:
         with:
           category: config
           sarif_file: trivy-config-${{ matrix.container.name }}.sarif
+
+  container-builds-result:
+    name: Test Container Builds
+    if: always()
+    needs: [detect-containers, container-builds]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check container build results
+        run: |
+          result="${{ needs.container-builds.result }}"
+          if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+            echo "Container builds: $result"
+            exit 1
+          fi
+          echo "Container builds: $result"
+
+  security-scan-result:
+    name: Security Scanning
+    if: always()
+    needs: [detect-containers, security-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check security scan results
+        run: |
+          result="${{ needs.security-scan.result }}"
+          if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+            echo "Security scanning: $result"
+            exit 1
+          fi
+          echo "Security scanning: $result"
