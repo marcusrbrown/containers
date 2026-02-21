@@ -300,8 +300,7 @@ class AICache:
     def _init_database(self):
         """Initialize cache database"""
         conn = sqlite3.connect(self.database_path)
-        conn.execute(
-            """
+        conn.execute("""
             CREATE TABLE IF NOT EXISTS ai_cache (
                 key TEXT PRIMARY KEY,
                 content TEXT,
@@ -311,8 +310,7 @@ class AICache:
                 metadata TEXT,
                 created_at INTEGER
             )
-        """
-        )
+        """)
         conn.commit()
         conn.close()
 
@@ -447,8 +445,7 @@ class AICore:
 
         if analytics_config.get("enabled", True):
             conn = sqlite3.connect(database_path)
-            conn.execute(
-                """
+            conn.execute("""
                 CREATE TABLE IF NOT EXISTS template_usage (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     template_name TEXT,
@@ -459,8 +456,7 @@ class AICore:
                     ai_provider TEXT,
                     timestamp INTEGER
                 )
-            """
-            )
+            """)
             conn.commit()
             conn.close()
 
