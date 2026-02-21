@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   prepare:
     if: github.event_name != 'workflow_dispatch'
@@ -123,9 +127,8 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
 
-      - name: Install test dependencies
-        run: |
-          poetry add --group dev pytest pytest-cov pytest-mock
+      - name: Install dev dependencies
+        run: poetry install --with dev
 
       - name: Run Python script tests
         run: |
@@ -205,26 +208,22 @@ jobs:
         with:
           sarif_file: hadolint.sarif
 
+      - name: Install dev dependencies
+        run: poetry install --with dev
+
       - name: Run yamllint
-        run: |
-          poetry add --group dev yamllint
-          yamllint -c .yamllint.yaml . --format github
+        run: yamllint -c .yamllint.yaml . --format github
 
       - name: Run Python linting with Black
-        run: |
-          poetry add --group dev black
-          poetry run black --check --diff scripts/*.py
+        run: poetry run black --check --diff scripts/*.py
 
       - name: Run Python static analysis
         run: |
-          poetry add --group dev pylint
           # Run pylint on scripts directory with some common warnings disabled for now
           poetry run pylint scripts/ --disable=C0114,C0115,C0116,R0903,W0613 --reports=n || true
 
       - name: Check Python import sorting
-        run: |
-          poetry add --group dev isort
-          poetry run isort --check-only --diff scripts/*.py
+        run: poetry run isort --check-only --diff scripts/*.py
 
   security-scan:
     name: Security Scanning
