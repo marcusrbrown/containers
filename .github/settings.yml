@@ -27,6 +27,5 @@ branches:
             'Renovate / Renovate',
             'Security Scanning',
             'Test Container Builds',
-            'Yamllint',
           ]
       restrictions: null
