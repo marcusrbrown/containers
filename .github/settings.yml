@@ -20,6 +20,7 @@ branches:
             'Code Quality & Linting',
             'Container Scan',
             'Detect Changed Containers',
+            'Fro Bot',
             'Pre-commit Checks',
             'Prepare',
             'Python Script Testing',
