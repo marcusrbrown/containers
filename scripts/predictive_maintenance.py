@@ -79,7 +79,8 @@ class TemplateAnalytics:
         conn = sqlite3.connect(self.database_path)
 
         # Usage tracking table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS template_usage (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 template_name TEXT NOT NULL,
@@ -96,10 +97,12 @@ class TemplateAnalytics:
                 timestamp INTEGER NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        """)
+        """
+        )
 
         # Performance metrics table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS performance_metrics (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 template_name TEXT NOT NULL,
@@ -109,10 +112,12 @@ class TemplateAnalytics:
                 metadata TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        """)
+        """
+        )
 
         # Issues and alerts table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS maintenance_alerts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 template_name TEXT NOT NULL,
@@ -127,10 +132,12 @@ class TemplateAnalytics:
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 resolved_at DATETIME
             )
-        """)
+        """
+        )
 
         # Template versions and updates table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS template_versions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 template_name TEXT NOT NULL,
@@ -141,10 +148,12 @@ class TemplateAnalytics:
                 deprecated BOOLEAN DEFAULT FALSE,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        """)
+        """
+        )
 
         # User feedback table
-        conn.execute("""
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS user_feedback (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 template_name TEXT NOT NULL,
@@ -154,7 +163,8 @@ class TemplateAnalytics:
                 user_id TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        """)
+        """
+        )
 
         conn.commit()
         conn.close()

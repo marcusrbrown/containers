@@ -726,7 +726,8 @@ class ProjectAnalyzer:
 
         template_descriptions = []
         for template in templates:
-            template_descriptions.append(f"""
+            template_descriptions.append(
+                f"""
 Template: {template.name}
 Category: {template.category}
 Description: {template.description}
@@ -734,7 +735,8 @@ Tech Stack: {', '.join(template.tech_stack)}
 Use Cases: {', '.join(template.use_cases)}
 Complexity: {template.complexity}
 Tags: {', '.join(template.tags)}
-""")
+"""
+            )
 
         prompt = f"""
 Analyze this project and recommend the best container templates:
