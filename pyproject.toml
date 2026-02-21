@@ -38,7 +38,7 @@ extend_skip = ["templates"]
 packages = [{ include = "scripts" }]
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.0"
+pytest = "^9.0"
 pytest-cov = "^5.0"
 pytest-mock = "^3.0"
 black = "^25.0"
