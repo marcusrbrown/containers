@@ -12,6 +12,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  pre-commit:
+    name: Pre-commit Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version-file: 'pyproject.toml'
+      - run: pip install pre-commit
+      - run: pre-commit run --all-files
+
   prepare:
     if: github.event_name != 'workflow_dispatch'
     name: Prepare
@@ -210,9 +221,6 @@ jobs:
 
       - name: Install dev dependencies
         run: poetry install --with dev
-
-      - name: Run yamllint
-        run: yamllint -c .yamllint.yaml . --format github
 
       - name: Run Python linting with Black
         run: poetry run black --check --diff scripts/*.py
