@@ -1,5 +1,5 @@
 fastapi[all]==0.129.2
-uvicorn[standard]==0.38.0
+uvicorn[standard]==0.41.0
 sqlalchemy==2.0.23
 asyncpg==0.31.0
 alembic==1.18.0
