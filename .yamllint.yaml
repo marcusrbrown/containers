@@ -2,6 +2,8 @@ extends: default
 
 ignore: |
   .github/workflows/*.yml
+  node_modules/
+  **/node_modules/**
   templates/
   **/templates/**
 
@@ -17,5 +19,3 @@ rules:
   brackets:
     min-spaces-inside: 0
     max-spaces-inside: 0
-
-name: default_name
