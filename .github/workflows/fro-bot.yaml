@@ -144,4 +144,5 @@ jobs:
               || secrets.FRO_BOT_PAT
             }}
           auth-json: ${{ secrets.OPENCODE_AUTH_JSON }}
+          model: ${{ vars.FRO_BOT_MODEL }}
           prompt: ${{ env.PROMPT }}
