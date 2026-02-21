@@ -13,7 +13,7 @@ require (
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0
 	go.opentelemetry.io/otel/sdk v1.40.0
 	github.com/lib/pq v1.10.9
-	github.com/go-redis/redis/v9 v9.17.0
+	github.com/go-redis/redis/v9 v9.18.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.11.0
 )
