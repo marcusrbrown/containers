@@ -6,8 +6,8 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "@bfra.me/prettier-config": "^0.16.1",
-    "prettier": "3.8.0"
+    "@bfra.me/prettier-config": "^0.16.7",
+    "prettier": "3.8.1"
   },
   "prettier": "@bfra.me/prettier-config/120-proof"
 }
