@@ -18,11 +18,13 @@ runs:
       with:
         version: ${{ env.MISE_VERSION }}
 
-    - name: Setup Python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+    - name: Cache Poetry dependencies
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
-        cache: poetry
-        python-version-file: 'pyproject.toml'
+        path: .venv
+        key: poetry-${{ runner.os }}-${{ inputs.cache-version }}-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          poetry-${{ runner.os }}-${{ inputs.cache-version }}-
 
     - name: Install dependencies
       run: poetry install
