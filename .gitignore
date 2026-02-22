@@ -60,3 +60,6 @@ dist/
 build/
 *.egg-info/
 .eggs/
+
+# Oh My OpenCode files
+.sisyphus/
