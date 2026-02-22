@@ -9,28 +9,28 @@ importers:
   .:
     devDependencies:
       '@bfra.me/prettier-config':
-        specifier: ^0.16.1
-        version: 0.16.1(prettier@3.8.0)
+        specifier: ^0.16.7
+        version: 0.16.7(prettier@3.8.1)
       prettier:
-        specifier: 3.8.0
-        version: 3.8.0
+        specifier: 3.8.1
+        version: 3.8.1
 
 packages:
 
-  '@bfra.me/prettier-config@0.16.1':
-    resolution: {integrity: sha512-GQAUQFFx2v5wXEkMu19okchRJnyhONTF0FWDxRyerIC6z+oURtSMoa9UW/ar6nYeVEGUJEH9iUV0+Cu0FoxWDA==}
+  '@bfra.me/prettier-config@0.16.7':
+    resolution: {integrity: sha512-WBNnEzlTcsaQ0C82jmF88iuDxke3S3ZP6PyMWldh/PTN/1JLoFAb/54M5PMn2qg+BEC1Xe/5pLAE0MnIWue3KQ==}
     peerDependencies:
       prettier: ^3.0.0
 
-  prettier@3.8.0:
-    resolution: {integrity: sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA==}
+  prettier@3.8.1:
+    resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
     engines: {node: '>=14'}
     hasBin: true
 
 snapshots:
 
-  '@bfra.me/prettier-config@0.16.1(prettier@3.8.0)':
+  '@bfra.me/prettier-config@0.16.7(prettier@3.8.1)':
     dependencies:
-      prettier: 3.8.0
+      prettier: 3.8.1
 
-  prettier@3.8.0: {}
+  prettier@3.8.1: {}
