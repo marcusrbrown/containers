@@ -4,12 +4,10 @@ _.path = [
   "./node_modules/.bin",
 ]
 _.python.venv = { path = ".venv", create = true }
-MISE_POETRY_AUTO_INSTALL = "{% if env.CI is defined %}false{% else %}true{% endif %}"
-MISE_POETRY_VENV_AUTO = "{% if env.CI is defined %}false{% else %}true{% endif %}"
 
 [tools]
 node = "24.13.0"
 pnpm = "10.30.1"
-poetry = { version = "latest", pyproject = "{{ config_root }}/pyproject.toml" }
+poetry = "latest"
 pre-commit = "latest"
 python = "3.13"
