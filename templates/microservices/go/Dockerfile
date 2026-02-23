@@ -2,7 +2,8 @@
 # Multi-stage build for optimal performance
 
 ARG GO_VERSION={{ go_version }}
-FROM golang:${GO_VERSION}-alpine AS builder
+ARG GO_DIGEST={{ go_digest | default('') }}
+FROM golang:${GO_VERSION}-alpine@sha256:${GO_DIGEST} AS builder
 
 # Metadata
 LABEL maintainer="Container Template Engine"
@@ -46,14 +47,16 @@ RUN protoc --go_out=. --go_opt=paths=source_relative \
     proto/*.proto
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build \
     -ldflags='-w -s -extldflags "-static"' \
     -tags netgo \
     -o /build/{{ service_name }} \
     .
 
 # Runtime stage
-FROM alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+ARG ALPINE_VERSION=3.21
+ARG ALPINE_DIGEST={{ alpine_digest | default('') }}
+FROM alpine:${ALPINE_VERSION}@sha256:${ALPINE_DIGEST}
 
 # Install runtime dependencies
 RUN apk --no-cache add \
@@ -63,8 +66,8 @@ RUN apk --no-cache add \
     && rm -rf /var/cache/apk/*
 
 # Create app user
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -u 1001 -S appuser -G appgroup
+RUN addgroup -g 1000 -S appgroup && \
+    adduser -u 1000 -S appuser -G appgroup
 
 # Set working directory
 WORKDIR /app

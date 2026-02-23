@@ -17,7 +17,9 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
   { \
   set -ex; \
   \
-  # Install packages \
+  # NOTE: Alpine repos only serve the latest package version per release.
+  # Exact version pins break when repos rotate — the base image digest above
+  # is the reproducibility boundary, not individual package versions.
   apk add --no-cache \
   ca-certificates \
   curl \
@@ -34,30 +36,29 @@ LABEL org.opencontainers.image.title="Node.js Runtime (Alpine)" \
   org.opencontainers.image.vendor="Node.js Foundation" \
   org.opencontainers.image.source="https://github.com/marcusrbrown/containers" \
   org.opencontainers.image.licenses="MIT" \
-  org.label-schema.docker.dockerfile="/node/alpine/Dockerfile" \
-  org.label-schema.vcs-type="git"
+  org.opencontainers.image.base.name="node:24-alpine" \
+  org.opencontainers.image.base.digest="sha256:4f696fbf39f383c1e486030ba6b289a5d9af541642fc78ab197e584a113b9c03"
 
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodeuser && \
-  adduser -S -D -H -u 1001 -h /home/nodeuser -s /sbin/nologin -G nodeuser nodeuser && \
-  mkdir -p /home/nodeuser && \
-  chown nodeuser:nodeuser /home/nodeuser
+# Base image already provides 'node' user at UID/GID 1000
 
 # Set up application directory
 WORKDIR /app
-RUN chown nodeuser:nodeuser /app
+RUN chown node:node /app
+
+# Copy entrypoint script
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Copy package files for better layer caching
-COPY --chown=nodeuser:nodeuser package*.json ./
+COPY --chown=node:node package*.json ./
 
 # Switch to non-root user
-USER nodeuser
+USER node
 
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy application code
-COPY --chown=nodeuser:nodeuser . .
+COPY --chown=node:node . .
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost:3000/health || exit 1
@@ -66,5 +67,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -
 EXPOSE 3000
 
 # Use tini as init system for proper signal handling
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "index.js"]

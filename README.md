@@ -199,6 +199,27 @@ This repository includes comprehensive GitHub Actions workflows:
 - **[`metrics_collector.yaml`](.github/workflows/metrics_collector.yaml)**: Performance metrics collection
 - **[`test.yaml`](.github/workflows/test.yaml)**: Container testing and validation
 
+## OCI Label Policy
+
+Container images follow the [OCI Image Spec annotations](https://github.com/opencontainers/image-spec/blob/main/annotations.md).
+
+**CI-injected labels** (set automatically by `docker/metadata-action` in GitHub Actions — do NOT hardcode in Dockerfiles):
+- `org.opencontainers.image.created` — build timestamp
+- `org.opencontainers.image.revision` — git commit SHA
+- `org.opencontainers.image.version` — image version/tag
+
+**Dockerfile-defined labels** (static metadata appropriate for the image):
+- `org.opencontainers.image.title` — human-readable image name
+- `org.opencontainers.image.description` — image description
+- `org.opencontainers.image.vendor` — image vendor
+- `org.opencontainers.image.source` — source repository URL
+- `org.opencontainers.image.licenses` — SPDX license identifier
+- `org.opencontainers.image.base.name` — base image name (e.g. `node:24-alpine`)
+- `org.opencontainers.image.base.digest` — base image digest (e.g. `sha256:abc...`)
+
+**Deprecated labels** (removed from all Dockerfiles):
+- `org.label-schema.*` — superseded by OCI annotations
+
 ## 📚 Project Structure
 
 ```text

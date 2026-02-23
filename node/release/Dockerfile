@@ -18,6 +18,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   { \
   set -ex; \
   \
+  # NOTE: Debian repos replace package versions with security updates.
+  # Exact version pins break when repos rotate — the base image digest above
+  # is the reproducibility boundary, not individual package versions.
   DEPS=" \
   ca-certificates \
   curl \
@@ -40,27 +43,29 @@ LABEL org.opencontainers.image.title="Node.js Runtime" \
   org.opencontainers.image.vendor="Node.js Foundation" \
   org.opencontainers.image.source="https://github.com/marcusrbrown/containers" \
   org.opencontainers.image.licenses="MIT" \
-  org.label-schema.docker.dockerfile="/node/release/Dockerfile" \
-  org.label-schema.vcs-type="git"
+  org.opencontainers.image.base.name="node:24-bookworm-slim" \
+  org.opencontainers.image.base.digest="sha256:a81a03dd965b4052269a57fac857004022b522a4bf06e7a739e25e18bce45af2"
 
-# Create non-root user for security
-RUN groupadd -r nodeuser && useradd -r -g nodeuser -m -s /bin/bash nodeuser
+# Base image already provides 'node' user at UID/GID 1000
 
 # Set up application directory
 WORKDIR /app
-RUN chown nodeuser:nodeuser /app
+RUN chown node:node /app
+
+# Copy entrypoint script
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Copy package files for better layer caching
-COPY --chown=nodeuser:nodeuser package*.json ./
+COPY --chown=node:node package*.json ./
 
 # Switch to non-root user
-USER nodeuser
+USER node
 
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy application code
-COPY --chown=nodeuser:nodeuser . .
+COPY --chown=node:node . .
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost:3000/health || exit 1
@@ -69,5 +74,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -
 EXPOSE 3000
 
 # Use tini as init system for proper signal handling
-ENTRYPOINT ["/usr/bin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "index.js"]
