@@ -53,7 +53,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     .
 
 # Runtime stage
-FROM alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+ARG ALPINE_VERSION=3.21
+FROM alpine:${ALPINE_VERSION}
 
 # Install runtime dependencies
 RUN apk --no-cache add \
@@ -63,8 +64,8 @@ RUN apk --no-cache add \
     && rm -rf /var/cache/apk/*
 
 # Create app user
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -u 1001 -S appuser -G appgroup
+RUN addgroup -g 1000 -S appgroup && \
+    adduser -u 1000 -S appuser -G appgroup
 
 # Set working directory
 WORKDIR /app
