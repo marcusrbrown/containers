@@ -2,7 +2,8 @@
 # Multi-stage build for optimal performance
 
 ARG GO_VERSION={{ go_version }}
-FROM golang:${GO_VERSION}-alpine AS builder
+ARG GO_DIGEST={{ go_digest | default('') }}
+FROM golang:${GO_VERSION}-alpine@sha256:${GO_DIGEST} AS builder
 
 # Metadata
 LABEL maintainer="Container Template Engine"
@@ -54,7 +55,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
 
 # Runtime stage
 ARG ALPINE_VERSION=3.21
-FROM alpine:${ALPINE_VERSION}
+ARG ALPINE_DIGEST={{ alpine_digest | default('') }}
+FROM alpine:${ALPINE_VERSION}@sha256:${ALPINE_DIGEST}
 
 # Install runtime dependencies
 RUN apk --no-cache add \

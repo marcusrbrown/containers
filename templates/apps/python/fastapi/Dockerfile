@@ -2,7 +2,8 @@
 # Multi-stage build for production optimization
 
 ARG PYTHON_VERSION={{ python_version }}
-FROM python:${PYTHON_VERSION}-alpine AS base
+ARG PYTHON_DIGEST={{ python_digest | default('') }}
+FROM python:${PYTHON_VERSION}-alpine@sha256:${PYTHON_DIGEST} AS base
 
 # Metadata
 LABEL maintainer="Container Template Engine"
