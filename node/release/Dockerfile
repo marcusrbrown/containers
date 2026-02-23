@@ -44,7 +44,7 @@ LABEL org.opencontainers.image.title="Node.js Runtime" \
   org.label-schema.vcs-type="git"
 
 # Create non-root user for security
-RUN groupadd -r nodeuser && useradd -r -g nodeuser -m -s /bin/bash nodeuser
+RUN groupadd --gid 1000 nodeuser && useradd --uid 1000 --gid 1000 -m -s /bin/bash nodeuser
 
 # Set up application directory
 WORKDIR /app

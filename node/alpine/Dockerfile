@@ -38,8 +38,8 @@ LABEL org.opencontainers.image.title="Node.js Runtime (Alpine)" \
   org.label-schema.vcs-type="git"
 
 # Create non-root user for security
-RUN addgroup -g 1001 -S nodeuser && \
-  adduser -S -D -H -u 1001 -h /home/nodeuser -s /sbin/nologin -G nodeuser nodeuser && \
+RUN addgroup -g 1000 -S nodeuser && \
+  adduser -S -D -H -u 1000 -h /home/nodeuser -s /sbin/nologin -G nodeuser nodeuser && \
   mkdir -p /home/nodeuser && \
   chown nodeuser:nodeuser /home/nodeuser
 
