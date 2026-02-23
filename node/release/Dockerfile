@@ -50,6 +50,9 @@ RUN groupadd --gid 1000 nodeuser && useradd --uid 1000 --gid 1000 -m -s /bin/bas
 WORKDIR /app
 RUN chown nodeuser:nodeuser /app
 
+# Copy entrypoint script
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
 # Copy package files for better layer caching
 COPY --chown=nodeuser:nodeuser package*.json ./
 
@@ -69,5 +72,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -
 EXPOSE 3000
 
 # Use tini as init system for proper signal handling
-ENTRYPOINT ["/usr/bin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "index.js"]
