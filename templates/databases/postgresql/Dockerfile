@@ -13,7 +13,6 @@ LABEL description="{{ description | default('PostgreSQL database server') }}"
 LABEL org.opencontainers.image.title="{{ template_name }}"
 LABEL org.opencontainers.image.description="{{ description | default('PostgreSQL database server') }}"
 LABEL org.opencontainers.image.version="{{ template_version }}"
-LABEL org.opencontainers.image.created="{{ generated_at }}"
 
 # Build arguments
 ARG POSTGRES_DB={{ postgres_db }}
