@@ -34,6 +34,10 @@ profile = "black"
 known_third_party = ["pytest"]
 extend_skip = ["templates"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
 [tool.poetry]
 packages = [{ include = "scripts" }]
 
