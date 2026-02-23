@@ -40,8 +40,8 @@ LABEL org.opencontainers.image.title="Node.js Runtime" \
   org.opencontainers.image.vendor="Node.js Foundation" \
   org.opencontainers.image.source="https://github.com/marcusrbrown/containers" \
   org.opencontainers.image.licenses="MIT" \
-  org.label-schema.docker.dockerfile="/node/release/Dockerfile" \
-  org.label-schema.vcs-type="git"
+  org.opencontainers.image.base.name="node:24-bookworm-slim" \
+  org.opencontainers.image.base.digest="sha256:a81a03dd965b4052269a57fac857004022b522a4bf06e7a739e25e18bce45af2"
 
 # Create non-root user for security
 RUN groupadd --gid 1000 nodeuser && useradd --uid 1000 --gid 1000 -m -s /bin/bash nodeuser

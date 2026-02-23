@@ -34,8 +34,8 @@ LABEL org.opencontainers.image.title="Node.js Runtime (Alpine)" \
   org.opencontainers.image.vendor="Node.js Foundation" \
   org.opencontainers.image.source="https://github.com/marcusrbrown/containers" \
   org.opencontainers.image.licenses="MIT" \
-  org.label-schema.docker.dockerfile="/node/alpine/Dockerfile" \
-  org.label-schema.vcs-type="git"
+  org.opencontainers.image.base.name="node:24-alpine" \
+  org.opencontainers.image.base.digest="sha256:4f696fbf39f383c1e486030ba6b289a5d9af541642fc78ab197e584a113b9c03"
 
 # Create non-root user for security
 RUN addgroup -g 1000 -S nodeuser && \
