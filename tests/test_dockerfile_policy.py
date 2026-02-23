@@ -70,24 +70,19 @@ def test_go_template_no_alpine_latest():
 
 
 def test_uid_gid_defaults_alpine():
-    """node/alpine/Dockerfile must use explicit UID/GID 1000."""
+    """node/alpine/Dockerfile must use the base image's node user (UID/GID 1000)."""
     content = read_dockerfile("node/alpine/Dockerfile")
     assert re.search(
-        r"-u\s+1000", content
-    ), "node/alpine/Dockerfile: UID not set to 1000"
-    assert re.search(
-        r"-g\s+1000", content
-    ), "node/alpine/Dockerfile: GID not set to 1000"
+        r"^USER\s+node\s*$", content, re.MULTILINE
+    ), "node/alpine/Dockerfile: must have 'USER node' directive (base image provides node at UID/GID 1000)"
 
 
 def test_uid_gid_defaults_release():
-    """node/release/Dockerfile must use explicit UID/GID 1000."""
+    """node/release/Dockerfile must use the base image's node user (UID/GID 1000)."""
     content = read_dockerfile("node/release/Dockerfile")
-    # Must explicitly set numeric UID and GID to 1000
-    assert "1000" in content, "node/release/Dockerfile: no explicit UID/GID 1000 found"
     assert re.search(
-        r"(useradd|groupadd).*\b1000\b", content
-    ), "node/release/Dockerfile: useradd/groupadd does not specify 1000"
+        r"^USER\s+node\s*$", content, re.MULTILINE
+    ), "node/release/Dockerfile: must have 'USER node' directive (base image provides node at UID/GID 1000)"
 
 
 # ---------------------------------------------------------------------------

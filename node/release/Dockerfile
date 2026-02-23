@@ -46,27 +46,26 @@ LABEL org.opencontainers.image.title="Node.js Runtime" \
   org.opencontainers.image.base.name="node:24-bookworm-slim" \
   org.opencontainers.image.base.digest="sha256:a81a03dd965b4052269a57fac857004022b522a4bf06e7a739e25e18bce45af2"
 
-# Create non-root user for security
-RUN groupadd --gid 1000 nodeuser && useradd --uid 1000 --gid 1000 -m -s /bin/bash nodeuser
+# Base image already provides 'node' user at UID/GID 1000
 
 # Set up application directory
 WORKDIR /app
-RUN chown nodeuser:nodeuser /app
+RUN chown node:node /app
 
 # Copy entrypoint script
 COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Copy package files for better layer caching
-COPY --chown=nodeuser:nodeuser package*.json ./
+COPY --chown=node:node package*.json ./
 
 # Switch to non-root user
-USER nodeuser
+USER node
 
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy application code
-COPY --chown=nodeuser:nodeuser . .
+COPY --chown=node:node . .
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost:3000/health || exit 1
