@@ -7,5 +7,10 @@ RUN apk add --no-cache \
     py3-pip \
     bash
 
+RUN addgroup -g 1000 devuser && \
+    adduser -D -u 1000 -G devuser devuser
+
+USER devuser
+
 # Set up the environment
 ENV SHELL /bin/bash
