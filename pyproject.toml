@@ -16,6 +16,18 @@ dependencies = [
   "anthropic (>=0.30.0,<1.0.0)",
 ]
 
+[project.scripts]
+containers = "scripts.containers_cli:main"
+collect-docker-metrics = "scripts.collect_docker_metrics:main"
+generate-image-tags = "scripts.generate_image_tags:main"
+generate-dockerfile = "scripts.generate_dockerfile:main"
+template-engine = "scripts.template_engine:main"
+template-testing = "scripts.template_testing:main"
+generate-docs = "scripts.template_documentation:main"
+ai-chat = "scripts.ai_chat_interface:main"
+ai-analyze = "scripts.template_intelligence:analyze_project"
+ai-recommend = "scripts.template_intelligence:recommend_templates"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
@@ -49,15 +61,3 @@ black = "^26.1"
 isort = "^8.0"
 pylint = "^4.0"
 yamllint = "^1.0"
-
-[tool.poetry.scripts]
-containers = "scripts.containers_cli:main"
-collect-docker-metrics = "scripts.collect_docker_metrics:main"
-generate-image-tags = "scripts.generate_image_tags:main"
-generate-dockerfile = "scripts.generate_dockerfile:main"
-template-engine = "scripts.template_engine:main"
-template-testing = "scripts.template_testing:main"
-generate-docs = "scripts.template_documentation:main"
-ai-chat = "scripts.ai_chat_interface:main"
-ai-analyze = "scripts.template_intelligence:analyze_project"
-ai-recommend = "scripts.template_intelligence:recommend_templates"
