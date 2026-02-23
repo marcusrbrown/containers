@@ -49,6 +49,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   \
   echo "Downloading Parity for $TARGETARCH from $PARITY_DEB_URL"; \
   curl -fsSL "$PARITY_DEB_URL" -o /tmp/parity.deb; \
+  # NOTE: This is archived software with broken download URLs. \
+  # SHA256 values below are placeholders — update if restoring this container. \
+  case "$TARGETARCH" in \
+  "amd64") PARITY_SHA256="0000000000000000000000000000000000000000000000000000000000000000" ;; \
+  "arm64") PARITY_SHA256="0000000000000000000000000000000000000000000000000000000000000000" ;; \
+  "arm") PARITY_SHA256="0000000000000000000000000000000000000000000000000000000000000000" ;; \
+  esac; \
+  echo "$PARITY_SHA256  /tmp/parity.deb" | sha256sum --check --status; \
   dpkg -i /tmp/parity.deb || true; \
   apt-get install -f -y; \
   \
