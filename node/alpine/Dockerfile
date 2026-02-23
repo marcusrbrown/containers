@@ -17,11 +17,12 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
   { \
   set -ex; \
   \
-  # Install packages \
+  # NOTE: Package versions are coupled to the base image digest above.
+  # Update versions when bumping the base image SHA.
   apk add --no-cache \
-  ca-certificates \
-  curl \
-  tini; \
+  ca-certificates=20241010-r0 \
+  curl=8.11.1-r0 \
+  tini=0.19.0-r3; \
   \
   # Clean up \
   rm -rf /tmp/* /var/tmp/*; \

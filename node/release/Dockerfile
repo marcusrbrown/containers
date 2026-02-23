@@ -18,10 +18,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   { \
   set -ex; \
   \
+  # NOTE: Package versions are coupled to the base image digest above.
+  # Update versions when bumping the base image SHA.
   DEPS=" \
-  ca-certificates \
-  curl \
-  tini \
+  ca-certificates=20230311 \
+  curl=7.88.1-10+deb12u8 \
+  tini=0.19.0-1 \
   "; \
   \
   rm -f /etc/apt/apt.conf.d/docker-clean; \
