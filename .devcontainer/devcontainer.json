@@ -12,5 +12,5 @@
             "extensions": ["ms-python.python", "ms-python.vscode-pylance", "ms-azuretools.vscode-docker"]
         }
     },
-    "postCreateCommand": "pip install -r requirements.txt"
+    "postCreateCommand": "mise install && poetry install"
 }

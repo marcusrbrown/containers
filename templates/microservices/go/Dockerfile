@@ -47,7 +47,7 @@ RUN protoc --go_out=. --go_opt=paths=source_relative \
     proto/*.proto
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build \
     -ldflags='-w -s -extldflags "-static"' \
     -tags netgo \
     -o /build/{{ service_name }} \

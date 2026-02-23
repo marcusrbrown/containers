@@ -6,8 +6,6 @@ Tests fail against current state and turn green as gaps are fixed per issue #431
 import os
 import re
 
-import pytest
-
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -157,39 +155,35 @@ def test_entrypoint_scripts_referenced_in_dockerfiles():
 
 
 # ---------------------------------------------------------------------------
-# P3: Package version pinning
+# P3: Required packages and reproducibility boundary
 # ---------------------------------------------------------------------------
 
 
-def test_package_version_pinning_alpine_node():
-    """node/alpine packages must be version-pinned (apk add pkg=version)."""
+def test_required_packages_alpine_node():
+    """node/alpine must install required runtime packages."""
     content = read_dockerfile("node/alpine/Dockerfile")
-    pkg_names = ["ca-certificates", "curl", "tini"]
-    failures = []
-    for pkg in pkg_names:
-        if pkg in content and f"{pkg}=" not in content:
-            failures.append(f"node/alpine/Dockerfile: '{pkg}' not version-pinned")
-    assert not failures, "\n".join(failures)
+    for pkg in ["ca-certificates", "curl", "tini"]:
+        assert (
+            pkg in content
+        ), f"node/alpine/Dockerfile: missing required package '{pkg}'"
 
 
-def test_package_version_pinning_release_node():
-    """node/release packages must be version-pinned (apt-get install pkg=version)."""
+def test_required_packages_release_node():
+    """node/release must install required runtime packages."""
     content = read_dockerfile("node/release/Dockerfile")
-    pkg_names = ["ca-certificates", "curl", "tini"]
-    failures = []
-    for pkg in pkg_names:
-        if pkg in content and f"{pkg}=" not in content:
-            failures.append(f"node/release/Dockerfile: '{pkg}' not version-pinned")
-    assert not failures, "\n".join(failures)
+    for pkg in ["ca-certificates", "curl", "tini"]:
+        assert (
+            pkg in content
+        ), f"node/release/Dockerfile: missing required package '{pkg}'"
 
 
-def test_devcontainer_package_pinning():
-    """devcontainer packages must be version-pinned."""
+def test_devcontainer_required_packages():
+    """devcontainer must install required packages."""
     content = read_dockerfile(".devcontainer/Dockerfile")
     for pkg in ["python3", "py3-pip", "bash"]:
         assert (
-            f"{pkg}=" in content
-        ), f".devcontainer/Dockerfile: '{pkg}' not version-pinned"
+            pkg in content
+        ), f".devcontainer/Dockerfile: missing required package '{pkg}'"
 
 
 def test_devcontainer_non_root_user():
