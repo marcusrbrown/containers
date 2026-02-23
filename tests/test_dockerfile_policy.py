@@ -74,12 +74,12 @@ def test_go_template_no_alpine_latest():
 def test_uid_gid_defaults_alpine():
     """node/alpine/Dockerfile must use explicit UID/GID 1000."""
     content = read_dockerfile("node/alpine/Dockerfile")
-    assert re.search(r"-u\s+1000", content), (
-        "node/alpine/Dockerfile: UID not set to 1000"
-    )
-    assert re.search(r"-g\s+1000", content), (
-        "node/alpine/Dockerfile: GID not set to 1000"
-    )
+    assert re.search(
+        r"-u\s+1000", content
+    ), "node/alpine/Dockerfile: UID not set to 1000"
+    assert re.search(
+        r"-g\s+1000", content
+    ), "node/alpine/Dockerfile: GID not set to 1000"
 
 
 def test_uid_gid_defaults_release():
@@ -87,9 +87,9 @@ def test_uid_gid_defaults_release():
     content = read_dockerfile("node/release/Dockerfile")
     # Must explicitly set numeric UID and GID to 1000
     assert "1000" in content, "node/release/Dockerfile: no explicit UID/GID 1000 found"
-    assert re.search(r"(useradd|groupadd).*\b1000\b", content), (
-        "node/release/Dockerfile: useradd/groupadd does not specify 1000"
-    )
+    assert re.search(
+        r"(useradd|groupadd).*\b1000\b", content
+    ), "node/release/Dockerfile: useradd/groupadd does not specify 1000"
 
 
 # ---------------------------------------------------------------------------
@@ -101,12 +101,12 @@ def test_oci_base_labels_present():
     """node Dockerfiles must include OCI base image labels."""
     for variant in ["node/alpine/Dockerfile", "node/release/Dockerfile"]:
         content = read_dockerfile(variant)
-        assert "org.opencontainers.image.base.name" in content, (
-            f"{variant}: missing org.opencontainers.image.base.name label"
-        )
-        assert "org.opencontainers.image.base.digest" in content, (
-            f"{variant}: missing org.opencontainers.image.base.digest label"
-        )
+        assert (
+            "org.opencontainers.image.base.name" in content
+        ), f"{variant}: missing org.opencontainers.image.base.name label"
+        assert (
+            "org.opencontainers.image.base.digest" in content
+        ), f"{variant}: missing org.opencontainers.image.base.digest label"
 
 
 def test_no_hardcoded_created_revision_in_templates():
@@ -133,27 +133,27 @@ def test_no_deprecated_label_schema():
     """node Dockerfiles must not contain deprecated org.label-schema.* labels."""
     for variant in ["node/alpine/Dockerfile", "node/release/Dockerfile"]:
         content = read_dockerfile(variant)
-        assert "org.label-schema." not in content, (
-            f"{variant}: contains deprecated org.label-schema.* labels — remove them"
-        )
+        assert (
+            "org.label-schema." not in content
+        ), f"{variant}: contains deprecated org.label-schema.* labels — remove them"
 
 
 def test_entrypoint_scripts_exist():
     """docker-entrypoint.sh must exist for each node variant."""
     for variant in ["node/alpine", "node/release"]:
         script_path = os.path.join(REPO_ROOT, variant, "docker-entrypoint.sh")
-        assert os.path.exists(script_path), (
-            f"{variant}/docker-entrypoint.sh does not exist"
-        )
+        assert os.path.exists(
+            script_path
+        ), f"{variant}/docker-entrypoint.sh does not exist"
 
 
 def test_entrypoint_scripts_referenced_in_dockerfiles():
     """Dockerfiles must reference docker-entrypoint.sh."""
     for variant in ["node/alpine/Dockerfile", "node/release/Dockerfile"]:
         content = read_dockerfile(variant)
-        assert "docker-entrypoint.sh" in content, (
-            f"{variant}: does not reference docker-entrypoint.sh"
-        )
+        assert (
+            "docker-entrypoint.sh" in content
+        ), f"{variant}: does not reference docker-entrypoint.sh"
 
 
 # ---------------------------------------------------------------------------
@@ -187,9 +187,9 @@ def test_devcontainer_package_pinning():
     """devcontainer packages must be version-pinned."""
     content = read_dockerfile(".devcontainer/Dockerfile")
     for pkg in ["python3", "py3-pip", "bash"]:
-        assert f"{pkg}=" in content, (
-            f".devcontainer/Dockerfile: '{pkg}' not version-pinned"
-        )
+        assert (
+            f"{pkg}=" in content
+        ), f".devcontainer/Dockerfile: '{pkg}' not version-pinned"
 
 
 def test_devcontainer_non_root_user():
@@ -204,10 +204,12 @@ def test_download_verification_parity_release():
     """archived/parity/release must verify downloads via GPG or SHA256."""
     content = read_dockerfile("archived/parity/release/Dockerfile")
     # Exclude the dockerfile syntax directive which contains '@sha256:' but is not verification
-    payload_lines = [l for l in content.splitlines() if not l.strip().startswith("# syntax=")]
+    payload_lines = [
+        l for l in content.splitlines() if not l.strip().startswith("# syntax=")
+    ]
     payload = "\n".join(payload_lines)
     has_gpg = bool(re.search(r"\bgpg\b|\bgnupg\b|\bgpgv\b", payload, re.IGNORECASE))
     has_sha256 = bool(re.search(r"\bsha256sum\b", payload))
-    assert has_gpg or has_sha256, (
-        "archived/parity/release/Dockerfile: downloads .deb without GPG or SHA256 verification"
-    )
+    assert (
+        has_gpg or has_sha256
+    ), "archived/parity/release/Dockerfile: downloads .deb without GPG or SHA256 verification"
