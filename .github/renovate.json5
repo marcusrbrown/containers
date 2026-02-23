@@ -4,6 +4,7 @@
   constraints: {
     python: '3.13',
   },
+  ignorePaths: ['templates/**'],
   packageRules: [
     {
       description: ['Disable lockfile maintaenance.'],
