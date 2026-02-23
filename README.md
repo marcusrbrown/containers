@@ -204,11 +204,13 @@ This repository includes comprehensive GitHub Actions workflows:
 Container images follow the [OCI Image Spec annotations](https://github.com/opencontainers/image-spec/blob/main/annotations.md).
 
 **CI-injected labels** (set automatically by `docker/metadata-action` in GitHub Actions — do NOT hardcode in Dockerfiles):
+
 - `org.opencontainers.image.created` — build timestamp
 - `org.opencontainers.image.revision` — git commit SHA
 - `org.opencontainers.image.version` — image version/tag
 
 **Dockerfile-defined labels** (static metadata appropriate for the image):
+
 - `org.opencontainers.image.title` — human-readable image name
 - `org.opencontainers.image.description` — image description
 - `org.opencontainers.image.vendor` — image vendor
@@ -218,6 +220,7 @@ Container images follow the [OCI Image Spec annotations](https://github.com/open
 - `org.opencontainers.image.base.digest` — base image digest (e.g. `sha256:abc...`)
 
 **Deprecated labels** (removed from all Dockerfiles):
+
 - `org.label-schema.*` — superseded by OCI annotations
 
 ## 📚 Project Structure
