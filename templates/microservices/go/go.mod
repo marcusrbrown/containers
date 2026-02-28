@@ -3,7 +3,7 @@ module {{ service_name }}
 go {{ go_version }}
 
 require (
-	github.com/gin-gonic/gin v1.11.0
+	github.com/gin-gonic/gin v1.12.0
 	github.com/prometheus/client_golang v1.23.0
 	github.com/spf13/viper v1.21.0
 	google.golang.org/grpc v1.79.1
