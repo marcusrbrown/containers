@@ -8,10 +8,10 @@ require (
 	github.com/spf13/viper v1.21.0
 	google.golang.org/grpc v1.79.1
 	google.golang.org/protobuf v1.36.6
-	go.opentelemetry.io/otel v1.40.0
-	go.opentelemetry.io/otel/trace v1.40.0
+	go.opentelemetry.io/otel v1.41.0
+	go.opentelemetry.io/otel/trace v1.41.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0
-	go.opentelemetry.io/otel/sdk v1.40.0
+	go.opentelemetry.io/otel/sdk v1.41.0
 	github.com/lib/pq v1.11.2
 	github.com/go-redis/redis/v9 v9.18.0
 	github.com/sirupsen/logrus v1.9.3
