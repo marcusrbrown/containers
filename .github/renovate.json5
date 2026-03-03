@@ -1,6 +1,7 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['github>marcusrbrown/renovate-config#4.4.1'],
+  ignorePaths: ['templates/**'],
   constraints: {
     python: '3.13',
   },
