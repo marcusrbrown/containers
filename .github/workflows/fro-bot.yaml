@@ -11,9 +11,9 @@ on:
   issues:
     types: [opened, edited]
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, ready_for_review, reopened, review_requested]
   schedule:
-    - cron: '0 9 * * *'
+    - cron: '30 14 * * *' # Daily at 14:30 UTC
   workflow_dispatch:
     inputs:
       prompt:
@@ -42,6 +42,21 @@ env:
     - GitHub Actions security: SHA-pinned actions, minimal permissions, no secret leaks
     - Breaking changes to container images or Poetry script entry points
     Skip style nits — Black, isort, Prettier, and pre-commit handle formatting.
+
+    Do NOT push commits, modify code, or create branches. Review only.
+    Use inline comments for file-specific issues. Reserve the review body
+    for the structured summary below.
+
+    You MUST structure your review using exactly these headings:
+    ## Verdict: [PASS | CONDITIONAL | REJECT]
+    CONDITIONAL = can merge after addressing the listed blocking issues.
+    ### Blocking issues
+    ### Non-blocking concerns
+    ### Missing tests
+    ### Risk assessment (LOW/MED/HIGH) + rationale
+    Evaluate likelihood of regression, security exposure, or blast radius.
+    If a section has no items, write "None" under the heading.
+    Do not omit any heading.
 
   SCHEDULE_PROMPT: |
     Perform daily repository autohealing. Work through each category in order,
@@ -74,12 +89,6 @@ jobs:
   fro-bot:
     name: Fro Bot
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: write
-      discussions: write
-      issues: write
-      pull-requests: write
     if: >-
       (
         github.event.pull_request == null ||
@@ -114,12 +123,6 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-          ref: >-
-            ${{
-              (github.event.issue.pull_request && format('refs/pull/{0}/head', github.event.issue.number))
-              || github.event.pull_request.head.sha
-              || ''
-            }}
           token: ${{ secrets.FRO_BOT_PAT }}
 
       - name: Setup environment
