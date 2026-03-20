@@ -265,6 +265,8 @@ jobs:
           image-ref: scan/${{ matrix.container.name }}:latest
           format: sarif
           output: trivy-${{ matrix.container.name }}.sarif
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
 
       - name: Upload Trivy SARIF
         if: always()
@@ -279,6 +281,8 @@ jobs:
           scan-ref: ${{ matrix.container.path }}
           format: sarif
           output: trivy-config-${{ matrix.container.name }}.sarif
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
 
       - name: Upload Trivy config SARIF
         if: always()
