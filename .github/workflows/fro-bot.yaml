@@ -80,10 +80,49 @@ env:
        failures. Verify Black, isort, Prettier, yamllint, and dockerfilelint
        configs are consistent and applied. Fix any drift.
 
-    After completing all work, create a SINGLE issue titled
-    "Daily Autohealing Report — YYYY-MM-DD" summarizing actions taken,
-    PRs created/fixed, and any items that need human attention.
-    Do NOT comment on individual issues. Produce one summary issue only.
+    ## SINGLE ISSUE MANAGEMENT
+
+    Instead of creating new daily issues, you must manage a SINGLE perpetual issue:
+
+    ### Finding the Perpetual Issue
+    1. Search for an open issue titled "Daily Autohealing Report" (exact match)
+    2. If found, use that issue for all updates
+    3. If not found, create a new issue with that exact title
+
+    ### Updating the Issue
+    After completing all work, ADD a dated update section to the TOP of the issue body:
+
+    ```markdown
+    ## Update — YYYY-MM-DD
+
+    ### Summary
+    | Category | Status | Actions |
+    |----------|--------|---------|
+    | ERRORED PRs | status indicator | description |
+    | SECURITY | status indicator | description |
+    | HEALTH & MAINTENANCE | status indicator | description |
+    | DEVELOPER EXPERIENCE | status indicator | description |
+
+    ### Tasks for Fro Bot
+    - [ ] Task description (auto-assigned)
+    - [ ] Task description (auto-assigned)
+
+    ### Tasks for Copilot
+    - [ ] Task description (requires human context)
+
+    ### Items Needing Human Attention
+    - Description of blockers or decisions needed
+
+    ---
+    ```
+
+    ### Important Rules
+    - DO NOT create new daily issues
+    - DO NOT close the perpetual issue
+    - ALWAYS prepend new updates to existing content
+    - Use the Task structure above for delegation to Fro Bot and Copilot agents
+
+    Do NOT comment on individual issues. Update the single perpetual issue only.
 
 jobs:
   fro-bot:
