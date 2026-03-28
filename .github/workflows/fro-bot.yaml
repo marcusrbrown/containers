@@ -104,11 +104,11 @@ env:
     | DEVELOPER EXPERIENCE | status indicator | description |
 
     ### Tasks for Fro Bot
-    - [ ] Task description (auto-assigned)
-    - [ ] Task description (auto-assigned)
+    - [ ] Task description (PAT-powered, multi-item work)
+    - [ ] Task description (PAT-powered, multi-item work)
 
     ### Tasks for Copilot
-    - [ ] Task description (requires human context)
+    - [ ] Task description (assigned task → single PR)
 
     ### Items Needing Human Attention
     - Description of blockers or decisions needed
