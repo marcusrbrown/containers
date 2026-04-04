@@ -1,3 +1,4 @@
 .triage
 pnpm-lock.yaml
 templates/
+**/AGENTS.md
