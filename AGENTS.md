@@ -6,9 +6,22 @@ Container collection repo with Dockerfiles (`node/alpine/`, `node/release/`), Py
 
 ## Tool Versions (from mise.toml)
 
-- Python 3.13 (Poetry for deps/venv)
-- Node.js 24.13.0 (pnpm 10.28.0)
+- Python 3.13 (Poetry for deps/venv, `.venv` in project root)
+- Node.js 24.14.0 (pnpm 10.33.0)
 - Pre-commit hooks for formatting/linting
+
+## WHERE TO LOOK
+
+| Task | Location | Notes |
+|------|----------|-------|
+| Add/modify a container image | `node/{alpine,release}/Dockerfile` | See Dockerfile Style below |
+| Write Python automation | `scripts/*.py` | See `scripts/AGENTS.md` for patterns |
+| Fix CI/CD | `.github/workflows/` | See `.github/workflows/AGENTS.md` |
+| Add container template | `templates/` | Excluded from linting — see `templates/AGENTS.md` |
+| Run linting/tests | Commands below | `pre-commit run --all-files` is the catch-all |
+| Change tool versions | `mise.toml` | Never install Python/Node directly |
+| Change dev environment | `.devcontainer/` | Docker-in-Docker setup |
+| Review archived containers | `archived/` | Legacy, excluded from CI — don't modify |
 
 ## Build / Lint / Test Commands
 
@@ -45,10 +58,16 @@ docker build -t test-image:latest node/alpine/
 docker build -t test-image:latest node/release/
 
 # Script entry points (via Poetry)
-poetry run generate-dockerfile --help
-poetry run collect-docker-metrics --help
-poetry run generate-image-tags --help
-poetry run containers --help
+poetry run containers --help              # Main CLI (list, generate, analyze)
+poetry run generate-dockerfile --help     # Dockerfile generation
+poetry run collect-docker-metrics --help  # Docker metrics collection
+poetry run generate-image-tags --help     # Image tag generation
+poetry run template-engine --help         # Template engine
+poetry run template-testing --help        # Template test framework
+poetry run generate-docs --help           # Documentation generation
+poetry run ai-chat --help                 # AI chat interface
+poetry run ai-analyze --help              # AI project analysis
+poetry run ai-recommend --help            # AI template recommendations
 ```
 
 ## Python Code Style
@@ -141,6 +160,9 @@ except subprocess.CalledProcessError as e:
 - Use `$TARGETPLATFORM` / `$TARGETARCH` for multi-arch builds
 - Clean package caches: `rm -rf /var/lib/apt/lists/*` or `apk add --no-cache`
 - `templates/` and `node/` directories excluded from dockerfilelint
+- Use `# syntax=docker/dockerfile:1.x@sha256:...` for advanced features
+- Health checks: 30s intervals with curl-based probes
+- CI-injected labels — do NOT hardcode `created` or `revision` (set by `docker/metadata-action`)
 
 ## GitHub Actions Style
 
@@ -160,21 +182,32 @@ except subprocess.CalledProcessError as e:
 ## Directory Structure
 
 ```
-node/alpine/Dockerfile        # Alpine-based Node.js container
-node/release/Dockerfile       # Debian Bookworm-based Node.js container
-scripts/*.py                  # Automation scripts (Poetry entry points)
-archived/                     # Legacy containers (excluded from CI)
-templates/                    # Excluded from linting/formatting
-.github/workflows/            # CI/CD pipelines
-.github/actions/setup/        # Shared setup action
-.devcontainer/                # Docker-in-Docker dev environment
+node/alpine/Dockerfile         # Alpine-based Node.js container
+node/release/Dockerfile        # Debian Bookworm-based Node.js container
+scripts/*.py                   # Automation scripts (Poetry entry points) — see scripts/AGENTS.md
+templates/                     # Container templates, excluded from linting — see templates/AGENTS.md
+archived/                      # Legacy containers (excluded from CI, do not modify)
+tests/                         # Python test suite (pytest)
+docs/                          # Project documentation (multi-arch, AI CLI, templates)
+.github/workflows/             # CI/CD pipelines — see .github/workflows/AGENTS.md
+.github/actions/setup/         # Shared composite action (mise + Poetry setup)
+.devcontainer/                 # Docker-in-Docker dev environment
 ```
 
 ## Key Conventions
 
-- **mise manages all tools** -- never install Python/Node/pnpm directly
+- **mise manages all tools** — never install Python/Node/pnpm directly
 - **Poetry scripts** are the entry points for automation (`pyproject.toml [tool.poetry.scripts]`)
 - **Pre-commit hooks** enforce trailing whitespace, EOF newlines, dockerfilelint, yamllint
-- **Comments**: explain _why_, not _what_. Self-documenting code preferred. Use annotations (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`) when context is needed.
+- **`templates/` is excluded from everything** — linting, formatting, CI detection, yamllint, prettier, dockerfilelint
+- **Comments**: explain _why_, not _what_. Self-documenting code preferred. Use annotations (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`) when context is needed
 - **No secrets** in container images, commits, or logs
 - **Security scanning**: Trivy for container vulnerabilities, Hadolint for Dockerfile best practices
+
+## Anti-Patterns (This Project)
+
+- Do NOT hardcode OCI labels `created` or `revision` — CI injects via `docker/metadata-action`
+- Do NOT run linters/formatters against `templates/` — intentionally excluded
+- Do NOT modify `archived/` — legacy containers with broken dependencies
+- Dockerfile policy tests in `tests/test_dockerfile_policy.py` intentionally fail against current state (tracking issue)
+- Renovate manages dependency updates — do NOT manually update lockfiles unless necessary
