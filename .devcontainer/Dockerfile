@@ -1,5 +1,5 @@
 # Use a Docker-in-Docker base image
-FROM docker:29.3.0@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
+FROM docker:29.4.0@sha256:f80c26212befc1c1988b529495532c6b9180d9b1dab1611f4a1efbe9da8ec821
 
 # Install essential packages
 # NOTE: Alpine repos only serve the latest package version per release.
