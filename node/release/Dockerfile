@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.23@sha256:2780b5c3bab67f1f76c781860de469442999ed1a0d7992a5efdf2cffc0e3d769
-FROM node:24-bookworm-slim@sha256:0cea6878306fada44baa90bf3d48ac1e19f233bcdc68a5eaabb592c99b5ed0aa
+FROM node:24-bookworm-slim@sha256:b506e7321f176aae77317f99d67a24b272c1f09f1d10f1761f2773447d8da26c
 
 # Multi-architecture build arguments
 ARG TARGETPLATFORM
