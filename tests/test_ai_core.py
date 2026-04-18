@@ -38,7 +38,7 @@ class StubProvider:
         )
 
 
-def test_aicore_defaults_when_config_missing(tmp_path):
+def test_ai_core_disabled_when_config_missing(tmp_path):
     core = AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
 
     assert core.is_enabled() is False
@@ -114,7 +114,7 @@ def test_analyze_code_uses_provider(tmp_path):
     assert provider.analysis_calls == 1
 
 
-def test_aicache_respects_ttl():
+def test_ai_cache_respects_ttl():
     with tempfile.TemporaryDirectory() as temp_dir:
         cache = AICache(f"{temp_dir}/cache.db", ttl_hours=0)
         key = "k"

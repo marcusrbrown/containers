@@ -5,7 +5,7 @@ import pytest
 from scripts.template_engine import TemplateEngine
 
 
-def _base_template_metadata():
+def base_template_metadata():
     return {
         "name": "base-template",
         "version": "1.0.0",
@@ -34,7 +34,7 @@ def test_load_template_metadata_and_list_templates(template_factory):
     templates_dir, create_template = template_factory
     create_template(
         "base/alpine",
-        _base_template_metadata(),
+        base_template_metadata(),
         {"Dockerfile": "FROM alpine:3.21\n"},
     )
 
@@ -60,7 +60,7 @@ def test_load_template_metadata_missing_file_raises(template_factory):
 def test_resolve_inheritance_and_generate_template(template_factory, tmp_path):
     templates_dir, create_template = template_factory
 
-    base_meta = _base_template_metadata()
+    base_meta = base_template_metadata()
     create_template(
         "base/alpine",
         base_meta,
@@ -111,7 +111,7 @@ def test_generate_template_requires_required_parameters(template_factory, tmp_pa
     templates_dir, create_template = template_factory
     create_template(
         "base/alpine",
-        _base_template_metadata(),
+        base_template_metadata(),
         {"Dockerfile": "FROM alpine:3.21\n"},
     )
 
@@ -123,7 +123,7 @@ def test_generate_template_requires_required_parameters(template_factory, tmp_pa
 
 def test_validate_template_reports_missing_required_files(template_factory):
     templates_dir, create_template = template_factory
-    metadata = _base_template_metadata()
+    metadata = base_template_metadata()
     metadata["files"]["compose"] = "docker-compose.yml"
 
     create_template(
@@ -143,8 +143,8 @@ def test_generate_template_writes_files_when_not_dry_run(template_factory, tmp_p
     templates_dir, create_template = template_factory
     create_template(
         "base/alpine",
-        _base_template_metadata(),
-        {"Dockerfile": "FROM alpine:3.21\nARG GENERATED={{ generated_by }}\n"},
+        base_template_metadata(),
+        {"Dockerfile": "FROM alpine:3.21\nARG REPLICAS={{ replicas }}\n"},
     )
 
     engine = TemplateEngine(str(templates_dir))
@@ -156,4 +156,4 @@ def test_generate_template_writes_files_when_not_dry_run(template_factory, tmp_p
     output_file = output_dir / "Dockerfile"
     assert str(output_file) in generated
     assert output_file.exists()
-    assert "container-template-engine" in output_file.read_text()
+    assert "ARG REPLICAS=3" in output_file.read_text()

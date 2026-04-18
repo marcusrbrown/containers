@@ -13,10 +13,10 @@ class DummyAnalytics:
         self._performance_metrics = performance_metrics
         self.database_path = ":memory:"
 
-    def get_usage_stats(self, _template_name, days=30):
+    def get_usage_stats(self, _template_name, _days=30):
         return self._usage_stats
 
-    def get_performance_metrics(self, _template_name, days=30):
+    def get_performance_metrics(self, _template_name, _days=30):
         return self._performance_metrics
 
 

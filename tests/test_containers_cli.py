@@ -60,16 +60,53 @@ class DummyDocs:
         return ["a.md"]
 
 
+class DummyTemplateIntelligence:
+    def recommend_templates(self, _path):
+        return []
+
+    def analyze_project(self, _path):
+        return object()
+
+    def infer_parameters(self, _template, _project):
+        return {}
+
+
+class DummyAssistant:
+    def chat(self, _message, _context):
+        return "ok"
+
+
+class DummyMaintenance:
+    def analyze_template(self, _template):
+        return []
+
+    def generate_maintenance_report(self):
+        return {}
+
+
+class DummyAIDocs:
+    def generate_readme(self, _template, _config):
+        return "README"
+
+    def generate_api_docs(self, _config):
+        return "API"
+
+    def generate_troubleshooting_guide(self, _config):
+        return "TS"
+
+
 def _build_cli(monkeypatch):
     engine = DummyEngine()
     monkeypatch.setattr(cli_module, "TemplateEngine", lambda: engine)
     monkeypatch.setattr(cli_module, "TemplateTestFramework", lambda: DummyTesting())
     monkeypatch.setattr(cli_module, "DocumentationGenerator", lambda: DummyDocs())
     monkeypatch.setattr(cli_module, "AICore", lambda: object())
-    monkeypatch.setattr(cli_module, "TemplateIntelligence", lambda: object())
-    monkeypatch.setattr(cli_module, "TemplateAssistant", lambda: object())
-    monkeypatch.setattr(cli_module, "PredictiveMaintenance", lambda: object())
-    monkeypatch.setattr(cli_module, "AIDocumentationGenerator", lambda: object())
+    monkeypatch.setattr(
+        cli_module, "TemplateIntelligence", lambda: DummyTemplateIntelligence()
+    )
+    monkeypatch.setattr(cli_module, "TemplateAssistant", lambda: DummyAssistant())
+    monkeypatch.setattr(cli_module, "PredictiveMaintenance", lambda: DummyMaintenance())
+    monkeypatch.setattr(cli_module, "AIDocumentationGenerator", lambda: DummyAIDocs())
     return cli_module.ContainerTemplateCLI(), engine
 
 

@@ -48,10 +48,16 @@ extend_skip = ["templates"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v --cov=scripts.ai_core --cov=scripts.template_engine --cov=scripts.containers_cli --cov=scripts.predictive_maintenance --cov-report=term-missing --cov-fail-under=35"
+addopts = "-v --cov --cov-report=term-missing --cov-fail-under=35"
 
 [tool.coverage.run]
 branch = true
+source = [
+  "scripts.ai_core",
+  "scripts.template_engine",
+  "scripts.containers_cli",
+  "scripts.predictive_maintenance",
+]
 
 [tool.coverage.report]
 skip_covered = false
