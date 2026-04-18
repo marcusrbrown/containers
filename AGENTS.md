@@ -19,6 +19,7 @@ Container collection repo with Dockerfiles (`node/alpine/`, `node/release/`), Py
 | Fix CI/CD | `.github/workflows/` | See `.github/workflows/AGENTS.md` |
 | Add container template | `templates/` | Excluded from linting — see `templates/AGENTS.md` |
 | Run linting/tests | Commands below | `pre-commit run --all-files` is the catch-all |
+| Configure AI features | `ai_config.example.yaml`, `docs/AI_CONFIGURATION.md` | Initialize via `poetry run containers ai config --init` |
 | Change tool versions | `mise.toml` | Never install Python/Node directly |
 | Change dev environment | `.devcontainer/` | Docker-in-Docker setup |
 | Review archived containers | `archived/` | Legacy, excluded from CI — don't modify |
@@ -198,6 +199,7 @@ docs/                          # Project documentation (multi-arch, AI CLI, temp
 
 - **mise manages all tools** — never install Python/Node/pnpm directly
 - **Poetry scripts** are the entry points for automation (`pyproject.toml [tool.poetry.scripts]`)
+- **AI features require `ai_config.yaml`** — generate from `ai_config.example.yaml` or `poetry run containers ai config --init`
 - **Pre-commit hooks** enforce trailing whitespace, EOF newlines, dockerfilelint, yamllint
 - **`templates/` is excluded from everything** — linting, formatting, CI detection, yamllint, prettier, dockerfilelint
 - **Comments**: explain _why_, not _what_. Self-documenting code preferred. Use annotations (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`) when context is needed

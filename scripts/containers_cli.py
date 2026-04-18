@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 from typing import List
 
+import yaml
+
 from .ai_chat_interface import TemplateAssistant
 from .ai_core import AICore
 from .documentation_ai import DocumentationGenerator as AIDocumentationGenerator
@@ -238,16 +240,14 @@ class ContainerTemplateCLI:
         )
 
         # AI Commands - Intelligent Template System
-        if self.ai_available:
-            ai_parser = subparsers.add_parser(
-                "ai",
-                help="AI-powered template assistance",
-                description="Access intelligent template features",
-            )
-            ai_subparsers = ai_parser.add_subparsers(
-                dest="ai_command", help="AI commands"
-            )
+        ai_parser = subparsers.add_parser(
+            "ai",
+            help="AI-powered template assistance",
+            description="Access intelligent template features",
+        )
+        ai_subparsers = ai_parser.add_subparsers(dest="ai_command", help="AI commands")
 
+        if self.ai_available:
             # AI Recommend
             recommend_parser = ai_subparsers.add_parser(
                 "recommend",
@@ -325,6 +325,34 @@ class ContainerTemplateCLI:
                 "--init-db", action="store_true", help="Initialize analytics database"
             )
 
+        # AI Config
+        config_parser = ai_subparsers.add_parser(
+            "config",
+            help="Initialize or validate AI configuration",
+            description="Manage ai_config.yaml for AI features",
+        )
+        config_mode = config_parser.add_mutually_exclusive_group(required=True)
+        config_mode.add_argument(
+            "--init",
+            action="store_true",
+            help="Create ai_config.yaml from ai_config.example.yaml",
+        )
+        config_mode.add_argument(
+            "--validate",
+            action="store_true",
+            help="Validate AI configuration file",
+        )
+        config_parser.add_argument(
+            "--path",
+            default="ai_config.yaml",
+            help="Path to AI configuration file",
+        )
+        config_parser.add_argument(
+            "--force",
+            action="store_true",
+            help="Overwrite config file when used with --init",
+        )
+
         return parser
 
     def run(self, args: List[str] | None = None) -> int:
@@ -359,14 +387,9 @@ class ContainerTemplateCLI:
                 return self.cmd_info(parsed_args)
             elif parsed_args.command == "search":
                 return self.cmd_search(parsed_args)
-            elif parsed_args.command == "ai" and self.ai_available:
+            elif parsed_args.command == "ai":
                 return asyncio.run(self.cmd_ai(parsed_args))
             else:
-                if parsed_args.command == "ai" and not self.ai_available:
-                    print(
-                        "❌ AI features are not available. Please check your configuration."
-                    )
-                    return 1
                 print(f"Unknown command: {parsed_args.command}")
                 return 1
 
@@ -1024,6 +1047,10 @@ Edit the parameters in `template.yaml` to customize this template.
             )
             return 1
 
+        if args.ai_command != "config" and not self.ai_available:
+            print("❌ AI features are not available. Please check your configuration.")
+            return 1
+
         try:
             if args.ai_command == "recommend":
                 return await self.cmd_ai_recommend(args)
@@ -1039,6 +1066,8 @@ Edit the parameters in `template.yaml` to customize this template.
                 return await self.cmd_ai_docs(args)
             elif args.ai_command == "maintenance":
                 return await self.cmd_ai_maintenance(args)
+            elif args.ai_command == "config":
+                return await self.cmd_ai_config(args)
             else:
                 print(f"❌ Unknown AI command: {args.ai_command}")
                 return 1
@@ -1083,6 +1112,130 @@ Edit the parameters in `template.yaml` to customize this template.
                 f"   containers generate {getattr(top_rec, 'template', 'base/alpine')} ./my-project"
             )
 
+        return 0
+
+    async def cmd_ai_config(self, args) -> int:
+        """Initialize or validate AI configuration."""
+        config_path = Path(args.path)
+
+        if args.init:
+            if config_path.exists() and not args.force:
+                print(
+                    f"❌ Config file already exists: {config_path}. Use --force to overwrite."
+                )
+                return 1
+
+            example_path = Path(__file__).resolve().parent.parent / "ai_config.example.yaml"
+            if example_path.exists():
+                config_path.write_text(example_path.read_text())
+            else:
+                default_config = {
+                    "ai": {
+                        "enabled": True,
+                        "default_provider": "ollama",
+                        "providers": {
+                            "ollama": {
+                                "enabled": True,
+                                "base_url": "http://localhost:11434",
+                                "timeout": 30,
+                                "models": {"chat": "llama3.2", "code": "codellama"},
+                            },
+                            "openai": {
+                                "enabled": False,
+                                "api_key_env": "OPENAI_API_KEY",
+                                "models": {"chat": "gpt-4", "code": "gpt-4"},
+                                "max_tokens": 4000,
+                            },
+                            "anthropic": {
+                                "enabled": False,
+                                "api_key_env": "ANTHROPIC_API_KEY",
+                                "models": {
+                                    "chat": "claude-3-sonnet-20240229",
+                                    "code": "claude-3-sonnet-20240229",
+                                },
+                                "max_tokens": 4000,
+                            },
+                        },
+                        "cache": {"enabled": True, "ttl_hours": 24},
+                        "analytics": {
+                            "enabled": True,
+                            "database_path": "template_analytics.db",
+                        },
+                        "features": {
+                            "template_recommendation": {"enabled": True},
+                            "parameter_inference": {"enabled": True},
+                            "documentation_generation": {"enabled": True},
+                            "predictive_maintenance": {"enabled": True},
+                            "chat_interface": {"enabled": True},
+                        },
+                    }
+                }
+                config_path.write_text(yaml.safe_dump(default_config, sort_keys=False))
+
+            print(f"✅ Created AI configuration: {config_path}")
+            return 0
+
+        if not config_path.exists():
+            print(
+                f"❌ Config file not found: {config_path}. Run 'containers ai config --init' first."
+            )
+            return 1
+
+        try:
+            loaded_config = yaml.safe_load(config_path.read_text()) or {}
+        except yaml.YAMLError as e:
+            print(f"❌ Invalid YAML in {config_path}: {e}")
+            return 1
+
+        validation_errors: list[str] = []
+        ai_config = loaded_config.get("ai")
+
+        if not isinstance(ai_config, dict):
+            validation_errors.append("Missing or invalid top-level 'ai' section.")
+        else:
+            default_provider = ai_config.get("default_provider")
+            supported_providers = {"ollama", "openai", "anthropic"}
+            if default_provider not in supported_providers:
+                validation_errors.append(
+                    "ai.default_provider must be one of: ollama, openai, anthropic."
+                )
+
+            providers = ai_config.get("providers", {})
+            if not isinstance(providers, dict):
+                validation_errors.append("ai.providers must be a mapping.")
+            else:
+                for provider_name in supported_providers:
+                    if provider_name not in providers:
+                        validation_errors.append(
+                            f"Missing ai.providers.{provider_name} section."
+                        )
+
+                for provider_name in ("openai", "anthropic"):
+                    provider_config = providers.get(provider_name, {})
+                    if (
+                        isinstance(provider_config, dict)
+                        and provider_config.get("enabled")
+                        and not provider_config.get("api_key_env")
+                    ):
+                        validation_errors.append(
+                            f"ai.providers.{provider_name}.api_key_env is required when provider is enabled."
+                        )
+
+            cache = ai_config.get("cache", {})
+            if cache and not isinstance(cache, dict):
+                validation_errors.append("ai.cache must be a mapping when provided.")
+
+            analytics = ai_config.get("analytics", {})
+            if analytics and not isinstance(analytics, dict):
+                validation_errors.append("ai.analytics must be a mapping when provided.")
+
+        if validation_errors:
+            print(f"❌ AI configuration validation failed for {config_path}:")
+            for error in validation_errors:
+                print(f"  - {error}")
+            return 1
+
+        print(f"✅ AI configuration is valid: {config_path}")
         return 0
 
     async def cmd_ai_analyze(self, args) -> int:
