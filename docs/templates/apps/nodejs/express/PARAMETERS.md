@@ -113,6 +113,7 @@ Complete reference for all available parameters.
 - **Required**: No
 - **Description**: Additional npm packages to install
 - **Default**: `['helmet', 'cors', 'compression', 'morgan']`
+- **Note**: Custom entries should be version-pinned using `package@version`
 
 ### `dev_packages`
 
@@ -120,6 +121,7 @@ Complete reference for all available parameters.
 - **Required**: No
 - **Description**: Development packages to install
 - **Default**: `['nodemon', '@types/node', '@types/express']`
+- **Note**: Custom entries should be version-pinned using `package@version`
 
 ## Parameter Examples
 
