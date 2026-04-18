@@ -9,12 +9,6 @@ import re
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def read_dockerfile(path: str) -> str:
-    full_path = os.path.join(REPO_ROOT, path)
-    with open(full_path) as f:
-        return f.read()
-
-
 def read_file(path: str) -> str:
     full_path = os.path.join(REPO_ROOT, path)
     with open(full_path) as f:
@@ -45,7 +39,7 @@ def test_base_image_digest_pinning_templates():
     ]
     failures = []
     for tmpl in templates:
-        content = read_dockerfile(tmpl)
+        content = read_file(tmpl)
         for line in from_lines(content):
             if "@sha256:" not in line:
                 failures.append(f"{tmpl}: {line}")
@@ -56,7 +50,7 @@ def test_base_image_digest_pinning_templates():
 
 def test_go_template_builder_digest_pinning():
     """Go template builder FROM line must include @sha256: digest."""
-    content = read_dockerfile("templates/microservices/go/Dockerfile")
+    content = read_file("templates/microservices/go/Dockerfile")
     builder_froms = [l for l in from_lines(content) if "golang" in l.lower()]
     failures = [l for l in builder_froms if "@sha256:" not in l]
     assert not failures, "Go template builder FROM missing @sha256::\n" + "\n".join(
@@ -66,7 +60,7 @@ def test_go_template_builder_digest_pinning():
 
 def test_go_template_no_alpine_latest():
     """Go template runtime stage must not reference alpine:latest tag."""
-    content = read_dockerfile("templates/microservices/go/Dockerfile")
+    content = read_file("templates/microservices/go/Dockerfile")
     # alpine:latest is unacceptable even with a sha256 digest appended;
     # the tag "latest" is semantically non-deterministic.
     assert "alpine:latest" not in content, (
@@ -77,7 +71,7 @@ def test_go_template_no_alpine_latest():
 
 def test_uid_gid_defaults_alpine():
     """node/alpine/Dockerfile must use the base image's node user (UID/GID 1000)."""
-    content = read_dockerfile("node/alpine/Dockerfile")
+    content = read_file("node/alpine/Dockerfile")
     assert re.search(
         r"^USER\s+node\s*$", content, re.MULTILINE
     ), "node/alpine/Dockerfile: must have 'USER node' directive (base image provides node at UID/GID 1000)"
@@ -85,7 +79,7 @@ def test_uid_gid_defaults_alpine():
 
 def test_uid_gid_defaults_release():
     """node/release/Dockerfile must use the base image's node user (UID/GID 1000)."""
-    content = read_dockerfile("node/release/Dockerfile")
+    content = read_file("node/release/Dockerfile")
     assert re.search(
         r"^USER\s+node\s*$", content, re.MULTILINE
     ), "node/release/Dockerfile: must have 'USER node' directive (base image provides node at UID/GID 1000)"
@@ -99,7 +93,7 @@ def test_uid_gid_defaults_release():
 def test_oci_base_labels_present():
     """node Dockerfiles must include OCI base image labels."""
     for variant in ["node/alpine/Dockerfile", "node/release/Dockerfile"]:
-        content = read_dockerfile(variant)
+        content = read_file(variant)
         assert (
             "org.opencontainers.image.base.name" in content
         ), f"{variant}: missing org.opencontainers.image.base.name label"
@@ -118,7 +112,7 @@ def test_no_hardcoded_created_revision_in_templates():
     ]
     failures = []
     for tmpl in templates:
-        content = read_dockerfile(tmpl)
+        content = read_file(tmpl)
         if "org.opencontainers.image.created" in content:
             failures.append(f"{tmpl}: hardcodes 'created' label (must come from CI)")
         if "org.opencontainers.image.revision" in content:
@@ -131,7 +125,7 @@ def test_no_hardcoded_created_revision_in_templates():
 def test_no_deprecated_label_schema():
     """node Dockerfiles must not contain deprecated org.label-schema.* labels."""
     for variant in ["node/alpine/Dockerfile", "node/release/Dockerfile"]:
-        content = read_dockerfile(variant)
+        content = read_file(variant)
         assert (
             "org.label-schema." not in content
         ), f"{variant}: contains deprecated org.label-schema.* labels — remove them"
@@ -149,7 +143,7 @@ def test_entrypoint_scripts_exist():
 def test_entrypoint_scripts_referenced_in_dockerfiles():
     """Dockerfiles must reference docker-entrypoint.sh."""
     for variant in ["node/alpine/Dockerfile", "node/release/Dockerfile"]:
-        content = read_dockerfile(variant)
+        content = read_file(variant)
         assert (
             "docker-entrypoint.sh" in content
         ), f"{variant}: does not reference docker-entrypoint.sh"
@@ -162,7 +156,7 @@ def test_entrypoint_scripts_referenced_in_dockerfiles():
 
 def test_required_packages_alpine_node():
     """node/alpine must install required runtime packages."""
-    content = read_dockerfile("node/alpine/Dockerfile")
+    content = read_file("node/alpine/Dockerfile")
     for pkg in ["ca-certificates", "curl", "tini"]:
         assert (
             pkg in content
@@ -171,7 +165,7 @@ def test_required_packages_alpine_node():
 
 def test_required_packages_release_node():
     """node/release must install required runtime packages."""
-    content = read_dockerfile("node/release/Dockerfile")
+    content = read_file("node/release/Dockerfile")
     for pkg in ["ca-certificates", "curl", "tini"]:
         assert (
             pkg in content
@@ -180,7 +174,7 @@ def test_required_packages_release_node():
 
 def test_devcontainer_required_packages():
     """devcontainer must install required packages."""
-    content = read_dockerfile(".devcontainer/Dockerfile")
+    content = read_file(".devcontainer/Dockerfile")
     for pkg in ["python3", "py3-pip", "bash"]:
         assert (
             pkg in content
@@ -189,7 +183,7 @@ def test_devcontainer_required_packages():
 
 def test_devcontainer_non_root_user():
     """devcontainer must define a non-root user."""
-    content = read_dockerfile(".devcontainer/Dockerfile")
+    content = read_file(".devcontainer/Dockerfile")
     # Must have a USER directive that is not 'root'
     has_user = re.search(r"^USER\s+(?!root\s*$)\S+", content, re.MULTILINE)
     assert has_user, ".devcontainer/Dockerfile has no non-root USER directive"
@@ -197,7 +191,7 @@ def test_devcontainer_non_root_user():
 
 def test_download_verification_parity_release():
     """archived/parity/release must verify downloads via GPG or SHA256."""
-    content = read_dockerfile("archived/parity/release/Dockerfile")
+    content = read_file("archived/parity/release/Dockerfile")
     # Exclude the dockerfile syntax directive which contains '@sha256:' but is not verification
     payload_lines = [
         l for l in content.splitlines() if not l.strip().startswith("# syntax=")
