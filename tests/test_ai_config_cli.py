@@ -37,7 +37,7 @@ def test_ai_config_command_parser_includes_config_subcommand():
     assert args.validate is True
 
 
-def test_ai_config_init_creates_file_from_example(tmp_path):
+def test_ai_config_init_creates_file_from_example(tmp_path, capsys):
     """`containers ai config --init` should create a config file."""
     config_path = tmp_path / "ai_config.yaml"
     cli = ContainerTemplateCLI()
@@ -45,15 +45,17 @@ def test_ai_config_init_creates_file_from_example(tmp_path):
 
     exit_code = asyncio.run(cli.cmd_ai_config(args))
 
+    captured = capsys.readouterr()
     assert exit_code == 0
+    assert f"✅ Created AI configuration: {config_path}" in captured.out
     assert config_path.exists()
     created = yaml.safe_load(config_path.read_text())
     example = yaml.safe_load((REPO_ROOT / "ai_config.example.yaml").read_text())
     assert created == example
 
 
-def test_ai_config_validate_reports_schema_errors(tmp_path):
-    """`containers ai config --validate` should fail for invalid schema."""
+def test_ai_config_validate_reports_missing_required_fields(tmp_path):
+    """`containers ai config --validate` should fail for missing required fields."""
     config_path = tmp_path / "ai_config.yaml"
     config_path.write_text(
         yaml.safe_dump(
@@ -69,6 +71,61 @@ def test_ai_config_validate_reports_schema_errors(tmp_path):
             }
         )
     )
+
+    cli = ContainerTemplateCLI()
+    args = Namespace(init=False, validate=True, path=str(config_path), force=False)
+    exit_code = asyncio.run(cli.cmd_ai_config(args))
+
+    assert exit_code == 1
+
+
+def test_ai_config_validate_reports_missing_api_key_for_enabled_cloud_provider(
+    tmp_path, capsys
+):
+    """Enabled OpenAI/Anthropic providers must specify api_key_env."""
+    config_path = tmp_path / "ai_config.yaml"
+    config = yaml.safe_load((REPO_ROOT / "ai_config.example.yaml").read_text())
+    config["ai"]["providers"]["openai"]["enabled"] = True
+    config["ai"]["providers"]["openai"].pop("api_key_env")
+    config_path.write_text(yaml.safe_dump(config))
+
+    cli = ContainerTemplateCLI()
+    args = Namespace(init=False, validate=True, path=str(config_path), force=False)
+    exit_code = asyncio.run(cli.cmd_ai_config(args))
+
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "ai.providers.openai.api_key_env is required" in captured.out
+
+
+def test_ai_config_validate_reports_invalid_yaml(tmp_path):
+    """Validation should fail for malformed YAML files."""
+    config_path = tmp_path / "ai_config.yaml"
+    config_path.write_text("ai: [broken")
+
+    cli = ContainerTemplateCLI()
+    args = Namespace(init=False, validate=True, path=str(config_path), force=False)
+    exit_code = asyncio.run(cli.cmd_ai_config(args))
+
+    assert exit_code == 1
+
+
+def test_ai_config_validate_reports_missing_ai_section(tmp_path):
+    """Validation should fail when top-level ai section is missing."""
+    config_path = tmp_path / "ai_config.yaml"
+    config_path.write_text(yaml.safe_dump({"cache": {"enabled": True}}))
+
+    cli = ContainerTemplateCLI()
+    args = Namespace(init=False, validate=True, path=str(config_path), force=False)
+    exit_code = asyncio.run(cli.cmd_ai_config(args))
+
+    assert exit_code == 1
+
+
+def test_ai_config_validate_reports_empty_file(tmp_path):
+    """Validation should fail with a clear message for empty files."""
+    config_path = tmp_path / "ai_config.yaml"
+    config_path.write_text("")
 
     cli = ContainerTemplateCLI()
     args = Namespace(init=False, validate=True, path=str(config_path), force=False)

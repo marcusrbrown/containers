@@ -1048,7 +1048,9 @@ Edit the parameters in `template.yaml` to customize this template.
             return 1
 
         if args.ai_command != "config" and not self.ai_available:
-            print("❌ AI features are not available. Please check your configuration.")
+            print(
+                "❌ AI features are not available. Initialize config with 'containers ai config --init' and review provider settings."
+            )
             return 1
 
         try:
@@ -1126,51 +1128,11 @@ Edit the parameters in `template.yaml` to customize this template.
                 return 1
 
             example_path = Path(__file__).resolve().parent.parent / "ai_config.example.yaml"
-            if example_path.exists():
-                config_path.write_text(example_path.read_text())
-            else:
-                default_config = {
-                    "ai": {
-                        "enabled": True,
-                        "default_provider": "ollama",
-                        "providers": {
-                            "ollama": {
-                                "enabled": True,
-                                "base_url": "http://localhost:11434",
-                                "timeout": 30,
-                                "models": {"chat": "llama3.2", "code": "codellama"},
-                            },
-                            "openai": {
-                                "enabled": False,
-                                "api_key_env": "OPENAI_API_KEY",
-                                "models": {"chat": "gpt-4", "code": "gpt-4"},
-                                "max_tokens": 4000,
-                            },
-                            "anthropic": {
-                                "enabled": False,
-                                "api_key_env": "ANTHROPIC_API_KEY",
-                                "models": {
-                                    "chat": "claude-3-sonnet-20240229",
-                                    "code": "claude-3-sonnet-20240229",
-                                },
-                                "max_tokens": 4000,
-                            },
-                        },
-                        "cache": {"enabled": True, "ttl_hours": 24},
-                        "analytics": {
-                            "enabled": True,
-                            "database_path": "template_analytics.db",
-                        },
-                        "features": {
-                            "template_recommendation": {"enabled": True},
-                            "parameter_inference": {"enabled": True},
-                            "documentation_generation": {"enabled": True},
-                            "predictive_maintenance": {"enabled": True},
-                            "chat_interface": {"enabled": True},
-                        },
-                    }
-                }
-                config_path.write_text(yaml.safe_dump(default_config, sort_keys=False))
+            if not example_path.exists():
+                print(f"❌ Example config file is missing: {example_path}")
+                return 1
+
+            config_path.write_text(example_path.read_text())
 
             print(f"✅ Created AI configuration: {config_path}")
             return 0
@@ -1182,12 +1144,16 @@ Edit the parameters in `template.yaml` to customize this template.
             return 1
 
         try:
-            loaded_config = yaml.safe_load(config_path.read_text()) or {}
+            loaded_config = yaml.safe_load(config_path.read_text())
         except yaml.YAMLError as e:
             print(f"❌ Invalid YAML in {config_path}: {e}")
             return 1
 
-        validation_errors: list[str] = []
+        if loaded_config is None:
+            print(f"❌ AI configuration file is empty: {config_path}")
+            return 1
+
+        validation_errors: List[str] = []
         ai_config = loaded_config.get("ai")
 
         if not isinstance(ai_config, dict):
@@ -1224,10 +1190,38 @@ Edit the parameters in `template.yaml` to customize this template.
             cache = ai_config.get("cache", {})
             if cache and not isinstance(cache, dict):
                 validation_errors.append("ai.cache must be a mapping when provided.")
+            elif isinstance(cache, dict):
+                if "enabled" not in cache:
+                    validation_errors.append("ai.cache.enabled is required.")
+                else:
+                    cache_enabled = cache.get("enabled")
+                    if not isinstance(cache_enabled, bool):
+                        validation_errors.append("ai.cache.enabled must be a boolean.")
+                    elif cache_enabled:
+                        if "ttl_hours" not in cache:
+                            validation_errors.append(
+                                "ai.cache.ttl_hours is required when cache is enabled."
+                            )
+                        ttl_hours = cache.get("ttl_hours")
+                        if not isinstance(ttl_hours, int) or ttl_hours <= 0:
+                            validation_errors.append(
+                                "ai.cache.ttl_hours must be a positive integer when cache is enabled."
+                            )
 
             analytics = ai_config.get("analytics", {})
             if analytics and not isinstance(analytics, dict):
                 validation_errors.append("ai.analytics must be a mapping when provided.")
+            elif isinstance(analytics, dict):
+                if "enabled" not in analytics:
+                    validation_errors.append("ai.analytics.enabled is required.")
+                elif not isinstance(analytics.get("enabled"), bool):
+                    validation_errors.append("ai.analytics.enabled must be a boolean.")
+                elif analytics.get("enabled"):
+                    database_path = analytics.get("database_path")
+                    if not isinstance(database_path, str) or not database_path.strip():
+                        validation_errors.append(
+                            "ai.analytics.database_path must be a non-empty string when analytics is enabled."
+                        )
 
         if validation_errors:
             print(f"❌ AI configuration validation failed for {config_path}:")
