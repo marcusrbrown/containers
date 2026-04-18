@@ -48,7 +48,14 @@ extend_skip = ["templates"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v"
+addopts = "-v --cov=scripts.ai_core --cov=scripts.template_engine --cov=scripts.containers_cli --cov=scripts.predictive_maintenance --cov-report=term-missing --cov-fail-under=35"
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+skip_covered = false
+show_missing = true
 
 [tool.poetry]
 packages = [{ include = "scripts" }]
