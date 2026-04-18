@@ -15,6 +15,12 @@ def read_dockerfile(path: str) -> str:
         return f.read()
 
 
+def read_file(path: str) -> str:
+    full_path = os.path.join(REPO_ROOT, path)
+    with open(full_path) as f:
+        return f.read()
+
+
 def from_lines(content: str) -> list[str]:
     """Return all FROM lines from Dockerfile content."""
     return [
@@ -202,3 +208,31 @@ def test_download_verification_parity_release():
     assert (
         has_gpg or has_sha256
     ), "archived/parity/release/Dockerfile: downloads .deb without GPG or SHA256 verification"
+
+
+def test_nodejs_express_template_no_latest_dependency_tags():
+    """Express template package.json should not use floating latest tags."""
+    content = read_file("templates/apps/nodejs/express/package.json")
+    assert '"latest"' not in content, (
+        "templates/apps/nodejs/express/package.json contains 'latest' dependency tags"
+    )
+
+
+def test_node_package_json_express_pinned_to_stable_v4():
+    """Node image package manifests should pin express to stable 4.x."""
+    for manifest in ["node/alpine/package.json", "node/release/package.json"]:
+        content = read_file(manifest)
+        assert '"express": "4.22.1"' in content, (
+            f"{manifest}: expected express to be pinned to 4.22.1"
+        )
+        assert '"overrides"' not in content, (
+            f"{manifest}: override block should not be required for pinned express 4.22.1"
+        )
+
+
+def test_pyproject_does_not_depend_on_argparse_package():
+    """argparse should not be listed as project dependency on Python 3.13+."""
+    content = read_file("pyproject.toml")
+    assert '"argparse (' not in content, (
+        "pyproject.toml still lists argparse, but argparse is from Python stdlib"
+    )

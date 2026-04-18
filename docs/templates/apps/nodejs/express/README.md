@@ -62,8 +62,14 @@ None
 - `app_port` (integer): Application port (default: `3000`)
 - `enable_typescript` (boolean): Enable TypeScript support (default: `True`)
 - `enable_hot_reload` (boolean): Enable hot reload for development (default: `True`)
-- `install_packages` (array): Additional npm packages to install (default: `['helmet', 'cors', 'compression', 'morgan']`)
-- `dev_packages` (array): Development packages to install (default: `['nodemon', '@types/node', '@types/express']`)
+- `install_packages` (array): Additional npm packages to install (default: `['helmet', 'cors', 'compression', 'morgan']`; use `package@version` for custom packages)
+- `dev_packages` (array): Development packages to install (default: `['nodemon', '@types/node', '@types/express']`; use `package@version` for custom packages)
+
+### Dependency Version Pinning
+
+- Core dependencies in generated `package.json` use explicit versions for reproducible builds.
+- Default `install_packages` and `dev_packages` entries resolve to pinned versions.
+- For custom packages, provide an explicit `package@version` string to keep installs deterministic.
 
 [📋 **Full Parameter Reference**](PARAMETERS.md)
 

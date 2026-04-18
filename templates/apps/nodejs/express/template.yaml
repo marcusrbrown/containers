@@ -65,12 +65,12 @@ parameters:
 
   install_packages:
     type: 'array'
-    description: 'Additional npm packages to install'
+    description: 'Additional npm packages to install (use package@version for custom values)'
     default: ['helmet', 'cors', 'compression', 'morgan']
 
   dev_packages:
     type: 'array'
-    description: 'Development packages to install'
+    description: 'Development packages to install (use package@version for custom values)'
     default: ['nodemon', '@types/node', '@types/express']
 
 files:
