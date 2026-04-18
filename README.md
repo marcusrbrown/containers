@@ -67,6 +67,8 @@ poetry run containers ai maintenance --template base/alpine
 
 **[📚 Complete AI Guide](docs/AI_CLI_GUIDE.md)** - Comprehensive documentation for AI features
 
+> ⚠️ AI commands require `ai_config.yaml`. Initialize it with `poetry run containers ai config --init` and see **[AI Configuration Guide](docs/AI_CONFIGURATION.md)**.
+
 ## 📦 Available Containers
 
 ### Node.js Applications
