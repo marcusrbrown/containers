@@ -227,6 +227,6 @@ def test_node_package_json_express_pinned_to_stable_v4():
 def test_pyproject_does_not_depend_on_argparse_package():
     """argparse should not be listed as project dependency on Python 3.13+."""
     content = read_repo_file("pyproject.toml")
-    assert not re.search(r'["\']argparse\s*\(', content), (
+    assert not re.search(r"\bargparse\s*\(", content), (
         "pyproject.toml still lists argparse, but argparse is from Python stdlib"
     )
