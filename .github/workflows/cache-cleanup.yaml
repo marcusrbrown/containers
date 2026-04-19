@@ -33,5 +33,5 @@ jobs:
         run: |
           CACHE_KEYS="$(gh cache list -R ${{ github.repository }} --ref $BRANCH --limit 100 --order asc --sort last_accessed_at | cut -f 2 | tr '\n' ' ')"
           for key in $CACHE_KEYS; do
-            gh cache delete $key -R ${{ github.repository }}
+            gh cache delete $key -R ${{ github.repository }} || true
           done
