@@ -1127,7 +1127,9 @@ Edit the parameters in `template.yaml` to customize this template.
                 )
                 return 1
 
-            example_path = Path(__file__).resolve().parent.parent / "ai_config.example.yaml"
+            example_path = (
+                Path(__file__).resolve().parent.parent / "ai_config.example.yaml"
+            )
             if not example_path.exists():
                 print(f"❌ Example config file is missing: {example_path}")
                 return 1
@@ -1210,7 +1212,9 @@ Edit the parameters in `template.yaml` to customize this template.
 
             analytics = ai_config.get("analytics", {})
             if analytics and not isinstance(analytics, dict):
-                validation_errors.append("ai.analytics must be a mapping when provided.")
+                validation_errors.append(
+                    "ai.analytics must be a mapping when provided."
+                )
             elif isinstance(analytics, dict):
                 if "enabled" not in analytics:
                     validation_errors.append("ai.analytics.enabled is required.")
