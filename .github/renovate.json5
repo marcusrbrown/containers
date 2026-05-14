@@ -44,7 +44,7 @@
     },
   ],
   postUpgradeTasks: {
-    commands: ['pnpm install', 'pnpm format'],
+    commands: ['poetry lock', 'pnpm install', 'pnpm format'],
     executionMode: 'branch',
   },
   rebaseWhen: 'behind-base-branch',
