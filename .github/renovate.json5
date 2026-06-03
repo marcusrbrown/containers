@@ -42,6 +42,11 @@
       matchPackageNames: ['aquasecurity/trivy-action'],
       versioning: 'github-releases',
     },
+    {
+      description: 'Pin pnpm below 10.34.0 until mise aqua backend supports new binary format (no .tar.gz asset for linux-x64)',
+      matchPackageNames: ['pnpm'],
+      allowedVersions: '<10.34.0',
+    },
   ],
   postUpgradeTasks: {
     commands: ['poetry lock', 'pnpm install', 'pnpm format'],
