@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.24@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
-FROM --platform=$TARGETPLATFORM debian:bullseye-slim@sha256:cd1bc32f233a49f1b82149c9edb8ef34fb1e6c45f37211445c51a97603468604
+FROM --platform=$TARGETPLATFORM debian:bullseye-slim
 
 # Multi-architecture build arguments
 ARG TARGETPLATFORM
