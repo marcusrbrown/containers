@@ -20,8 +20,8 @@ class DummyEngine:
             }
         ]
 
-    def generate_template(self, template, output, params, dry_run):
-        self.generated_args = (template, output, params, dry_run)
+    def generate_template(self, template, output, parameters, dry_run):
+        self.generated_args = (template, output, parameters, dry_run)
         return {f"{output}/Dockerfile": "FROM alpine:3.21\n"}
 
     def validate_template(self, template):
@@ -95,12 +95,17 @@ class DummyAIDocs:
         return "TS"
 
 
+class DummyAICore:
+    pass
+
+
 def _build_cli(monkeypatch):
     engine = DummyEngine()
     monkeypatch.setattr(cli_module, "TemplateEngine", lambda: engine)
     monkeypatch.setattr(cli_module, "TemplateTestFramework", lambda: DummyTesting())
     monkeypatch.setattr(cli_module, "DocumentationGenerator", lambda: DummyDocs())
-    monkeypatch.setattr(cli_module, "AICore", lambda: object())
+    # These stubs are intentionally minimal and only support non-AI command tests.
+    monkeypatch.setattr(cli_module, "AICore", lambda: DummyAICore())
     monkeypatch.setattr(
         cli_module, "TemplateIntelligence", lambda: DummyTemplateIntelligence()
     )

@@ -1,6 +1,7 @@
 """Tests for AI core orchestration and caching behavior."""
 
 import tempfile
+from pathlib import Path
 
 from scripts.ai_core import AICache, AICore, AIResponse
 
@@ -38,15 +39,30 @@ class StubProvider:
         )
 
 
-def test_ai_core_disabled_when_config_missing(tmp_path):
-    core = AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
+def _build_isolated_core(tmp_path, monkeypatch):
+    monkeypatch.setattr(AICore, "_init_cache", lambda self: None)
+    monkeypatch.setattr(AICore, "_init_analytics", lambda self: None)
+    return AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
+
+
+def test_ai_core_disabled_when_config_missing(tmp_path, monkeypatch):
+    original_cwd = Path.cwd()
+    existing_cache_db = (original_cwd / "ai_cache.db").exists()
+    existing_analytics_db = (original_cwd / "template_analytics.db").exists()
+
+    monkeypatch.chdir(tmp_path)
+    core = _build_isolated_core(tmp_path, monkeypatch)
+    assert not (tmp_path / "ai_cache.db").exists()
+    assert not (tmp_path / "template_analytics.db").exists()
+    assert (original_cwd / "ai_cache.db").exists() is existing_cache_db
+    assert (original_cwd / "template_analytics.db").exists() is existing_analytics_db
 
     assert core.is_enabled() is False
     assert core.get_provider() is None
 
 
-def test_get_provider_falls_back_to_available_provider(tmp_path):
-    core = AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
+def test_get_provider_falls_back_to_available_provider(tmp_path, monkeypatch):
+    core = _build_isolated_core(tmp_path, monkeypatch)
     core.config = {"ai": {"enabled": True, "default_provider": "primary"}}
     core.providers = {
         "primary": StubProvider(available=False),
@@ -57,8 +73,8 @@ def test_get_provider_falls_back_to_available_provider(tmp_path):
     assert provider is core.providers["secondary"]
 
 
-def test_chat_completion_uses_cache(tmp_path):
-    core = AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
+def test_chat_completion_uses_cache(tmp_path, monkeypatch):
+    core = _build_isolated_core(tmp_path, monkeypatch)
     core.config = {
         "ai": {
             "enabled": True,
@@ -79,8 +95,8 @@ def test_chat_completion_uses_cache(tmp_path):
     assert core.providers["stub"].chat_calls == 1
 
 
-def test_chat_completion_returns_none_on_provider_failure(tmp_path):
-    core = AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
+def test_chat_completion_returns_none_on_provider_failure(tmp_path, monkeypatch):
+    core = _build_isolated_core(tmp_path, monkeypatch)
     core.config = {
         "ai": {
             "enabled": True,
@@ -95,8 +111,8 @@ def test_chat_completion_returns_none_on_provider_failure(tmp_path):
     assert result is None
 
 
-def test_analyze_code_uses_provider(tmp_path):
-    core = AICore(config_path=str(tmp_path / "missing-ai-config.yaml"))
+def test_analyze_code_uses_provider(tmp_path, monkeypatch):
+    core = _build_isolated_core(tmp_path, monkeypatch)
     core.config = {
         "ai": {
             "enabled": True,
