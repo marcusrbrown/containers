@@ -1,0 +1,51 @@
+# AI Configuration Example
+# Copy this file to ai_config.yaml and update values for your environment.
+
+ai:
+  enabled: true
+  default_provider: "ollama" # Options: ollama, openai, anthropic
+
+  providers:
+    ollama:
+      enabled: true
+      base_url: "http://localhost:11434"
+      timeout: 30
+      models:
+        chat: "llama3.2"
+        code: "codellama"
+
+    openai:
+      enabled: false
+      api_key_env: "OPENAI_API_KEY"
+      models:
+        chat: "gpt-4"
+        code: "gpt-4"
+      max_tokens: 4000
+
+    anthropic:
+      enabled: false
+      api_key_env: "ANTHROPIC_API_KEY"
+      models:
+        chat: "claude-3-sonnet-20240229"
+        code: "claude-3-sonnet-20240229"
+      max_tokens: 4000
+
+  cache:
+    enabled: true
+    ttl_hours: 24
+
+  analytics:
+    enabled: true
+    database_path: "template_analytics.db"
+
+  features:
+    template_recommendation:
+      enabled: true
+    parameter_inference:
+      enabled: true
+    documentation_generation:
+      enabled: true
+    predictive_maintenance:
+      enabled: true
+    chat_interface:
+      enabled: true
