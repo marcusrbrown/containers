@@ -3,31 +3,31 @@
 
 ai:
   enabled: true
-  default_provider: "ollama" # Options: ollama, openai, anthropic
+  default_provider: 'ollama' # Options: ollama, openai, anthropic
 
   providers:
     ollama:
       enabled: true
-      base_url: "http://localhost:11434"
+      base_url: 'http://localhost:11434'
       timeout: 30
       models:
-        chat: "llama3.2"
-        code: "codellama"
+        chat: 'llama3.2'
+        code: 'codellama'
 
     openai:
       enabled: false
-      api_key_env: "OPENAI_API_KEY"
+      api_key_env: 'OPENAI_API_KEY'
       models:
-        chat: "gpt-4"
-        code: "gpt-4"
+        chat: 'gpt-4'
+        code: 'gpt-4'
       max_tokens: 4000
 
     anthropic:
       enabled: false
-      api_key_env: "ANTHROPIC_API_KEY"
+      api_key_env: 'ANTHROPIC_API_KEY'
       models:
-        chat: "claude-3-sonnet-20240229"
-        code: "claude-3-sonnet-20240229"
+        chat: 'claude-3-sonnet-20240229'
+        code: 'claude-3-sonnet-20240229'
       max_tokens: 4000
 
   cache:
@@ -36,7 +36,7 @@ ai:
 
   analytics:
     enabled: true
-    database_path: "template_analytics.db"
+    database_path: 'template_analytics.db'
 
   features:
     template_recommendation:
