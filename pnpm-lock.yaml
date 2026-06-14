@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@bfra.me/prettier-config':
-        specifier: ^0.16.7
+        specifier: 0.16.7
         version: 0.16.7(prettier@3.8.1)
       prettier:
         specifier: 3.8.1
