@@ -11,7 +11,7 @@ dependencies = [
   "requests (>=2.33.0,<3.0.0)",
   "jinja2 (>=3.0.0,<4.0.0)",
   "jsonschema (>=4.0.0,<5.0.0)",
-  "openai (>=2.36.0,<2.37.0)",
+  "openai (>=2.43.0,<2.44.0)",
   "anthropic (>=0.30.0,<1.0.0)",
   "urllib3 (>=2.7.0)",
 ]
@@ -48,7 +48,20 @@ extend_skip = ["templates"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v"
+addopts = "-v --cov --cov-report=term-missing --cov-fail-under=35"
+
+[tool.coverage.run]
+branch = true
+source = [
+  "scripts.ai_core",
+  "scripts.template_engine",
+  "scripts.containers_cli",
+  "scripts.predictive_maintenance",
+]
+
+[tool.coverage.report]
+skip_covered = false
+show_missing = true
 
 [tool.poetry]
 packages = [{ include = "scripts" }]
