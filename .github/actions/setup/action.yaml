@@ -19,7 +19,7 @@ runs:
         version: ${{ env.MISE_VERSION }}
 
     - name: Cache Poetry dependencies
-      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: .venv
         key: poetry-${{ runner.os }}-${{ inputs.cache-version }}-${{ hashFiles('poetry.lock') }}
