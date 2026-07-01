@@ -216,11 +216,11 @@ def test_node_package_json_express_pinned_to_stable_v4():
     """Node image package manifests should pin express to stable 4.x."""
     for manifest in ["node/alpine/package.json", "node/release/package.json"]:
         content = read_repo_file(manifest)
-        assert '"express": "4.22.1"' in content, (
-            f"{manifest}: expected express to be pinned to 4.22.1"
+        assert '"express": "4.22.2"' in content, (
+            f"{manifest}: expected express to be pinned to 4.22.2"
         )
         assert '"overrides"' not in content, (
-            f"{manifest}: override block should not be required for pinned express 4.22.1"
+            f"{manifest}: override block should not be required for pinned express 4.22.2"
         )
 
 
