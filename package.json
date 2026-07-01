@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@bfra.me/prettier-config": "0.16.7",
-    "prettier": "3.8.1"
+    "prettier": "3.9.0"
   },
   "prettier": "@bfra.me/prettier-config/120-proof"
 }
