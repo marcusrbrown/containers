@@ -38,7 +38,9 @@ class DummyAICore:
         )
 
 
-def test_analyze_template_generates_expected_alerts(monkeypatch, sample_usage_stats_data):
+def test_analyze_template_generates_expected_alerts(
+    monkeypatch, sample_usage_stats_data
+):
     usage_stats = UsageStats(
         template_name=sample_usage_stats_data["template_name"],
         total_uses=sample_usage_stats_data["total_uses"],
@@ -78,7 +80,9 @@ def test_analyze_template_generates_expected_alerts(monkeypatch, sample_usage_st
     assert len(alerts) >= 4
 
 
-def test_generate_maintenance_report_summarizes_alerts(monkeypatch, sample_usage_stats_data):
+def test_generate_maintenance_report_summarizes_alerts(
+    monkeypatch, sample_usage_stats_data
+):
     usage_stats = UsageStats(
         template_name=sample_usage_stats_data["template_name"],
         total_uses=sample_usage_stats_data["total_uses"],
@@ -107,7 +111,9 @@ def test_generate_maintenance_report_summarizes_alerts(monkeypatch, sample_usage
     monkeypatch.setattr(pm_module, "get_ai_core", lambda: DummyAICore(enabled=False))
 
     maintenance = pm_module.PredictiveMaintenance()
-    report = maintenance.generate_maintenance_report(sample_usage_stats_data["template_name"])
+    report = maintenance.generate_maintenance_report(
+        sample_usage_stats_data["template_name"]
+    )
 
     assert report["scope"] == sample_usage_stats_data["template_name"]
     assert report["templates_analyzed"] == 1

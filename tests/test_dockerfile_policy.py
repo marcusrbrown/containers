@@ -207,26 +207,26 @@ def test_download_verification_parity_release():
 def test_nodejs_express_template_no_latest_dependency_tags():
     """Express template package.json should not use floating latest tags."""
     content = read_repo_file("templates/apps/nodejs/express/package.json")
-    assert '"latest"' not in content, (
-        "templates/apps/nodejs/express/package.json contains 'latest' dependency tags"
-    )
+    assert (
+        '"latest"' not in content
+    ), "templates/apps/nodejs/express/package.json contains 'latest' dependency tags"
 
 
 def test_node_package_json_express_pinned_to_stable_v4():
     """Node image package manifests should pin express to stable 4.x."""
     for manifest in ["node/alpine/package.json", "node/release/package.json"]:
         content = read_repo_file(manifest)
-        assert '"express": "4.22.1"' in content, (
-            f"{manifest}: expected express to be pinned to 4.22.1"
-        )
-        assert '"overrides"' not in content, (
-            f"{manifest}: override block should not be required for pinned express 4.22.1"
-        )
+        assert (
+            '"express": "4.22.1"' in content
+        ), f"{manifest}: expected express to be pinned to 4.22.1"
+        assert (
+            '"overrides"' not in content
+        ), f"{manifest}: override block should not be required for pinned express 4.22.1"
 
 
 def test_pyproject_does_not_depend_on_argparse_package():
     """argparse should not be listed as project dependency on Python 3.13+."""
     content = read_repo_file("pyproject.toml")
-    assert not re.search(r"\bargparse\s*\(", content), (
-        "pyproject.toml still lists argparse, but argparse is from Python stdlib"
-    )
+    assert not re.search(
+        r"\bargparse\s*\(", content
+    ), "pyproject.toml still lists argparse, but argparse is from Python stdlib"
