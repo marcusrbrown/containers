@@ -42,10 +42,22 @@
       matchPackageNames: ['aquasecurity/trivy-action'],
       versioning: 'github-releases',
     },
+    {
+      description: 'Keep poetry.lock in sync for Python dependency updates only.',
+      matchManagers: ['poetry'],
+      postUpgradeTasks: {
+        commands: ['poetry lock'],
+        executionMode: 'branch',
+      },
+    },
+    {
+      description: 'Keep pnpm-lock.yaml and formatting in sync for npm dependency updates only.',
+      matchManagers: ['npm'],
+      postUpgradeTasks: {
+        commands: ['pnpm install', 'pnpm format'],
+        executionMode: 'branch',
+      },
+    },
   ],
-  postUpgradeTasks: {
-    commands: ['poetry lock', 'pnpm install', 'pnpm format'],
-    executionMode: 'branch',
-  },
   rebaseWhen: 'behind-base-branch',
 }
