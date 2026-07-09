@@ -143,10 +143,8 @@ jobs:
 
       - name: Run Python script tests
         run: |
-          # Run existing tests
-          if [ -f "test_ai_cli.py" ]; then
-            poetry run pytest test_ai_cli.py -v
-          fi
+          # Run the pytest suite
+          poetry run pytest tests/ -v
 
           # Test script imports and basic functionality
           poetry run python -c "
