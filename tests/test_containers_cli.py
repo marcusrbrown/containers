@@ -127,7 +127,9 @@ def test_run_list_outputs_json(monkeypatch, capsys):
 
 def test_generate_rejects_invalid_param_format(monkeypatch, tmp_path, capsys):
     cli, _ = _build_cli(monkeypatch)
-    result = cli.run(["generate", "apps/nodejs/express", str(tmp_path), "--param", "bad"])
+    result = cli.run(
+        ["generate", "apps/nodejs/express", str(tmp_path), "--param", "bad"]
+    )
 
     assert result == 1
     assert "Invalid parameter format" in capsys.readouterr().out

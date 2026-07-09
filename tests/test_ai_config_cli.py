@@ -8,7 +8,6 @@ import yaml
 
 from scripts.containers_cli import ContainerTemplateCLI
 
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
