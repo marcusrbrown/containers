@@ -17,6 +17,7 @@ repos:
         name: dockerfilelint
         entry: npx dockerfilelint
         language: node
+        additional_dependencies: ['dockerfilelint@1.8.0']
         files: Dockerfile$
         exclude: ^(templates/|node/)
         args: ['--config', '.dockerfilelintrc']
