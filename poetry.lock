@@ -859,14 +859,14 @@ files = [
 
 [[package]]
 name = "openai"
-version = "2.49.0"
+version = "2.50.0"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "openai-2.49.0-py3-none-any.whl", hash = "sha256:b694201eaa42a1ccf2aa125fe29458150108fb22df1abfb55d7188599da81d8c"},
-    {file = "openai-2.49.0.tar.gz", hash = "sha256:80f934333b5b83cef2fde9af7151dacaa72e150f43f92b7675f7647ca6157f48"},
+    {file = "openai-2.50.0-py3-none-any.whl", hash = "sha256:90bdddcc5a2fa529b350fac9c5780d87e5c361dcc6090ab57b0d470b0d7af7fa"},
+    {file = "openai-2.50.0.tar.gz", hash = "sha256:5128f7caf4a6b01aefd6e7e93efe170a2c3427b8de286b9af5cdff3aa47e02c8"},
 ]
 
 [package.dependencies]
@@ -1613,4 +1613,4 @@ dev = ["doc8", "flake8", "flake8-import-order", "rstcheck[sphinx]", "ruff", "sph
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "ca8e9c2de37aa2085cd5b0c3b2f7623f6e8e97def02ff30340083013a91bd53d"
+content-hash = "bf7e9724ea931d087b566227330a24bf2b5108f7f1224b322a186812ebfaba3d"
