@@ -40,6 +40,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # (undici CVE-2026-12151/CVE-2026-9679, tar CVE-2026-53655)
 RUN npm install -g npm@12.0.2
 
+# Patch npm's vendored tar and brace-expansion, which remain vulnerable in the
+# latest published npm release (CVE-2026-14257, GHSA-r292-9mhp-454m). Overwrite
+# the bundled copies in-place since npm's internal deps are outside the public
+# registry's dependency graph and can't be bumped via `npm install -g` alone.
+RUN --mount=type=cache,target=/root/.npm,sharing=locked \
+  { \
+  set -ex; \
+  NPM_ROOT="$(npm root -g)/npm/node_modules"; \
+  npm pack tar@7.5.21 brace-expansion@5.0.8 --silent --pack-destination /tmp; \
+  rm -rf "$NPM_ROOT/tar" "$NPM_ROOT/brace-expansion"; \
+  mkdir -p "$NPM_ROOT/tar" "$NPM_ROOT/brace-expansion"; \
+  tar -xzf /tmp/tar-7.5.21.tgz -C "$NPM_ROOT/tar" --strip-components=1; \
+  tar -xzf /tmp/brace-expansion-5.0.8.tgz -C "$NPM_ROOT/brace-expansion" --strip-components=1; \
+  rm -f /tmp/tar-7.5.21.tgz /tmp/brace-expansion-5.0.8.tgz; \
+  }
+
 # Add labels for multi-arch support and metadata
 LABEL org.opencontainers.image.title="Node.js Runtime" \
   org.opencontainers.image.description="Multi-architecture Node.js runtime container" \
