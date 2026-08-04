@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 
 # Upgrade bundled npm to patch known CVEs in npm's vendored dependencies
 # (undici CVE-2026-12151/CVE-2026-9679, tar CVE-2026-53655)
-RUN npm install -g npm@11.19.0
+RUN npm install -g npm@12.0.2
 
 # Add labels for multi-arch support and metadata
 LABEL org.opencontainers.image.title="Node.js Runtime (Alpine)" \
