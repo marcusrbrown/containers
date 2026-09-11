@@ -2,6 +2,7 @@ extends: default
 
 ignore: |
   .github/workflows/*.yml
+  .github/workflows/*.yaml
   node_modules/
   **/node_modules/**
   templates/
