@@ -69,8 +69,8 @@ packages = [{ include = "scripts" }]
 [tool.poetry.group.dev.dependencies]
 pytest = "9.1.1"
 pytest-cov = "7.1.0"
-pytest-mock = "3.15.1"
+pytest-mock = "3.16.0"
 black = "==26.5.1"
 isort = "8.0.1"
-pylint = "4.0.6"
+pylint = "4.1.2"
 yamllint = "1.38.0"
