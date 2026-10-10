@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.27@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+# syntax=docker/dockerfile:1.28@sha256:bb22d9815c728170f72750f4e5b0d672e06176142e1d602c7e66c050100b7e5b
 FROM node:24-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20
 
 # Multi-architecture build arguments
@@ -38,7 +38,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # Upgrade bundled npm to patch known CVEs in npm's vendored dependencies
 # (undici CVE-2026-12151/CVE-2026-9679, tar CVE-2026-53655)
-RUN npm install -g npm@12.1.0
+RUN npm install -g npm@12.2.0
 
 # Add labels for multi-arch support and metadata
 LABEL org.opencontainers.image.title="Node.js Runtime" \
