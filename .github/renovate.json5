@@ -39,10 +39,6 @@
       groupName: null,
     },
     {
-      matchPackageNames: ['aquasecurity/trivy-action'],
-      versioning: 'github-releases',
-    },
-    {
       description: 'Keep poetry.lock in sync for Python dependency updates only.',
       matchManagers: ['poetry'],
       postUpgradeTasks: {
