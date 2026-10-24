@@ -291,13 +291,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check container build results
+        env:
+          DETECT_RESULT: ${{ needs.detect-containers.result }}
+          JOB_RESULT: ${{ needs.container-builds.result }}
         run: |
-          result="${{ needs.container-builds.result }}"
-          if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
-            echo "Container builds: $result"
-            exit 1
-          fi
-          echo "Container builds: $result"
+          # A failed detector skips the matrix job; a skipped job must not read
+          # as success, so the detector's own result gates this check too.
+          for result in "$DETECT_RESULT" "$JOB_RESULT"; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              echo "Container builds: detect-containers=$DETECT_RESULT, container-builds=$JOB_RESULT"
+              exit 1
+            fi
+          done
+          echo "Container builds: detect-containers=$DETECT_RESULT, container-builds=$JOB_RESULT"
 
   security-scan-result:
     name: Security Scanning
@@ -306,10 +312,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check security scan results
+        env:
+          DETECT_RESULT: ${{ needs.detect-containers.result }}
+          JOB_RESULT: ${{ needs.security-scan.result }}
         run: |
-          result="${{ needs.security-scan.result }}"
-          if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
-            echo "Security scanning: $result"
-            exit 1
-          fi
-          echo "Security scanning: $result"
+          # A failed detector skips the matrix job; a skipped job must not read
+          # as success, so the detector's own result gates this check too.
+          for result in "$DETECT_RESULT" "$JOB_RESULT"; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              echo "Security scanning: detect-containers=$DETECT_RESULT, security-scan=$JOB_RESULT"
+              exit 1
+            fi
+          done
+          echo "Security scanning: detect-containers=$DETECT_RESULT, security-scan=$JOB_RESULT"

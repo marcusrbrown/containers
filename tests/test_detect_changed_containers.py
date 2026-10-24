@@ -535,3 +535,46 @@ def test_test_workflow_prepare_filter_counts_context_changes():
             assert _path_filter_matches(filters, f"{context}/{name}")
     assert not _path_filter_matches(filters, "templates/base/alpine/x.sh")
     assert not _path_filter_matches(filters, "archived/parity/branch/x.sh")
+
+
+AGGREGATORS = {
+    "container-builds-result": "container-builds",
+    "security-scan-result": "security-scan",
+}
+
+
+@pytest.mark.parametrize("aggregator, matrix_job", sorted(AGGREGATORS.items()))
+def test_test_workflow_aggregators_fail_when_detection_fails(aggregator, matrix_job):
+    """A failed detector skips the matrix job; the required check must not pass."""
+    job = _load_workflow("test.yaml")["jobs"][aggregator]
+    assert job["if"] == "always()"
+    assert {"detect-containers", matrix_job} <= set(job["needs"])
+    (step,) = job["steps"]
+    # Results travel through env, never interpolated into the script.
+    assert "${{" not in step["run"]
+    assert step["env"]["DETECT_RESULT"] == "${{ needs.detect-containers.result }}"
+    assert step["env"]["JOB_RESULT"] == f"${{{{ needs.{matrix_job}.result }}}}"
+    assert '"$DETECT_RESULT"' in step["run"] and '"$JOB_RESULT"' in step["run"]
+    assert '"failure"' in step["run"] and '"cancelled"' in step["run"]
+
+
+def test_build_publish_only_the_matrix_job_depends_on_detection():
+    """No always() aggregator can mask a detect-changes failure: the only
+    dependent is the matrix job, and 'Detect Changed Containers' itself is the
+    required check that goes red."""
+    jobs = _load_workflow("build-publish.yaml")["jobs"]
+    dependents = {
+        name
+        for name, job in jobs.items()
+        if "detect-changes"
+        in (
+            [job.get("needs")]
+            if isinstance(job.get("needs"), str)
+            else job.get("needs", [])
+        )
+    }
+    assert dependents == {"build-multiarch"}
+    assert (
+        jobs["build-multiarch"]["if"]
+        == "needs.detect-changes.outputs.has_changes == 'true'"
+    )
