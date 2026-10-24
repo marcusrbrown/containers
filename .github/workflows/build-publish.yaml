@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - '**/Dockerfile'
+      # Every active image context. A new context under a new top-level
+      # directory must be added here; tests/test_detect_changed_containers.py
+      # fails until it is.
+      - 'node/**'
       - 'scripts/**'
       - '!archived/**'
       - '!templates/**'
@@ -13,6 +17,10 @@ on:
   pull_request:
     paths:
       - '**/Dockerfile'
+      # Every active image context. A new context under a new top-level
+      # directory must be added here; tests/test_detect_changed_containers.py
+      # fails until it is.
+      - 'node/**'
       - 'scripts/**'
       - '!archived/**'
       - '!templates/**'
@@ -32,7 +40,9 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Push runs on main must queue: each push diffs only before..sha, so cancelling
+  # an earlier run would drop its image changes.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   REGISTRY_GHCR: ghcr.io
@@ -43,6 +53,8 @@ jobs:
   detect-changes:
     name: Detect Changed Containers
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       matrix: ${{ steps.detect.outputs.matrix }}
       has_changes: ${{ steps.detect.outputs.has_changes }}
@@ -54,72 +66,19 @@ jobs:
 
       - name: Detect changed containers
         id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          # PR: base...head. Push: before..sha (all zeros on a new branch).
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          # Get list of changed Dockerfile paths
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # For manual runs, build all active containers (excluding archived and system files)
-            changed_files=$(find . -name "Dockerfile" -type f | grep -v -E "(archived/|templates/|\.devcontainer/|\.github/)" | head -10)
-          else
-            # For push/PR, detect changed files and filter out archived/system containers
-            if [ "${{ github.event_name }}" = "pull_request" ]; then
-              changed_files=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|templates/|\.devcontainer/|\.github/)" || true)
-            else
-              changed_files=$(git diff --name-only HEAD~1..HEAD | grep "Dockerfile$" | grep -v -E "(archived/|templates/|\.devcontainer/|\.github/)" || true)
-            fi
-          fi
-
-          if [ -z "$changed_files" ]; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "matrix={\"include\":[]}" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          # Generate matrix for changed containers with validation
-          matrix_include=""
-          for dockerfile in $changed_files; do
-            container_dir=$(dirname "$dockerfile")
-            container_name=$(basename "$container_dir")
-            parent_dir=$(basename "$(dirname "$container_dir")")
-
-            # Skip if this is an archived, system, or invalid container
-            if [[ "$dockerfile" =~ ^(\./)?(archived/|templates/|\.devcontainer/|\.github/) ]]; then
-              echo "Skipping archived/template/system container: $dockerfile"
-              continue
-            fi
-
-            # Create a unique identifier for the container
-            if [ "$parent_dir" != "." ]; then
-              image_name="${parent_dir}-${container_name}"
-            else
-              image_name="$container_name"
-            fi
-
-            # Validate image name format (no special characters)
-            if [[ ! "$image_name" =~ ^[a-z0-9][a-z0-9_.-]*$ ]]; then
-              echo "Skipping invalid image name: $image_name (from $dockerfile)"
-              continue
-            fi
-
-            if [ -n "$matrix_include" ]; then
-              matrix_include="$matrix_include,"
-            fi
-            matrix_include="$matrix_include{\"dockerfile\":\"$dockerfile\",\"context\":\"$container_dir\",\"image\":\"$image_name\",\"name\":\"$container_name\",\"category\":\"$parent_dir\"}"
-          done
-
-          # Final validation - ensure no archived containers in matrix
-          if [[ "$matrix_include" =~ archived ]]; then
-            echo "ERROR: Archived containers detected in build matrix!"
-            echo "Matrix content: $matrix_include"
-            exit 1
-          fi
-
-          # Debug output
-          echo "Detected containers for build:"
-          echo "$changed_files"
-          echo "Generated matrix include: $matrix_include"
-
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-          echo "matrix={\"include\":[$matrix_include]}" >> $GITHUB_OUTPUT
+          # A context is changed when ANY file under its directory changed.
+          # Fails the job on git errors; workflow_dispatch selects everything.
+          python3 scripts/detect_changed_containers.py \
+            --format build-matrix \
+            --event "$EVENT_NAME" \
+            --base "$BASE_SHA" \
+            --head "$HEAD_SHA" >> "$GITHUB_OUTPUT"
 
   build-multiarch:
     name: Build Multi-Arch Container

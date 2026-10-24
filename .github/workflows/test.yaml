@@ -9,7 +9,9 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Push runs on main must queue: each push diffs only before..sha, so cancelling
+  # an earlier run would drop its image changes.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   pre-commit:
@@ -44,14 +46,20 @@ jobs:
               - '**/*.yaml'
               - '**/*.yml'
               - 'pyproject.toml'
+              # Image contexts (lockfiles, package.json, source, entrypoints).
+              - 'node/**'
+              - 'scripts/**'
               - '!archived/**'
               - '!templates/**'
 
+  # Deliberately not gated on `prepare`: that filter only decides whether the
+  # Python jobs run. Which images to build is decided by the shared detector
+  # from the actual diff, so a lockfile-only change cannot be filtered out.
   detect-containers:
     name: Detect Changed Containers
-    needs: prepare
-    if: github.event_name == 'workflow_dispatch' || needs.prepare.outputs.changes == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       containers: ${{ steps.detect.outputs.containers }}
       has-containers: ${{ steps.detect.outputs.has-containers }}
@@ -63,28 +71,19 @@ jobs:
 
       - name: Detect containers to test
         id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          # PR: base...head. Push: before..sha (all zeros on a new branch).
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # For manual runs, test all containers
-            containers=$(find . -name "Dockerfile" -not -path "./archived/*" -not -path "./templates/*" -not -path "./.devcontainer/*" | xargs -I {} dirname {} | sort -u)
-          else
-            # For PR/push, only test changed containers
-            base_ref="${{ github.event.pull_request.base.sha || github.event.before }}"
-            containers=$(git diff --name-only "${base_ref}..HEAD" | grep "Dockerfile$" | grep -v -E "(archived/|templates/|\.devcontainer/)" | xargs -I {} dirname {} | sort -u)
-          fi
-
-          if [[ -n "$containers" ]]; then
-            # Convert to JSON array format
-            container_array=$(echo "$containers" | jq -R -s -c 'split("\n") | map(select(length > 0)) | map({path: ., name: (split("/") | join("-"))})')
-            echo "containers=$container_array" >> $GITHUB_OUTPUT
-            echo "has-containers=true" >> $GITHUB_OUTPUT
-            echo "Found containers to test:"
-            echo "$containers"
-          else
-            echo "containers=[]" >> $GITHUB_OUTPUT
-            echo "has-containers=false" >> $GITHUB_OUTPUT
-            echo "No containers to test"
-          fi
+          # A context is changed when ANY file under its directory changed.
+          # Fails the job on git errors; workflow_dispatch selects everything.
+          python3 scripts/detect_changed_containers.py \
+            --format test-containers \
+            --event "$EVENT_NAME" \
+            --base "$BASE_SHA" \
+            --head "$HEAD_SHA" >> "$GITHUB_OUTPUT"
 
   container-builds:
     name: Test Container Build
@@ -296,13 +295,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check container build results
+        env:
+          DETECT_RESULT: ${{ needs.detect-containers.result }}
+          JOB_RESULT: ${{ needs.container-builds.result }}
         run: |
-          result="${{ needs.container-builds.result }}"
-          if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
-            echo "Container builds: $result"
-            exit 1
-          fi
-          echo "Container builds: $result"
+          # A failed detector skips the matrix job; a skipped job must not read
+          # as success, so the detector's own result gates this check too.
+          for result in "$DETECT_RESULT" "$JOB_RESULT"; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              echo "Container builds: detect-containers=$DETECT_RESULT, container-builds=$JOB_RESULT"
+              exit 1
+            fi
+          done
+          echo "Container builds: detect-containers=$DETECT_RESULT, container-builds=$JOB_RESULT"
 
   security-scan-result:
     name: Security Scanning
@@ -311,10 +316,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check security scan results
+        env:
+          DETECT_RESULT: ${{ needs.detect-containers.result }}
+          JOB_RESULT: ${{ needs.security-scan.result }}
         run: |
-          result="${{ needs.security-scan.result }}"
-          if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
-            echo "Security scanning: $result"
-            exit 1
-          fi
-          echo "Security scanning: $result"
+          # A failed detector skips the matrix job; a skipped job must not read
+          # as success, so the detector's own result gates this check too.
+          for result in "$DETECT_RESULT" "$JOB_RESULT"; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              echo "Security scanning: detect-containers=$DETECT_RESULT, security-scan=$JOB_RESULT"
+              exit 1
+            fi
+          done
+          echo "Security scanning: detect-containers=$DETECT_RESULT, security-scan=$JOB_RESULT"
