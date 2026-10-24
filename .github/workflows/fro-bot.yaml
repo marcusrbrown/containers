@@ -60,14 +60,26 @@ env:
 
   SCHEDULE_PROMPT: |
     Perform daily repository autohealing. Work through each category in order,
-    making commits and pushing fixes directly where possible.
+    making commits and delivering fixes as pull requests.
 
-    1. ERRORED PRs: Find open PRs with failing CI checks. Check out each PR branch,
-       diagnose the failure from the check logs, fix the issue, and push the fix.
-       Comment on the PR explaining what was fixed.
+    DELIVERY RULES (apply to every category):
+    - Every new change lands as a pull request against `main`. Never push to
+      `main` directly. Open one PR per concern.
+    - Push fixes directly to an existing PR branch only when that PR is not
+      authored by a bot (human PRs and Fro Bot's own PRs). Never push to a
+      Renovate or Dependabot branch: a foreign commit makes Renovate stop
+      updating it ("PR Edited (Blocked)" on the Dependency Dashboard). For those
+      PRs, comment the diagnosis on the PR and, if a code fix outside the
+      dependency bump is needed, open a separate small PR against `main`.
+
+    1. ERRORED PRs: Find open PRs with failing CI checks. For non-bot PRs, check
+       out the PR branch, diagnose the failure from the check logs, fix the issue,
+       and push the fix. For Renovate/Dependabot PRs, follow the delivery rules
+       above. Comment on the PR explaining what was fixed or diagnosed.
 
     2. SECURITY: Review Dependabot/Renovate alerts and open PRs for vulnerable deps.
-       If a security update PR exists but has conflicts or failures, fix and push.
+       If a security update PR exists but has conflicts or failures, diagnose it per
+       the delivery rules above (non-bot PR branches: fix and push).
        For unaddressed critical/high advisories, create a PR with the fix.
 
     3. HEALTH & MAINTENANCE: Check for outdated major versions of dependencies in
@@ -184,6 +196,10 @@ jobs:
               || ''
             }}
         with:
+          # Without branch-pr, schedule/workflow_dispatch runs resolve to working-dir,
+          # where the agent may not commit, push or open PRs and edits are discarded.
+          output-mode: >-
+            ${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) && 'branch-pr' || '' }}
           github-token: ${{ secrets.FRO_BOT_PAT }}
           auth-json: ${{ secrets.OPENCODE_AUTH_JSON }}
           model: ${{ vars.FRO_BOT_MODEL }}
