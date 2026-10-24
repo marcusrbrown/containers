@@ -40,7 +40,9 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Push runs on main must queue: each push diffs only before..sha, so cancelling
+  # an earlier run would drop its image changes.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   REGISTRY_GHCR: ghcr.io
@@ -51,6 +53,8 @@ jobs:
   detect-changes:
     name: Detect Changed Containers
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       matrix: ${{ steps.detect.outputs.matrix }}
       has_changes: ${{ steps.detect.outputs.has_changes }}

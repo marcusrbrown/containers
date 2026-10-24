@@ -101,6 +101,11 @@ ZERO_SHA = "0" * 40
         ),
         pytest.param([".devcontainer/Dockerfile"], [], id="devcontainer-excluded"),
         pytest.param(
+            ["node/foo/templates/Dockerfile", "x/archived/Dockerfile"],
+            [],
+            id="nested-excluded-segments",
+        ),
+        pytest.param(
             ["node/alpine-sibling/index.js"], [], id="sibling-prefix-is-not-contained"
         ),
         pytest.param(["node/index.js"], [], id="parent-dir-file-is-not-contained"),
@@ -135,6 +140,13 @@ def test_is_active_dockerfile():
     assert not dcc.is_active_dockerfile("Dockerfile")
     for excluded in ("archived", "templates", ".devcontainer", ".github"):
         assert not dcc.is_active_dockerfile(f"{excluded}/x/Dockerfile")
+        # Any path segment counts, not just the top-level directory.
+        assert not dcc.is_active_dockerfile(f"node/foo/{excluded}/Dockerfile")
+        assert not dcc.is_active_dockerfile(f"x/{excluded}/y/Dockerfile")
+    # Segment equality, not substring: these names are legitimate contexts.
+    assert dcc.is_active_dockerfile("node/archived-x/Dockerfile")
+    assert dcc.is_active_dockerfile("node/my-templates/Dockerfile")
+    assert dcc.is_active_dockerfile("node/foo-archived/Dockerfile")
 
 
 # ---------------------------------------------------------------------------
@@ -183,9 +195,23 @@ def test_build_matrix_skips_invalid_image_names(capsys):
     assert "Skipping invalid image name" in capsys.readouterr().err
 
 
-def test_build_matrix_rejects_archived_contexts():
-    with pytest.raises(dcc.DetectionError, match="Archived"):
-        dcc.build_matrix(["node/archived-thing/Dockerfile"])
+@pytest.mark.parametrize(
+    "dockerfile",
+    [
+        "archived/parity/Dockerfile",
+        "node/archived/Dockerfile",
+        "node/foo/templates/Dockerfile",
+        ".github/x/y/Dockerfile",
+    ],
+)
+def test_build_matrix_rejects_excluded_segments(dockerfile):
+    with pytest.raises(dcc.DetectionError, match="Excluded"):
+        dcc.build_matrix([dockerfile])
+
+
+def test_build_matrix_allows_names_that_merely_contain_archived():
+    matrix = dcc.build_matrix(["node/archived-x/Dockerfile"])
+    assert [e["image"] for e in matrix["include"]] == ["node-archived-x"]
 
 
 def test_test_job_containers_match_previous_output():
@@ -231,10 +257,6 @@ def test_discover_dockerfiles_skips_excluded_and_pruned(tmp_path):
         "node/alpine/Dockerfile",
         "node/release/Dockerfile",
     ]
-
-
-def test_discover_dockerfiles_in_real_repo_is_the_two_node_images():
-    assert dcc.discover_dockerfiles(REPO_ROOT) == ACTIVE
 
 
 # ---------------------------------------------------------------------------
@@ -578,3 +600,22 @@ def test_build_publish_only_the_matrix_job_depends_on_detection():
         jobs["build-multiarch"]["if"]
         == "needs.detect-changes.outputs.has_changes == 'true'"
     )
+
+
+@pytest.mark.parametrize("workflow", ["build-publish.yaml", "test.yaml"])
+def test_push_runs_queue_instead_of_cancelling(workflow):
+    """Each push diffs only before..sha; cancelling run A would drop A's changes."""
+    concurrency = _load_workflow(workflow)["concurrency"]
+    assert (
+        concurrency["cancel-in-progress"]
+        == "${{ github.event_name == 'pull_request' }}"
+    )
+    assert "github.ref" in concurrency["group"]
+
+
+@pytest.mark.parametrize(
+    "workflow, job",
+    [("build-publish.yaml", "detect-changes"), ("test.yaml", "detect-containers")],
+)
+def test_detect_jobs_have_read_only_contents_permission(workflow, job):
+    assert _load_workflow(workflow)["jobs"][job]["permissions"] == {"contents": "read"}

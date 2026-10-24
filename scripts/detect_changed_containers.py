@@ -27,11 +27,11 @@ import sys
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 
-# Top-level directories that never hold active image contexts. Keep in sync with
-# the negated patterns in the workflow ``paths`` filters.
-EXCLUDED_TOP_LEVEL_DIRS = frozenset(
-    {"archived", "templates", ".devcontainer", ".github"}
-)
+# Directory names that never hold active image contexts. A Dockerfile is excluded
+# when ANY segment of its path equals one of these names (``x/archived/Dockerfile``
+# is excluded; ``node/archived-x/Dockerfile`` is not). Keep the top-level entries in
+# sync with the negated patterns in the workflow ``paths`` filters.
+EXCLUDED_DIR_NAMES = frozenset({"archived", "templates", ".devcontainer", ".github"})
 
 # Directories never worth descending into when discovering Dockerfiles.
 _PRUNED_DIRS = frozenset({".git", "node_modules", ".venv"})
@@ -63,13 +63,12 @@ def _normalize(path: str) -> str:
 
 def is_active_dockerfile(path: str) -> bool:
     """True for a ``Dockerfile`` that defines an active (non-excluded) context."""
-    path = _normalize(path)
-    parts = path.split("/")
+    parts = _normalize(path).split("/")
     # A root-level Dockerfile has no context directory of its own: it would make
     # every change select it, and "." is not a valid image name.
     if len(parts) < 2 or parts[-1] != DOCKERFILE_NAME:
         return False
-    return parts[0] not in EXCLUDED_TOP_LEVEL_DIRS
+    return EXCLUDED_DIR_NAMES.isdisjoint(parts[:-1])
 
 
 def discover_dockerfiles(root: Path) -> list[str]:
@@ -133,11 +132,14 @@ def build_matrix(dockerfiles: Iterable[str]) -> dict[str, list[dict[str, str]]]:
                 "category": parent,
             }
         )
-    matrix = {"include": include}
-    # Final guard: archived contexts must never reach the build matrix.
-    if "archived" in json.dumps(matrix):
-        raise DetectionError("Archived containers detected in build matrix")
-    return matrix
+    # Final guard: excluded (archived, template, ...) contexts must never reach the
+    # build matrix. Segment-based, so a name that merely contains "archived" is fine.
+    leaked = [
+        e["dockerfile"] for e in include if not is_active_dockerfile(e["dockerfile"])
+    ]
+    if leaked:
+        raise DetectionError(f"Excluded containers detected in build matrix: {leaked}")
+    return {"include": include}
 
 
 def test_job_containers(dockerfiles: Iterable[str]) -> list[dict[str, str]]:
