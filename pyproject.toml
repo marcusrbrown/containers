@@ -57,6 +57,7 @@ source = [
   "scripts.template_engine",
   "scripts.containers_cli",
   "scripts.predictive_maintenance",
+  "scripts.detect_changed_containers",
 ]
 
 [tool.coverage.report]

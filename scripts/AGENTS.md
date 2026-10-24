@@ -20,6 +20,7 @@ Python automation scripts for container management, template generation, and AI-
 | `predictive_maintenance.py` | 987 | Predictive maintenance analysis | — |
 | `collect_docker_metrics.py` | 73 | Docker metrics collection | `poetry run collect-docker-metrics` |
 | `generate_image_tags.py` | 49 | Image tag generation | `poetry run generate-image-tags` |
+| `detect_changed_containers.py` | 255 | Select image contexts affected by a change (stdlib-only; used by `build-publish.yaml` and `test.yaml`) | `python3 scripts/detect_changed_containers.py` |
 
 ## Architecture
 
