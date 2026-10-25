@@ -15,7 +15,7 @@
     'templates/**',
   ],
   constraints: {
-    python: '3.13',
+    python: '>=3.13,<3.14',
   },
   packageRules: [
     {
@@ -37,10 +37,6 @@
       description: 'Do not group TypeScript and Python with other updates',
       matchPackageNames: ['typescript', 'python'],
       groupName: null,
-    },
-    {
-      matchPackageNames: ['aquasecurity/trivy-action'],
-      versioning: 'github-releases',
     },
     {
       description: 'Keep poetry.lock in sync for Python dependency updates only.',

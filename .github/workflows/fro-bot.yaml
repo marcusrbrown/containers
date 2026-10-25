@@ -60,14 +60,31 @@ env:
 
   SCHEDULE_PROMPT: |
     Perform daily repository autohealing. Work through each category in order,
-    making commits and pushing fixes directly where possible.
+    making commits and delivering fixes as pull requests.
 
-    1. ERRORED PRs: Find open PRs with failing CI checks. Check out each PR branch,
-       diagnose the failure from the check logs, fix the issue, and push the fix.
-       Comment on the PR explaining what was fixed.
+    DELIVERY RULES (apply to every category):
+    - Every new change lands as a pull request against `main`. Never push to
+      `main` directly. Open one PR per concern.
+    - Before opening a PR, check for an open Fro Bot PR that already covers the
+      same concern. If one exists, update that PR instead of opening another.
+    - Push fixes directly to an existing PR branch only if a human or `fro-bot`
+      authored it. Never push to a Renovate or Dependabot branch, or to any other
+      bot's branch (Copilot, github-actions, and so on): a foreign commit makes
+      Renovate stop updating its branch ("PR Edited (Blocked)" on the Dependency
+      Dashboard). For those PRs, comment the diagnosis on the PR and, if a code
+      fix outside the dependency bump is needed, open a separate small PR against
+      `main`.
+
+    1. ERRORED PRs: Find open PRs with failing CI checks. For PRs authored by a
+       human or `fro-bot`, check out the PR branch, diagnose the failure from the
+       check logs, fix the issue, and push the fix. For every other author, follow
+       the delivery rules above. Comment on the PR explaining what was fixed or
+       diagnosed.
 
     2. SECURITY: Review Dependabot/Renovate alerts and open PRs for vulnerable deps.
-       If a security update PR exists but has conflicts or failures, fix and push.
+       If a Renovate/Dependabot security update PR has conflicts or failures, do not
+       push to its branch: comment the diagnosis on the PR, or open a separate small
+       PR against `main`. Fix and push only on PRs authored by a human or `fro-bot`.
        For unaddressed critical/high advisories, create a PR with the fix.
 
     3. HEALTH & MAINTENANCE: Check for outdated major versions of dependencies in
@@ -162,6 +179,8 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: >-
+            ${{ !contains(fromJSON('["pull_request", "issue_comment", "issues"]'), github.event_name) }}
           token: ${{ secrets.FRO_BOT_PAT }}
 
       - name: Setup environment
@@ -171,7 +190,7 @@ jobs:
         run: pnpm install
 
       - name: Run Fro Bot
-        uses: fro-bot/agent@c7369193c271ae74139ddcdeaa12079f6ef8d0f6 # v0.98.1
+        uses: fro-bot/agent@c1173a2e8b68294594927ff9a1d8be5067cc2932 # v0.125.3
         env:
           OPENCODE_PROMPT_ARTIFACT: 'true'
           PROMPT: >-
@@ -182,6 +201,10 @@ jobs:
               || ''
             }}
         with:
+          # Without branch-pr, schedule/workflow_dispatch runs resolve to working-dir,
+          # where the agent may not commit, push or open PRs and edits are discarded.
+          output-mode: >-
+            ${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) && 'branch-pr' || '' }}
           github-token: ${{ secrets.FRO_BOT_PAT }}
           auth-json: ${{ secrets.OPENCODE_AUTH_JSON }}
           model: ${{ vars.FRO_BOT_MODEL }}

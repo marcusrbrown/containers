@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1.26@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
-FROM node:24-alpine@sha256:d32cdf619f63fe0471182d08996dd516c6275bb5fd31ae06e55a570bd9e1ad43
+# syntax=docker/dockerfile:1.28@sha256:bb22d9815c728170f72750f4e5b0d672e06176142e1d602c7e66c050100b7e5b
+FROM node:24-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53
 
 # Multi-architecture build arguments
 ARG TARGETPLATFORM
@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 
 # Upgrade bundled npm to patch known CVEs in npm's vendored dependencies
 # (undici CVE-2026-12151/CVE-2026-9679, tar CVE-2026-53655)
-RUN npm install -g npm@12.0.2
+RUN npm install -g npm@12.2.1
 
 # Add labels for multi-arch support and metadata
 LABEL org.opencontainers.image.title="Node.js Runtime (Alpine)" \
