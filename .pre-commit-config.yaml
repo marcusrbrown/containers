@@ -17,6 +17,8 @@ repos:
         name: dockerfilelint
         entry: npx dockerfilelint
         language: node
+        # Use the mise-managed Node.js; nodeenv's default "latest" resolution can pick a pre-release and crash.
+        language_version: system
         additional_dependencies: ['dockerfilelint@1.8.0']
         files: Dockerfile$
         exclude: ^(templates/|node/)
