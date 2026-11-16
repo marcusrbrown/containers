@@ -30,12 +30,10 @@ def test_output_mode_is_branch_pr_for_schedule_and_dispatch_only():
     )
 
 
-def test_checkout_persists_credentials_for_schedule_and_dispatch():
-    """git push needs the checkout token, so only the review-style events opt out."""
-    assert CHECKOUT_STEP["with"]["persist-credentials"] == (
-        '${{ !contains(fromJSON(\'["pull_request", "issue_comment", "issues"]\'),'
-        " github.event_name) }}"
-    )
+def test_agent_runs_isolated_without_a_persisted_checkout_token():
+    """The isolated agent pushes through the Action's credential helper; isolation refuses a persisted token."""
+    assert AGENT_STEP["with"]["isolate-agent"] is True
+    assert CHECKOUT_STEP["with"]["persist-credentials"] is False
 
 
 @pytest.mark.parametrize(

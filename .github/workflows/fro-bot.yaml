@@ -179,9 +179,16 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
-          persist-credentials: >-
-            ${{ !contains(fromJSON('["pull_request", "issue_comment", "issues"]'), github.event_name) }}
+          persist-credentials: false
           token: ${{ secrets.FRO_BOT_PAT }}
+
+      # Keep mise, and the tools it installs, in the hosted tool cache, which
+      # the isolated agent can read, rather than ~/.local/share/mise. mise-action
+      # takes its install directory from MISE_DATA_DIR, so the mise binary lands
+      # there too. The runner context is not available in job-level env, so
+      # export it for the steps below.
+      - name: Share mise with the agent
+        run: echo "MISE_DATA_DIR=${RUNNER_TOOL_CACHE}/mise" >> "${GITHUB_ENV}"
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -190,7 +197,7 @@ jobs:
         run: pnpm install
 
       - name: Run Fro Bot
-        uses: fro-bot/agent@eaf1e3e284d58add1695b2e131e6104030689dc1 # v0.144.0
+        uses: fro-bot/agent@b3d5cd8de673ba285160777aa1eab3d4e5c0b03a # v0.144.4
         env:
           OPENCODE_PROMPT_ARTIFACT: 'true'
           PROMPT: >-
@@ -210,3 +217,4 @@ jobs:
           model: ${{ vars.FRO_BOT_MODEL }}
           prompt: ${{ env.PROMPT }}
           opencode-config: ${{ secrets.OPENCODE_CONFIG }}
+          isolate-agent: true
