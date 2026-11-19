@@ -7,7 +7,7 @@ Container collection repo with Dockerfiles (`node/alpine/`, `node/release/`), Py
 ## Tool Versions (from mise.toml)
 
 - Python 3.13 (Poetry for deps/venv, `.venv` in project root)
-- Node.js 24.14.0 (pnpm 10.33.0)
+- Node.js 24.22.1 (pnpm 11.28.6)
 - Pre-commit hooks for formatting/linting
 
 ## WHERE TO LOOK
