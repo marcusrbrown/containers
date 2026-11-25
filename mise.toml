@@ -7,7 +7,7 @@ _.python.venv = { path = ".venv", create = true }
 
 [tools]
 node = "24.22.1"
-pnpm = "11.28.6"
+pnpm = "11.29.0"
 poetry = "latest"
 pre-commit = "latest"
 python = "3.13"
